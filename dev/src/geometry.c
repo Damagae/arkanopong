@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "geometry/geometry.h"
+#include "geometry.h"
 
 #define min(x,y) (x<y ? x : y)
 #define max(x,y) (x>=y ? x : y)
