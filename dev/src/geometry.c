@@ -98,3 +98,4 @@ Vector2D Normalize(Vector2D V)
 
 	return vector;
 }
+
