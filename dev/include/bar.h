@@ -18,12 +18,13 @@ typedef Bar* PtBar;
 
 typedef enum Direction
 {
-    LEFT, RIGHT
+    LEFT, RIGHT, NONE
 } Direction;
 
 /** FUNCTIONS **/
 
-Bar createBar (Point2D position, float width, float height);
+Bar createBar (Point2D position);
 void moveBar(PtBar ptBar, Direction direction);
+void drawBar(Bar bar);
 
 #endif

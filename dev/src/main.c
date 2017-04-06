@@ -8,6 +8,8 @@
 
 #include "geometry.h"
 #include "ball.h"
+#include "bar.h"
+#include "primitives.h"
 
 #define MAX_BALL 6
 
@@ -34,12 +36,16 @@ void setVideoMode(unsigned int width, unsigned int height)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluOrtho2D(0, width, height, 0);
+  //gluOrtho2D(-1, -1, 1, 1);
 }
 
 int main(int argc, char** argv)
 {
   /** Creation des balles **/
   Ball ball[MAX_BALL];
+  Bar bar[2];
+  Direction direction[2] = {NONE, NONE};
+  bar[0] = createBar(PointXY(GAME_WIDTH/2, GAME_HEIGHT-50));
   ball[0] = createBall (PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), VectorXY(1, 0.5));
 
   /** Initialisation de la SDL **/
@@ -63,10 +69,13 @@ int main(int argc, char** argv)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glPushMatrix();
     drawBall(ball[0]);
-    glPopMatrix();
+    drawBar(bar[0]);
+
+    drawSquare();
+
     moveBall(&ball[0]);
+    moveBar(&bar[0], direction[0]);
 
     SDL_GL_SwapBuffers();
     /* ****** */    
@@ -86,6 +95,46 @@ int main(int argc, char** argv)
           WINDOW_WIDTH = e.resize.w;
           WINDOW_HEIGHT = e.resize.h;
           setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
+          break;
+
+        case SDL_KEYDOWN:
+          switch (e.key.keysym.sym)
+          {
+            case SDLK_LEFT:
+              direction[0] = LEFT;
+              break;
+            case SDLK_RIGHT:
+              direction[0] = RIGHT;
+              break;
+            case SDLK_q:
+              direction[1] = LEFT;
+              break;
+            case SDLK_d:
+              direction[1] = RIGHT;
+              break;
+            default:
+              break;
+          }
+          break;
+
+        case SDL_KEYUP:
+          switch (e.key.keysym.sym)
+          {
+            case SDLK_LEFT:
+              direction[0] = NONE;
+              break;
+            case SDLK_RIGHT:
+              direction[0] = NONE;
+              break;
+            case SDLK_q:
+              direction[1] = NONE;
+              break;
+            case SDLK_d:
+              direction[1] = NONE;
+              break;
+            default:
+              break;
+          }
           break;
           
         default:
