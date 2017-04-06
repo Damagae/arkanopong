@@ -4,7 +4,7 @@
 #include "bar.h"
 #include "primitives.h"
 
-#define BALL_RADIUS 20
+#define BALL_RADIUS 10
 #define BALL_SPEED 5
 
 extern int GAME_WIDTH;
@@ -79,7 +79,7 @@ void changeDirection (Vector2D* direction, Orientation orientation)
 
 void changeAngle (PtBall ptBall, PtBar ptBar)
 {
-    if (ptBall->position.x <= ptBar.position.x)
+    if (ptBall->position.x <= ptBar->position.x)
     {
        return ; 
     }

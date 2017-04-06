@@ -24,10 +24,8 @@ int GAME_HEIGHT = 800;
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
-void setVideoMode(unsigned int width, unsigned int height)
-{
-  if(NULL == SDL_SetVideoMode(width, height, BIT_PER_PIXEL, SDL_OPENGL))
-  {
+void setVideoMode(unsigned int width, unsigned int height) {
+  if(NULL == SDL_SetVideoMode(width, height, BIT_PER_PIXEL, SDL_OPENGL)) {
     fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
     exit(EXIT_FAILURE);
   }
@@ -35,9 +33,9 @@ void setVideoMode(unsigned int width, unsigned int height)
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluOrtho2D(0, width, height, 0);
-  //gluOrtho2D(-1, -1, 1, 1);
+  gluOrtho2D(0, GAME_WIDTH, GAME_HEIGHT, 0);
 }
+
 
 int main(int argc, char** argv)
 {
@@ -52,10 +50,9 @@ int main(int argc, char** argv)
   player[0] = createPlayer(0, "Toto", &bar[0], &ball[0]);
 
   bar[1] = createBar(PointXY(GAME_WIDTH/2, 50));
-
+  
   /** Initialisation de la SDL **/
-  if(-1 == SDL_Init(SDL_INIT_VIDEO))
-  {
+  if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
     return EXIT_FAILURE;
   }
@@ -63,9 +60,7 @@ int main(int argc, char** argv)
 
   /** Boucle d'affichage **/
   int loop = 1;
-  while(loop)
-  {
-    /* Récupération du temps au début de la boucle */
+  while(loop) {
     Uint32 startTime = SDL_GetTicks();
 
     /* Dessin */
@@ -87,24 +82,16 @@ int main(int argc, char** argv)
     /* ****** */    
 
     SDL_Event e;
-    while(SDL_PollEvent(&e))
-    {
-      if(e.type == SDL_QUIT)
-      {
+    while(SDL_PollEvent(&e)) {
+      if(e.type == SDL_QUIT) {
         loop = 0;
         break;
       }
       
-      switch(e.type)
-      {          
-        case SDL_VIDEORESIZE:
-          WINDOW_WIDTH = e.resize.w;
-          WINDOW_HEIGHT = e.resize.h;
-          setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
-          break;
+      switch(e.type) {          
 
         case SDL_KEYDOWN:
-          switch (e.key.keysym.sym)
+          switch(e.key.keysym.sym)
           {
             case SDLK_LEFT:
               direction[0] = LEFT;
@@ -124,7 +111,7 @@ int main(int argc, char** argv)
           break;
 
         case SDL_KEYUP:
-          switch (e.key.keysym.sym)
+          switch(e.key.keysym.sym)
           {
             case SDLK_LEFT:
               direction[0] = NONE;
@@ -148,11 +135,8 @@ int main(int argc, char** argv)
       }
     }
     
-    /* Calcul du temps écoulé */
     Uint32 elapsedTime = SDL_GetTicks() - startTime;
-    /* Si trop peu de temps s'est écoulé, on met en pause le programme */
-    if(elapsedTime < FRAMERATE_MILLISECONDS)
-    {
+    if(elapsedTime < FRAMERATE_MILLISECONDS) {
       SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
     }
   }

@@ -3,9 +3,9 @@
 #include "bar.h"
 #include "primitives.h"
 
-#define BAR_SPEED 10.0
-#define BAR_WIDTH 200.0
-#define BAR_HEIGHT 30.0
+#define BAR_SPEED 10
+#define BAR_WIDTH 100
+#define BAR_HEIGHT 20
 
 extern int GAME_WIDTH;
 extern int GAME_HEIGHT;
@@ -23,11 +23,11 @@ Bar createBar (Point2D position)
 
 void moveBar(PtBar ptBar, Direction direction)
 {
-    if(direction == RIGHT && (ptBar->position.x + ptBar->width/2 < GAME_WIDTH))
+    if(direction == RIGHT && barRightPosition(ptBar) <= GAME_WIDTH)
     {
         ptBar->position.x += ptBar->speed;
     }
-    else if (direction == LEFT && (ptBar->position.x - ptBar->width/2 > 0))
+    else if (direction == LEFT && barLeftPosition(ptBar) >= 0)
     {
         ptBar->position.x -= ptBar->speed;
     }
