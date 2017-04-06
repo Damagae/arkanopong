@@ -33,11 +33,35 @@ void moveBar(PtBar ptBar, Direction direction)
     }
 }
 
-void drawBar(Bar bar)
+void drawBar(Bar bar, int numPlayer)
 {
     glPushMatrix();
     glTranslatef(bar.position.x, bar.position.y, 1);
     glScalef(bar.width, bar.height, 1);
+    if (numPlayer == 1)
+        glRotatef(180, 0.0, 0.0, 1.0);
     drawSquare();
     glPopMatrix();
+}
+
+/* Bar edges position */
+
+float barTopPosition(PtBar ptBar)
+{
+    return ptBar->position.y - ptBar->height/2;
+}
+
+float barBottomPosition(PtBar ptBar)
+{
+    return ptBar->position.y + ptBar->height/2;
+}
+
+float barLeftPosition(PtBar ptBar)
+{
+    return ptBar->position.x - ptBar->width/2;
+}
+
+float barRightPosition(PtBar ptBar)
+{
+    return ptBar->position.x + ptBar->width/2;
 }

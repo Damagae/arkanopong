@@ -1,10 +1,11 @@
 #include <GL/gl.h>
 
 #include "ball.h"
+#include "bar.h"
 #include "primitives.h"
 
 #define BALL_RADIUS 20
-#define BALL_SPEED 10
+#define BALL_SPEED 5
 
 extern int GAME_WIDTH;
 extern int GAME_HEIGHT;
@@ -20,19 +21,30 @@ Ball createBall (Point2D position, Vector2D direction)
     return ball;
 }
 
+void drawBall(Ball ball)
+{
+    glPushMatrix();
+    glTranslatef(ball.position.x, ball.position.y, 1);
+    glScalef(ball.radius, ball.radius, 1);
+    drawCircle();
+    glPopMatrix();
+}
+
+/* BALL MANAGMENT */
+
 // Return 1 if ball inside game
 // Return 0 if ball outside game
-int moveBall (PtBall ptBall)
+int moveBall (PtBall ptBall, PtBar bar1, PtBar bar2)
 {
     Vector2D deplacement = MultVector(ptBall->direction, ptBall->speed);
     ptBall->position = PointPlusVector(ptBall->position, deplacement);
-    return checkPosition(ptBall);
+    return checkPosition(ptBall, bar1, bar2);
 }
 
-int checkPosition (PtBall ptBall)
+int checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2)
 {
     // If ball hit left or right border
-    if (ptBall->position.x + ptBall->radius == GAME_WIDTH || ptBall->position.x - ptBall->radius == 0)
+    if (collisionBallWall(ptBall))
     {
         changeDirection(&(ptBall->direction), HORIZONTAL);
         return 1;
@@ -43,6 +55,12 @@ int checkPosition (PtBall ptBall)
         return 1;
        // return 0;
     }
+    else if (collisionBallBar(ptBall, bar1, bar2))
+    {
+        changeDirection(&(ptBall->direction), VERTICAL);
+        return 1;
+    }
+
     else
         return 1;
 }
@@ -59,11 +77,61 @@ void changeDirection (Vector2D* direction, Orientation orientation)
     }
 }
 
-void drawBall(Ball ball)
+void changeAngle (PtBall ptBall, PtBar ptBar)
 {
-    glPushMatrix();
-    glTranslatef(ball.position.x, ball.position.y, 1);
-    glScalef(ball.radius, ball.radius, 1);
-    drawCircle();
-    glPopMatrix();
+    if (ptBall->position.x <= ptBar.position.x)
+    {
+       return ; 
+    }
+}
+
+int collisionBallWall(PtBall ptBall)
+{
+    if (ballRightPosition(ptBall) == GAME_WIDTH || ballLeftPosition(ptBall) == 0)
+        return 1;
+    else
+        return 0;
+}
+
+/* Return 1 if collision with bar1, 2 if collision with bar2, 0 if no collision */
+int collisionBallBar(PtBall ptBall, PtBar bar1, PtBar bar2)
+{
+    if (ballBottomPosition(ptBall) == barTopPosition(bar1))
+    {
+        if (ballRightPosition(ptBall) >= barLeftPosition(bar1) && ballLeftPosition(ptBall) <= barRightPosition(bar1))
+            return 1;
+        else return 0;
+    }
+    /* Bar 2 is rotated 180° */
+    
+    else if (ballTopPosition(ptBall) == barBottomPosition(bar2))
+    {
+        if (ballLeftPosition(ptBall) >= barLeftPosition(bar2) && ballRightPosition(ptBall) <= barRightPosition(bar2))
+            return 2;
+        else return 0;
+    }
+    else
+        return 0;
+}
+
+/* Ball edges position */
+
+float ballBottomPosition (PtBall ptBall)
+{
+    return ptBall->position.y + ptBall->radius;
+}
+
+float ballTopPosition (PtBall ptBall)
+{
+    return ptBall->position.y - ptBall->radius;
+}
+
+float ballLeftPosition (PtBall ptBall)
+{
+    return ptBall->position.x - ptBall->radius;
+}
+
+float ballRightPosition (PtBall ptBall)
+{
+    return ptBall->position.x + ptBall->radius;
 }

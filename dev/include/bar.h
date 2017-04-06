@@ -25,6 +25,11 @@ typedef enum Direction
 
 Bar createBar (Point2D position);
 void moveBar(PtBar ptBar, Direction direction);
-void drawBar(Bar bar);
+void drawBar(Bar bar, int numPlayer);
+
+float barTopPosition(PtBar ptBar);
+float barBottomPosition(PtBar ptBar);
+float barLeftPosition(PtBar ptBar);
+float barRightPosition(PtBar ptBar);
 
 #endif

@@ -9,7 +9,7 @@
 #include "geometry.h"
 #include "ball.h"
 #include "bar.h"
-#include "primitives.h"
+#include "player.h"
 
 #define MAX_BALL 6
 
@@ -44,9 +44,14 @@ int main(int argc, char** argv)
   /** Creation des balles **/
   Ball ball[MAX_BALL];
   Bar bar[2];
+  Player player[2];
   Direction direction[2] = {NONE, NONE};
+
   bar[0] = createBar(PointXY(GAME_WIDTH/2, GAME_HEIGHT-50));
   ball[0] = createBall (PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), VectorXY(1, 0.5));
+  player[0] = createPlayer(0, "Toto", &bar[0], &ball[0]);
+
+  bar[1] = createBar(PointXY(GAME_WIDTH/2, 50));
 
   /** Initialisation de la SDL **/
   if(-1 == SDL_Init(SDL_INIT_VIDEO))
@@ -70,12 +75,13 @@ int main(int argc, char** argv)
     glLoadIdentity();
 
     drawBall(ball[0]);
-    drawBar(bar[0]);
+    drawBar(*(player[0].p_bar), player[0].num);
 
-    drawSquare();
+    drawBar(bar[1], 1);
 
-    moveBall(&ball[0]);
-    moveBar(&bar[0], direction[0]);
+    moveBall(&ball[0], &bar[0], &bar[1]);
+    moveBar(player[0].p_bar, direction[0]);
+    moveBar(&bar[1], direction[1]);
 
     SDL_GL_SwapBuffers();
     /* ****** */    
