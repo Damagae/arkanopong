@@ -1,15 +1,21 @@
-#include "ball.h"
+#include <GL/gl.h>
 
-#define BALL_SPEED 1.0
-#define SEGMENTS 32
-#define GAME_WIDTH 200
-#define GAME_HEIGHT 400
+#include "ball.h"
+#include "primitives.h"
+
+#define BALL_RADIUS 20
+#define BALL_SPEED 10
+
+
+extern int GAME_WIDTH;
+extern int GAME_HEIGHT;
 
 Ball createBall (Point2D position, Vector2D direction)
 {
     Ball ball;
     ball.position = position;
     ball.direction = direction;
+    ball.radius = BALL_RADIUS;
     ball.speed = BALL_SPEED;
    
     return ball;
@@ -27,7 +33,7 @@ int moveBall (PtBall ptBall)
 int checkPosition (PtBall ptBall)
 {
     // If ball hit left or right border
-    if (ptBall->position.x + ptBall->radius == GAME_WIDTH || ptBall->position.y - ptBall->radius == 0)
+    if (ptBall->position.x + ptBall->radius == GAME_WIDTH || ptBall->position.x - ptBall->radius == 0)
     {
         changeDirection(&(ptBall->direction), HORIZONTAL);
         return 1;
@@ -56,5 +62,9 @@ void changeDirection (Vector2D* direction, Orientation orientation)
 
 void drawBall(Ball ball)
 {
-   return;
+    glPushMatrix();
+    glTranslatef(ball.position.x, ball.position.y, 1);
+    glScalef(ball.radius, ball.radius, 1);
+    drawCircle();
+    glPopMatrix();
 }

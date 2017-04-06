@@ -17,4 +17,6 @@ typedef struct
 
 /** FUNCTIONS **/
 
+Player createPlayer(int num, char* name, PtBar ptBar, PtBall ptBall);
+
 #endif
