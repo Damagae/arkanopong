@@ -13,3 +13,15 @@ Player createPlayer(int num, char* name, PtBar ptBar, PtBall ptBall)
 
     return player;
 }
+
+void drawLife(Player player)
+{
+    if (player.num == 0)
+    {
+
+    }
+    else
+    {
+        
+    }
+}

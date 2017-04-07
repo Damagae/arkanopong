@@ -10,6 +10,7 @@
 #include "ball.h"
 #include "bar.h"
 #include "player.h"
+#include "ai.h"
 
 #define MAX_BALL 6
 
@@ -77,6 +78,7 @@ int main(int argc, char** argv)
     moveBall(&ball[0], &bar[0], &bar[1]);
     moveBar(player[0].p_bar, direction[0]);
     moveBar(&bar[1], direction[1]);
+    AIcontroller (&bar[1], ball[0]);
 
     SDL_GL_SwapBuffers();
     /* ****** */    

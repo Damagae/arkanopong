@@ -7,7 +7,7 @@
 #include "primitives.h"
 
 #define BALL_RADIUS 10
-#define BALL_SPEED 5
+#define BALL_SPEED 10
 
 extern int GAME_WIDTH;
 extern int GAME_HEIGHT;

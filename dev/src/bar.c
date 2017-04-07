@@ -3,7 +3,7 @@
 #include "bar.h"
 #include "primitives.h"
 
-#define BAR_SPEED 10
+#define BAR_SPEED 5
 #define BAR_WIDTH 100
 #define BAR_HEIGHT 20
 
