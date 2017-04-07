@@ -46,7 +46,7 @@ int main(int argc, char** argv)
   Direction direction[2] = {NONE, NONE};
 
   bar[0] = createBar(PointXY(GAME_WIDTH/2, GAME_HEIGHT-50));
-  ball[0] = createBall (PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), VectorXY(1, 0.5));
+  ball[0] = createBall (PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), VectorXY(1, -0.5));
   player[0] = createPlayer(0, "Toto", &bar[0], &ball[0]);
 
   bar[1] = createBar(PointXY(GAME_WIDTH/2, 50));
