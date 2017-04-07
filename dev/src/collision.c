@@ -1,7 +1,10 @@
+#include <stdio.h>
+
 #include "collision.h"
 #include "math.h"
+#include "brick.h"
 
-bool CollisionPointCercle(Point2D A, Ball ball)
+bool CollisionPointCercle (Point2D A, Ball ball)
 {
     Point2D C = ball.position;
     int d2 = (A.x-C.x)*(A.x-C.x) + (A.y-C.y)*(A.y-C.y);
@@ -11,7 +14,7 @@ bool CollisionPointCercle(Point2D A, Ball ball)
         return true;
 }
 
-bool CollisionDroite(Point2D A, Point2D B, Ball ball)
+bool CollisionDroite (Point2D A, Point2D B, Ball ball)
 {
     Vector2D u = Vector(A, B);
     Point2D C = ball.position;
@@ -29,7 +32,7 @@ bool CollisionDroite(Point2D A, Point2D B, Ball ball)
 
 }
 
-bool CollisionSegment(Point2D A,Point2D B, Ball ball)
+bool CollisionSegment (Point2D A,Point2D B, Ball ball)
 {
     Point2D C = ball.position;
     if (CollisionDroite(A,B,ball) == false)
@@ -51,5 +54,22 @@ bool CollisionSegment(Point2D A,Point2D B, Ball ball)
     if (CollisionPointCercle(B,ball))
         return true;
     return false;
+}
+
+bool BrickCollision (Brick brick, Ball ball)
+{
+    Point2D A = brickVerticeTopLeft(&brick);
+    Point2D B = brickVerticeTopRight(&brick);
+    Point2D C = brickVerticeBottomLeft(&brick);
+    Point2D D = brickVerticeBottomRight(&brick);
+
+    if (CollisionSegment(A, B, ball) == true || CollisionSegment(B, C, ball) == true || CollisionSegment(C, D, ball) == true || CollisionSegment(D, A, ball) == true)
+    {
+        printf("collision\n");
+        return true;
+    }    
+    else {
+        return false;
+    }
 }
 

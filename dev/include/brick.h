@@ -9,7 +9,7 @@
 
 typedef enum BrickType
 {
-    INDES, DISAP, BARUP, BARDWN, BARSPDUP, BALLSPDUP, BALLSPDDWN, BALLSIZEUP, MOREBALL
+    INDES, DISAP, BARUP, BARDWN, BARSPDUP, BALLSPDUP, BALLSPDDWN, BALLSIZEUP, MOREBALL, NORMAL
 } BrickType;
 
 typedef struct
@@ -29,5 +29,10 @@ typedef Brick* PtBrick;
 
 Brick createBrick (Point2D position, BrickType type);
 bool brickCollision (Brick brick, Ball ball);
+void drawBrick(Brick brick);
+Point2D brickVerticeTopLeft(PtBrick ptBrick);
+Point2D brickVerticeTopRight(PtBrick ptBrick);
+Point2D brickVerticeBottomLeft(PtBrick ptBrick);
+Point2D brickVerticeBottomRight(PtBrick ptBrick);
 
 #endif

@@ -41,6 +41,14 @@ int moveBall (PtBall ptBall, PtBar bar1, PtBar bar2)
     return checkPosition(ptBall, bar1, bar2);
 }
 
+int moveBallBrick (PtBall ptBall)
+{
+    Vector2D deplacement = MultVector(ptBall->direction, ptBall->speed);
+    ptBall->position = PointPlusVector(ptBall->position, deplacement);
+    changeDirection(&(ptBall->direction), HORIZONTAL);
+    return 1;
+}
+
 int checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2)
 {
     // If ball hit left or right border

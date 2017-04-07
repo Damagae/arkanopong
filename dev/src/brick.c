@@ -1,9 +1,12 @@
 #include <math.h>
+#include <GL/gl.h>
 
 #include "brick.h"
+#include "primitives.h"
+#include "geometry.h"
 
-#define HEIGHT_DEFAULT 5
-#define WIDTH_DEFAULT 10
+#define HEIGHT_DEFAULT 40
+#define WIDTH_DEFAULT 90
 
 Brick createBrick (Point2D position, BrickType type)
 {
@@ -28,45 +31,41 @@ Brick createBrick (Point2D position, BrickType type)
     return brick;
 }
 
-
-bool brickCollision (Brick brick, Ball ball)
+void drawBrick(Brick brick)
 {
-    Point2D A;
-    Point2D B;
-    Point2D O = brick.position;
-    Point2D C = ball.position;
-    
-    // UP SIDE
-    //if()
-
-    // DOWN SIDE
-    //if()
-    Vector2D u;
-    A = PointXY(O.x, O.y + brick.height);
-    B = PointXY(O.x + brick.width, O.y + brick.height);
-    u = Vector(A, B);
-    Vector2D AC;
-    AC = Vector(A, C);
-    float numerateur = u.x*AC.y - u.y*AC.x;   // norme du vecteur v
-
-    if (numerateur <0)
-    numerateur = -numerateur ;   // valeur absolue ; si c'est négatif, on prend l'opposé.
-    
-    float denominateur = sqrt(u.x*u.x + u.y*u.y);  // norme de u
-    float CI = numerateur / denominateur;
-    
-    if (CI<ball.radius)
-        return true;
-    else
-        return false;
+    glPushMatrix();
+    glTranslatef(brick.position.x, brick.position.y, 1);
+    glScalef(brick.width, brick.height, 1);
+    drawSquare();
+    glPopMatrix();
 }
-/*
-    // RIGHT SIDE
 
-    // LEFT SIDE
+/* Brick vertices */
+/* A____________B */
+/* |            | */
+/* |            | */
+/* C____________D */
 
-    
-   int d2 = (x-ball.position.x)*(x-ball.position.x) + (y-ball.position.y)*(y-ball.position.y);
-   if (d2>ball.radius*ball.radius)
+/* A */
+Point2D brickVerticeTopLeft(PtBrick ptBrick)
+{
+    return ptBrick->position;
 }
-*/
+
+/* B */
+Point2D brickVerticeTopRight(PtBrick ptBrick)
+{
+    return PointXY(ptBrick->position.x + ptBrick->width, ptBrick->position.y);
+}
+
+/* C */
+Point2D brickVerticeBottomLeft(PtBrick ptBrick)
+{
+    return PointXY(ptBrick->position.x, ptBrick->position.y + ptBrick->height);
+}
+
+/* D */
+Point2D brickVerticeBottomRight(PtBrick ptBrick)
+{
+    return PointXY(ptBrick->position.x + ptBrick->width, ptBrick->position.y + ptBrick->height);
+}

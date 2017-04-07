@@ -7,6 +7,8 @@
 #include <SDL/SDL_image.h>
 
 #include "geometry.h"
+#include "collision.h"
+#include "brick.h"
 #include "ball.h"
 #include "bar.h"
 #include "player.h"
@@ -39,7 +41,7 @@ void setVideoMode(unsigned int width, unsigned int height) {
 
 int main(int argc, char** argv)
 {
-  /** Creation des balles **/
+  /** Creation des balles et barres et joueurs**/
   Ball ball[MAX_BALL];
   Bar bar[2];
   Player player[2];
@@ -50,6 +52,11 @@ int main(int argc, char** argv)
   player[0] = createPlayer(0, "Toto", &bar[0], &ball[0]);
 
   bar[1] = createBar(PointXY(GAME_WIDTH/2, 50));
+
+  /** Creation des briques **/
+  Brick brick;
+  BrickType type = NORMAL;
+  brick = createBrick(PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), type);
   
   /** Initialisation de la SDL **/
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -74,9 +81,22 @@ int main(int argc, char** argv)
 
     drawBar(bar[1], 1);
 
-    moveBall(&ball[0], &bar[0], &bar[1]);
+    drawBrick(brick);
+
+    // Brick Collision
+    if(BrickCollision(brick, ball[0]) == true) 
+    {
+      moveBallBrick(&ball[0]);
+    } else
+    {
+      moveBall(&ball[0], &bar[0], &bar[1]);
+    }
+    
     moveBar(player[0].p_bar, direction[0]);
     moveBar(&bar[1], direction[1]);
+
+    
+
 
     SDL_GL_SwapBuffers();
     /* ****** */    
