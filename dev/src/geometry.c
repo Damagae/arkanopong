@@ -98,3 +98,8 @@ Vector2D Normalize(Vector2D V)
 
 	return vector;
 }
+
+float inverse (float i)
+{
+	return -1*i;
+}

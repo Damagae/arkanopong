@@ -15,6 +15,8 @@ typedef struct
   PtBall p_ball;
 } Player;
 
+typedef Player* PtPlayer;
+
 /** FUNCTIONS **/
 
 Player createPlayer(int num, char* name, PtBar ptBar, PtBall ptBall);

@@ -38,5 +38,7 @@ float DotProduct(Vector2D V, Vector2D W);
 float Norm(Vector2D V);
 /* Normalisé d'un vecteur */
 Vector2D Normalize(Vector2D V);
+/* Retourne l'inverse d'un float */
+float inverse(float i);
 
 #endif

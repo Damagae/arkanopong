@@ -12,6 +12,7 @@
 #include "ball.h"
 #include "bar.h"
 #include "player.h"
+#include "ai.h"
 
 #define MAX_BALL 6
 
@@ -48,7 +49,7 @@ int main(int argc, char** argv)
   Direction direction[2] = {NONE, NONE};
 
   bar[0] = createBar(PointXY(GAME_WIDTH/2, GAME_HEIGHT-50));
-  ball[0] = createBall (PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), VectorXY(1, 0.5));
+  ball[0] = createBall (PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), VectorXY(1, -0.5));
   player[0] = createPlayer(0, "Toto", &bar[0], &ball[0]);
 
   bar[1] = createBar(PointXY(GAME_WIDTH/2, 50));
@@ -96,6 +97,7 @@ int main(int argc, char** argv)
     
     moveBar(player[0].p_bar, direction[0]);
     moveBar(&bar[1], direction[1]);
+    AIcontroller (&bar[1], ball[0]);
 
     
 
