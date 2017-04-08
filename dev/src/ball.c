@@ -44,11 +44,20 @@ int moveBall (PtBall ptBall, PtBar bar1, PtBar bar2)
     return checkPosition(ptBall, bar1, bar2);
 }
 
-int moveBallBrick (PtBall ptBall)
+int moveBallBrick (PtBall ptBall, int collision)
 {
     Vector2D deplacement = MultVector(ptBall->direction, ptBall->speed);
     ptBall->position = PointPlusVector(ptBall->position, deplacement);
-    changeDirection(&(ptBall->direction), VERTICAL);
+    if(collision == 2 || collision == 4)
+    {
+        changeDirection(&(ptBall->direction), VERTICAL);
+        printf("Direction change VERTICAL\n");
+    }
+    else
+    {
+        changeDirection(&(ptBall->direction), HORIZONTAL);
+        printf("Direction change HORIZONTAL\n");
+    }
     return 1;
 }
 
@@ -109,7 +118,7 @@ void changeDirection (Vector2D* direction, Orientation orientation)
     }
 }
 
-// Change ball's direction. The more you are close to the bar center, the more vertical it will be
+// Change ball's direction. The closer you are to the bar center, the more vertical it will be
 void changeAngle (PtBall ptBall, PtBar ptBar)
 {
     float dist;

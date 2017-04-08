@@ -31,7 +31,6 @@ bool CollisionDroite (Point2D A, Point2D B, Ball ball)
     
     if (CI<ball.radius)
     {
-        //printf("Collision droite (%.1f,%.1f)(%.1f,%.1f)\n", A.x, A.y, B.x, B.y);
         return true;
     }
     else
@@ -46,17 +45,16 @@ bool CollisionSegment (Point2D A,Point2D B, Ball ball)
     if (CollisionDroite(A,B,ball) == false)
         return false;  // si on ne touche pas la droite, on ne touchera jamais le segment
 
-    Vector2D AB,AC;
-    //Vector2D BC;
+    Vector2D AB,AC, BC;
     AB = Vector(A, B);
     AC = Vector(A, C);
-    //BC = Vector(B, C);
+    BC = Vector(B, C);
     float pscal1 = DotProduct(AB, AC);  // produit scalaire
-    float pscal2 = DotProduct(MultVector(AB, -1), AC);  // produit scalaire
+    float pscal2 = DotProduct(MultVector(AB, -1), BC);  // produit scalaire
 
     if (pscal1>=0 && pscal2>=0)
     {
-        printf("Collision segment (%.1f,%f)(%.1f,%.1f)\n", A.x, A.y, B.x, B.y);
+        printf("Collision segment\n");
         return true;   // I entre A et B, ok.
     }
     // dernière possibilité, A ou B dans le cercle
@@ -73,31 +71,41 @@ bool CollisionSegment (Point2D A,Point2D B, Ball ball)
     return false;
 }
 
-bool BrickCollision (Brick brick, Ball ball)
+int BrickCollision (Brick brick, Ball ball)
 {
     Point2D A = brickVerticeTopLeft(&brick);
     Point2D B = brickVerticeTopRight(&brick);
     Point2D C = brickVerticeBottomLeft(&brick);
     Point2D D = brickVerticeBottomRight(&brick);
 
-    if (CollisionSegment(A, B, ball) == true || CollisionSegment(B, C, ball) == true || CollisionSegment(C, D, ball) == true || CollisionSegment(D, A, ball) == true)
+    bool AB, BC, CD, DA;
+    AB = CollisionSegment(A, B, ball);
+    BC = CollisionSegment(B, C, ball);
+    CD = CollisionSegment(C, D, ball);
+    DA = CollisionSegment(D, A, ball);
+
+    if (AB == true || BC == true || CD == true || DA == true)
     {
-        if (CollisionSegment(A, B, ball) == true ) {
+        if (AB == true ) {
             printf("AB\n");
+            return 1;
         }
-        if (CollisionSegment(B, C, ball) == true ) {
+        if (BC == true ) {
             printf("BC\n");
+            return 2;
         }
-        if (CollisionSegment(C, D, ball) == true ) {
+        if (CD == true ) {
             printf("CD\n");
+            return 3;
         }
-        if (CollisionSegment(D, A, ball) == true ) {
+        if (DA == true ) {
             printf("DA\n");
+            return 4;
         }
-        return true;
     }    
     else {
-        return false;
+        return -1;
     }
+    return -1;
 }
 
