@@ -65,7 +65,18 @@ bool BrickCollision (Brick brick, Ball ball)
 
     if (CollisionSegment(A, B, ball) == true || CollisionSegment(B, C, ball) == true || CollisionSegment(C, D, ball) == true || CollisionSegment(D, A, ball) == true)
     {
-        printf("collision\n");
+        if (CollisionSegment(A, B, ball) == true ) {
+            printf("AB\n");
+        }
+        if (CollisionSegment(B, C, ball) == true ) {
+            printf("BC\n");
+        }
+        if (CollisionSegment(C, D, ball) == true ) {
+            printf("CD\n");
+        }
+        if (CollisionSegment(D, A, ball) == true ) {
+            printf("DA\n");
+        }
         return true;
     }    
     else {

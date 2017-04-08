@@ -38,4 +38,6 @@ float ballTopPosition (PtBall ptBall);
 float ballLeftPosition (PtBall ptBall);
 float ballRightPosition (PtBall ptBall);
 
+int moveBallBrick (PtBall ptBall);
+
 #endif

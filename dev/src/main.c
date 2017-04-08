@@ -86,8 +86,10 @@ int main(int argc, char** argv)
     // Brick Collision
     if(BrickCollision(brick, ball[0]) == true) 
     {
+     printf("**Collision Main\n");
       moveBallBrick(&ball[0]);
-    } else
+    }
+    else
     {
       moveBall(&ball[0], &bar[0], &bar[1]);
     }

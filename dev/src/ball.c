@@ -45,7 +45,7 @@ int moveBallBrick (PtBall ptBall)
 {
     Vector2D deplacement = MultVector(ptBall->direction, ptBall->speed);
     ptBall->position = PointPlusVector(ptBall->position, deplacement);
-    changeDirection(&(ptBall->direction), HORIZONTAL);
+    changeDirection(&(ptBall->direction), VERTICAL);
     return 1;
 }
 
