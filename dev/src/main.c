@@ -52,7 +52,7 @@ int main(int argc, char** argv)
   ball[0] = createBall (PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), VectorXY(1, -0.5));
   player[0] = createPlayer(0, "Toto", &bar[0], &ball[0]);
 
-  bar[1] = createBar(PointXY(GAME_WIDTH/2, 50));
+  //bar[1] = createBar(PointXY(GAME_WIDTH/2, 50));
 
   /** Creation des briques **/
   Brick brick;
@@ -73,21 +73,23 @@ int main(int argc, char** argv)
 
     /* Dessin */
     glClear(GL_COLOR_BUFFER_BIT);
-
+  
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    glColor3f(1.0, 1.0, 1.0);
 
     drawBall(ball[0]);
     drawBar(*(player[0].p_bar), player[0].num);
 
-    drawBar(bar[1], 1);
+    //drawBar(bar[1], 1);
 
     drawBrick(brick);
 
     // Brick Collision
     if(BrickCollision(brick, ball[0]) == true) 
     {
-     printf("**Collision Main\n");
+      printf("**Collision Main\n");
+      SDL_Delay(2000);
       moveBallBrick(&ball[0]);
     }
     else
@@ -96,7 +98,7 @@ int main(int argc, char** argv)
     }
     
     moveBar(player[0].p_bar, direction[0]);
-    moveBar(&bar[1], direction[1]);
+    //moveBar(&bar[1], direction[1]);
     AIcontroller (&bar[1], ball[0]);
 
     

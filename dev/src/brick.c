@@ -44,28 +44,30 @@ void drawBrick(Brick brick)
 /* A____________B */
 /* |            | */
 /* |            | */
-/* C____________D */
+/* D____________C */
 
 /* A */
 Point2D brickVerticeTopLeft(PtBrick ptBrick)
 {
-    return ptBrick->position;
+    return PointXY(ptBrick->position.x - ptBrick->width/2, ptBrick->position.y - ptBrick->height/2);
 }
 
 /* B */
 Point2D brickVerticeTopRight(PtBrick ptBrick)
 {
-    return PointXY(ptBrick->position.x + ptBrick->width, ptBrick->position.y);
+    return PointXY(ptBrick->position.x + ptBrick->width/2, ptBrick->position.y - ptBrick->height/2);
 }
 
 /* C */
 Point2D brickVerticeBottomLeft(PtBrick ptBrick)
 {
-    return PointXY(ptBrick->position.x, ptBrick->position.y + ptBrick->height);
+    return PointXY(ptBrick->position.x + ptBrick->width/2, ptBrick->position.y + ptBrick->height/2);
 }
 
 /* D */
 Point2D brickVerticeBottomRight(PtBrick ptBrick)
 {
-    return PointXY(ptBrick->position.x + ptBrick->width, ptBrick->position.y + ptBrick->height);
+    return PointXY(ptBrick->position.x - ptBrick->width/2, ptBrick->position.y + ptBrick->height/2);
 }
+
+

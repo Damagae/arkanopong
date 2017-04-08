@@ -9,9 +9,13 @@ bool CollisionPointCercle (Point2D A, Ball ball)
     Point2D C = ball.position;
     int d2 = (A.x-C.x)*(A.x-C.x) + (A.y-C.y)*(A.y-C.y);
     if (d2>ball.radius*ball.radius)
+    {
         return false;
-    else
+    }
+    else 
+    {
         return true;
+    }
 }
 
 bool CollisionDroite (Point2D A, Point2D B, Ball ball)
@@ -26,10 +30,14 @@ bool CollisionDroite (Point2D A, Point2D B, Ball ball)
     float CI = numerateur / denominateur;
     
     if (CI<ball.radius)
+    {
+        //printf("Collision droite (%.1f,%.1f)(%.1f,%.1f)\n", A.x, A.y, B.x, B.y);
         return true;
+    }
     else
+    {
         return false;
-
+    }
 }
 
 bool CollisionSegment (Point2D A,Point2D B, Ball ball)
@@ -47,12 +55,21 @@ bool CollisionSegment (Point2D A,Point2D B, Ball ball)
     float pscal2 = DotProduct(MultVector(AB, -1), AC);  // produit scalaire
 
     if (pscal1>=0 && pscal2>=0)
+    {
+        printf("Collision segment (%.1f,%f)(%.1f,%.1f)\n", A.x, A.y, B.x, B.y);
         return true;   // I entre A et B, ok.
+    }
     // dernière possibilité, A ou B dans le cercle
     if (CollisionPointCercle(A,ball))
+    {
+        printf("Point A(%.1f,%.1f) dans cercle\n", A.x, A.y);
         return true;
+    }
     if (CollisionPointCercle(B,ball))
+    {
+        printf("Point B(%.1f,%.1f) dans cercle\n", B.x, B.y);
         return true;
+    }
     return false;
 }
 
