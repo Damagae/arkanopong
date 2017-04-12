@@ -31,14 +31,11 @@ void drawBall(Ball ball)
 
 /* BALL MANAGMENT */
 
-// Return 1 if ball inside game
-// Return 0 if ball outside game
-int moveBall (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick)
+// Change ball position
+void moveBall (PtBall ptBall)
 {
     Vector2D deplacement = MultVector(ptBall->direction, ptBall->speed);
-    // Change ball position
     ptBall->position = PointPlusVector(ptBall->position, deplacement);
-    return checkPosition(ptBall, bar1, bar2, ptBrick);
 }
 
 /* Ball edges position */

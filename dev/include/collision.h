@@ -20,6 +20,7 @@ int ballOutOfGame(PtBall ptBall);
 int collisionBallBar (PtBall ptBall, PtBar bar1, PtBar bar2);
 void changeDirection (Vector2D* direction, Orientation orientation);
 void changeAngle (PtBall ptBall, PtBar ptBar);
+int checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick);
 
 
 #endif

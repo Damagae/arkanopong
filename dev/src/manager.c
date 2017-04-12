@@ -1,14 +1,16 @@
+#include <SDL/SDL.h>
 #include <GL/gl.h>
 
 #include "manager.h"
 #include "primitives.h"
-#include "player.h"
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 
 extern int GAME_WIDTH;
 extern int GAME_HEIGHT;
+
+extern int LIFE_MAX;
 
 int loseLife(PtPlayer player)
 {
@@ -23,7 +25,6 @@ void drawGameBorder()
 {
     Point2D GAME_TOP_LEFT = PointXY((WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2);
 
-    glColor3f(1.0, 0.0, 0.0);
     glPushMatrix();
     glTranslatef(GAME_TOP_LEFT.x + GAME_WIDTH/2, GAME_TOP_LEFT.y + GAME_HEIGHT/2, 1);
     glScalef(GAME_WIDTH-1, GAME_HEIGHT-1, 1);
@@ -31,14 +32,46 @@ void drawGameBorder()
     glPopMatrix();
 }
 
-void render(Player player1, Player player2)
-{
+void renderGame(Player player1, Player player2, Brick brick)
+{    
+    glClear(GL_COLOR_BUFFER_BIT);
+  
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    
+
+    glColor3f(1.0, 0.0, 0.0);
+    drawGameBorder();
+
+    glColor3f(1.0, 1.0, 1.0);
     drawBall(*(player1.p_ball));
-    drawBall(*(player2.p_ball));
+    //drawBall(*(player2.p_ball));
 
     drawBar(*(player1.p_bar), player1.num);
     drawBar(*(player2.p_bar), player2.num);
 
+    drawBrick(brick);
+
     drawLife(player1);
     drawLife(player2);
+
+
+    SDL_GL_SwapBuffers();
+}
+
+int runGame(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer player)
+{
+    int i;
+    int alive = LIFE_MAX;
+    moveBall(ptBall);
+    i = checkPosition(ptBall, bar1, bar2, ptBrick);
+    if (i == 0)
+    {
+        alive = loseLife(&player[i]);
+    }
+    else if (i == 1)
+    {
+        alive = loseLife(&player[i]);
+    }
+    return alive;
 }

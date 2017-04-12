@@ -3,13 +3,13 @@
 #include "player.h"
 #include "primitives.h"
 
-#define LIFE_MAX 3
-
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 
 extern int GAME_WIDTH;
 extern int GAME_HEIGHT;
+
+extern int LIFE_MAX;
 
 Player createPlayer(int num, char* name, PtBar ptBar, PtBall ptBall)
 {

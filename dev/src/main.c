@@ -14,6 +14,7 @@
 #include "player.h"
 #include "ai.h"
 #include "manager.h"
+#include "bool.h"
 
 #define MAX_BALL 6
 
@@ -24,6 +25,8 @@ unsigned int WINDOW_HEIGHT = 800;
 /* Dimensions du jeu */
 int GAME_WIDTH = 600;
 int GAME_HEIGHT = 600;
+
+int LIFE_MAX = 3;
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
@@ -43,6 +46,9 @@ void setVideoMode(unsigned int width, unsigned int height) {
 
 int main(int argc, char** argv)
 {
+  bool start = false;
+  int alive;
+
   /** Creation des balles, barres et joueurs**/
   Ball ball[MAX_BALL];
   Bar bar[2];
@@ -54,6 +60,7 @@ int main(int argc, char** argv)
   player[0] = createPlayer(0, "Toto", &bar[0], &ball[0]);
 
   bar[1] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50));
+  player[1] = createPlayer(1, "Tata", &bar[1], &ball[0]);
 
   /** Creation des briques **/
   Brick brick;
@@ -73,31 +80,33 @@ int main(int argc, char** argv)
     Uint32 startTime = SDL_GetTicks();
 
     /* Dessin */
-    glClear(GL_COLOR_BUFFER_BIT);
-  
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glColor3f(1.0, 1.0, 1.0);
+    renderGame(player[0], player[1], brick);
 
-    drawBall(ball[0]);
-    drawBar(*(player[0].p_bar), player[0].num);
+    if (start)
+    {
+      alive = runGame(&ball[0], &bar[0], &bar[1], &brick, player);
+      if (alive < LIFE_MAX)
+      {
+        // Commenter cette ligne pour continuer à jouer serainement
+        start = false;
+        if (!alive)
+        {
+          if (player[0].life == 0)
+          {
+            printf("%s a perdu !\n",player[0].name);
+          }
+          else
+          {
+            printf("%s a perdu !\n",player[1].name);
+          }
+        }
+      }
+      
+      moveBar(player[0].p_bar, direction[0]);
+      //moveBar(&bar[1], direction[1]);
+      AIcontroller (&bar[1], ball[0]);
+    }
 
-    drawBar(bar[1], 1);
-
-    drawBrick(brick);
-    drawGameBorder();
-    drawLife(player[0]);
-
-    moveBall(&ball[0], &bar[0], &bar[1], &brick);
-    
-    moveBar(player[0].p_bar, direction[0]);
-    //moveBar(&bar[1], direction[1]);
-    AIcontroller (&bar[1], ball[0]);
-
-    
-
-
-    SDL_GL_SwapBuffers();
     /* ****** */    
 
     SDL_Event e;
@@ -143,6 +152,9 @@ int main(int argc, char** argv)
               break;
             case SDLK_d:
               direction[1] = NONE;
+              break;
+            case SDLK_SPACE:
+              start = true;
               break;
             default:
               break;
