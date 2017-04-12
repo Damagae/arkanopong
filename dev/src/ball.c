@@ -3,7 +3,7 @@
 #include <math.h>
 
 #include "ball.h"
-#include "bar.h"
+#include "collision.h"
 #include "primitives.h"
 
 #define BALL_RADIUS 10
@@ -36,72 +36,62 @@ void drawBall(Ball ball)
 
 // Return 1 if ball inside game
 // Return 0 if ball outside game
-int moveBall (PtBall ptBall, PtBar bar1, PtBar bar2)
+int moveBall (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick)
 {
     Vector2D deplacement = MultVector(ptBall->direction, ptBall->speed);
     // Change ball position
     ptBall->position = PointPlusVector(ptBall->position, deplacement);
-    return checkPosition(ptBall, bar1, bar2);
-}
-
-int moveBallBrick (PtBall ptBall, int collision)
-{
-    Vector2D deplacement = MultVector(ptBall->direction, ptBall->speed);
-    ptBall->position = PointPlusVector(ptBall->position, deplacement);
-    if(collision == 2 || collision == 4)
-    {
-        changeDirection(&(ptBall->direction), VERTICAL);
-        printf("Direction change VERTICAL\n");
-    }
-    else
-    {
-        changeDirection(&(ptBall->direction), HORIZONTAL);
-        printf("Direction change HORIZONTAL\n");
-    }
-    return 1;
+    return checkPosition(ptBall, bar1, bar2, ptBrick);
 }
 
 // Check if the ball hits something or if it's out of the game
-int checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2)
+int checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick)
 {
-    int colBallBar;
+    int colBallBar, colBallBrick;
     int inside = 0;
 
-    // 0 if no collision
+    // 0 if no collision with the bar
     colBallBar = collisionBallBar(ptBall, bar1, bar2);
-
-    // If ball is out of the game
-    if (ballTopPosition(ptBall) <= 0 || ballBottomPosition(ptBall) >= GAME_HEIGHT)
-    {
-        changeDirection(&(ptBall->direction), VERTICAL);
-        inside = 1;
-       // return 0;
-    }
+    colBallBrick = BrickCollision(*ptBrick, *ptBall);
 
     // If ball hits left or right border
     if (collisionBallWall(ptBall))
     {
         changeDirection(&(ptBall->direction), HORIZONTAL);
-        inside = 1;
     }
+    // If ball is out of the game
+    if (ballTopPosition(ptBall) <= 0 || ballBottomPosition(ptBall) >= GAME_HEIGHT)
+    {
+        changeDirection(&(ptBall->direction), VERTICAL);
+        inside = 0;
+    }
+    // If ball hits nothing & it's inside the game
+    else
+        inside = 1;
 
     // If ball hits bar1 (down)
-    else if (colBallBar == 1)
+    if (colBallBar == 1)
     {
         changeAngle(ptBall, bar1);
-        inside = 1;
     }
-
     // If ball hits bar2 (up)
     else if (colBallBar == 2)
     {
         changeAngle(ptBall, bar2);
-        inside = 1;
     }
 
-    // If ball hits nothing & it's inside the game
-    else
-        inside = 1;
+    if (colBallBrick == 2 || colBallBrick == 4)
+    {
+        changeDirection(&(ptBall->direction), HORIZONTAL);
+        printf("Direction change VERTICAL\n");
+        inside = 2;
+    }
+    else if (colBallBrick == 1 || colBallBrick == 3)
+    {
+        changeDirection(&(ptBall->direction), VERTICAL);
+        printf("Direction change HORIZONTAL\n");
+        inside = 2;
+    }
 
     return inside;
 }

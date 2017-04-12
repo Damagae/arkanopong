@@ -28,7 +28,6 @@ typedef Brick* PtBrick;
 /** FUNCTIONS **/
 
 Brick createBrick (Point2D position, BrickType type);
-bool brickCollision (Brick brick, Ball ball);
 void drawBrick(Brick brick);
 Point2D brickVerticeTopLeft(PtBrick ptBrick);
 Point2D brickVerticeTopRight(PtBrick ptBrick);

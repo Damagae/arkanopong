@@ -42,18 +42,17 @@ void setVideoMode(unsigned int width, unsigned int height) {
 
 int main(int argc, char** argv)
 {
-  /** Creation des balles et barres et joueurs**/
+  /** Creation des balles, barres et joueurs**/
   Ball ball[MAX_BALL];
   Bar bar[2];
   Player player[2];
   Direction direction[2] = {NONE, NONE};
 
   bar[0] = createBar(PointXY(GAME_WIDTH/2, GAME_HEIGHT-50));
-  //ball[0] = createBall (PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), VectorXY(1, -0.5));
-  ball[0] = createBall (PointXY(50, 50), VectorXY(1, -0.5));
+  ball[0] = createBall (PointXY(150, 550), VectorXY(0.5, 0.5));
   player[0] = createPlayer(0, "Toto", &bar[0], &ball[0]);
 
-  //bar[1] = createBar(PointXY(GAME_WIDTH/2, 50));
+  bar[1] = createBar(PointXY(GAME_WIDTH/2, 50));
 
   /** Creation des briques **/
   Brick brick;
@@ -82,22 +81,12 @@ int main(int argc, char** argv)
     drawBall(ball[0]);
     drawBar(*(player[0].p_bar), player[0].num);
 
-    //drawBar(bar[1], 1);
+    drawBar(bar[1], 1);
 
     drawBrick(brick);
 
-    // Brick Collision
-    int brickCollision = BrickCollision(brick, ball[0]);
-    if(brickCollision != -1) 
-    {
-      printf("**Collision Main**\n");
-      SDL_Delay(1000);
-      moveBallBrick(&ball[0], brickCollision);
-    }
-    else
-    {
-      moveBall(&ball[0], &bar[0], &bar[1]);
-    }
+
+    moveBall(&ball[0], &bar[0], &bar[1], &brick);
     
     moveBar(player[0].p_bar, direction[0]);
     //moveBar(&bar[1], direction[1]);
