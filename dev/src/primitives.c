@@ -17,6 +17,18 @@ void drawSquare()
     glEnd();
 }
 
+void drawSquareBorder()
+{
+    glBegin(GL_LINE_LOOP);
+
+    glVertex2f(-0.5, 0.5);
+    glVertex2f(0.5, 0.5);
+    glVertex2f(0.5, -0.5);
+    glVertex2f(-0.5, -0.5);
+
+    glEnd();
+}
+
 void drawRoundedSquare(float radius)
 {
     float i;

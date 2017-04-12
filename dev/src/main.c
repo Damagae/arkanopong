@@ -13,16 +13,17 @@
 #include "bar.h"
 #include "player.h"
 #include "ai.h"
+#include "manager.h"
 
 #define MAX_BALL 6
 
 /* Dimensions de la fenêtre */
-static unsigned int WINDOW_WIDTH = 800;
-static unsigned int WINDOW_HEIGHT = 800;
+unsigned int WINDOW_WIDTH = 800;
+unsigned int WINDOW_HEIGHT = 800;
 
 /* Dimensions du jeu */
-int GAME_WIDTH = 800;
-int GAME_HEIGHT = 800;
+int GAME_WIDTH = 600;
+int GAME_HEIGHT = 600;
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
@@ -36,7 +37,7 @@ void setVideoMode(unsigned int width, unsigned int height) {
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluOrtho2D(0, GAME_WIDTH, GAME_HEIGHT, 0);
+  gluOrtho2D(0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 }
 
 
@@ -48,16 +49,16 @@ int main(int argc, char** argv)
   Player player[2];
   Direction direction[2] = {NONE, NONE};
 
-  bar[0] = createBar(PointXY(GAME_WIDTH/2, GAME_HEIGHT-50));
-  ball[0] = createBall (PointXY(150, 550), VectorXY(0.5, 0.5));
+  bar[0] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50));
+  ball[0] = createBall (PointXY(450, 550), VectorXY(0.5, 0.5));
   player[0] = createPlayer(0, "Toto", &bar[0], &ball[0]);
 
-  bar[1] = createBar(PointXY(GAME_WIDTH/2, 50));
+  bar[1] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50));
 
   /** Creation des briques **/
   Brick brick;
   BrickType type = NORMAL;
-  brick = createBrick(PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), type);
+  brick = createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), type);
   
   /** Initialisation de la SDL **/
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -84,7 +85,8 @@ int main(int argc, char** argv)
     drawBar(bar[1], 1);
 
     drawBrick(brick);
-
+    drawGameBorder();
+    drawLife(player[0]);
 
     moveBall(&ball[0], &bar[0], &bar[1], &brick);
     

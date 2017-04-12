@@ -7,6 +7,9 @@
 #define BAR_WIDTH 100
 #define BAR_HEIGHT 20
 
+extern int WINDOW_WIDTH;
+extern int WINDOW_HEIGHT;
+
 extern int GAME_WIDTH;
 extern int GAME_HEIGHT;
 
@@ -23,13 +26,25 @@ Bar createBar (Point2D position)
 
 void moveBar(PtBar ptBar, Direction direction)
 {
-    if(direction == RIGHT && barRightPosition(ptBar) <= GAME_WIDTH)
+    float LEFT_BORDER = (WINDOW_WIDTH-GAME_WIDTH)/2;
+    float RIGHT_BORDER = GAME_WIDTH + (WINDOW_WIDTH-GAME_WIDTH)/2;
+
+    if(direction == RIGHT && barRightPosition(ptBar) <= RIGHT_BORDER)
     {
         ptBar->position.x += ptBar->speed;
     }
-    else if (direction == LEFT && barLeftPosition(ptBar) >= 0)
+    else if (direction == LEFT && barLeftPosition(ptBar) >= LEFT_BORDER)
     {
         ptBar->position.x -= ptBar->speed;
+    }
+    // Block bar inside the game size
+    if (barRightPosition(ptBar) >= RIGHT_BORDER)
+    {
+        ptBar->position.x = RIGHT_BORDER - ptBar->width/2;
+    }
+    else if (barLeftPosition(ptBar) <= LEFT_BORDER)
+    {
+        ptBar->position.x = LEFT_BORDER + ptBar->width/2;
     }
 }
 

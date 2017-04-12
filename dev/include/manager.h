@@ -9,5 +9,7 @@
 /** FONCTIONS **/
 
 int loseLife(PtPlayer player);
+void drawGameBorder();
+void render(Player player1, Player player2);
 
 #endif

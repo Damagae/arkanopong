@@ -20,5 +20,6 @@ typedef Player* PtPlayer;
 /** FUNCTIONS **/
 
 Player createPlayer(int num, char* name, PtBar ptBar, PtBall ptBall);
+void drawLife(Player player);
 
 #endif

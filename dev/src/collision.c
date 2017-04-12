@@ -4,6 +4,9 @@
 #include "math.h"
 #include "brick.h"
 
+extern int WINDOW_WIDTH;
+extern int WINDOW_HEIGHT;
+
 extern int GAME_WIDTH;
 extern int GAME_HEIGHT;
 
@@ -110,7 +113,21 @@ int BrickCollision (Brick brick, Ball ball)
 
 int collisionBallWall(PtBall ptBall)
 {
-    if (ballLeftPosition(ptBall) <= 0 || ballRightPosition(ptBall) >= GAME_WIDTH)
+    float LEFT_BORDER = (WINDOW_WIDTH-GAME_WIDTH)/2;
+    float RIGHT_BORDER = GAME_WIDTH + (WINDOW_WIDTH-GAME_WIDTH)/2;
+
+    if (ballLeftPosition(ptBall) <= LEFT_BORDER || ballRightPosition(ptBall) >= RIGHT_BORDER)
+        return 1;
+    else
+        return 0;
+}
+
+int ballOutOfGame(PtBall ptBall)
+{
+    float TOP_BORDER = (WINDOW_HEIGHT-GAME_HEIGHT)/2;
+    float BOTTOM_BORDER = GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2;
+
+    if (ballTopPosition(ptBall) <= TOP_BORDER || ballBottomPosition(ptBall) >= BOTTOM_BORDER)
         return 1;
     else
         return 0;
@@ -171,4 +188,57 @@ void changeAngle (PtBall ptBall, PtBar ptBar)
         ptBall->direction.y = -cos(angle);
     else
         ptBall->direction.y = cos(angle);
+}
+
+// 0 if ball outside, 1 if ball inside, 2 if collision detected
+int checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick)
+{
+    int colBallBar, colBallBrick;
+    int inside = 0;
+
+    // 0 if no collision with the bar
+    colBallBar = collisionBallBar(ptBall, bar1, bar2);
+    colBallBrick = BrickCollision(*ptBrick, *ptBall);
+
+    // If ball hits left or right border
+    if (collisionBallWall(ptBall))
+    {
+        changeDirection(&(ptBall->direction), HORIZONTAL);
+        inside = 2;
+    }
+    // If ball is out of the game
+    if (ballOutOfGame(ptBall))
+    {
+        changeDirection(&(ptBall->direction), VERTICAL);
+        inside = 0;
+    }
+    // If ball hits nothing & it's inside the game
+    else
+        inside = 1;
+
+    // If ball hits bar1 (down)
+    if (colBallBar == 1)
+    {
+        changeAngle(ptBall, bar1);
+        inside = 2;
+    }
+    // If ball hits bar2 (up)
+    else if (colBallBar == 2)
+    {
+        changeAngle(ptBall, bar2);
+        inside = 2;
+    }
+
+    if (colBallBrick == 2 || colBallBrick == 4)
+    {
+        changeDirection(&(ptBall->direction), HORIZONTAL);
+        inside = 2;
+    }
+    else if (colBallBrick == 1 || colBallBrick == 3)
+    {
+        changeDirection(&(ptBall->direction), VERTICAL);
+        inside = 2;
+    }
+
+    return inside;
 }
