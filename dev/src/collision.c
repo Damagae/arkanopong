@@ -77,7 +77,7 @@ bool CollisionSegment (Point2D A,Point2D B, Ball ball)
     return false;
 }
 
-int BrickCollision (Brick brick, Ball ball)
+int BrickCollision (Brick brick, PtBall ptBall)
 {
     Point2D A = brickVerticeTopLeft(&brick);
     Point2D B = brickVerticeTopRight(&brick);
@@ -85,23 +85,28 @@ int BrickCollision (Brick brick, Ball ball)
     Point2D D = brickVerticeBottomRight(&brick);
 
     bool AB, BC, CD, DA;
-    AB = CollisionSegment(A, B, ball);
-    BC = CollisionSegment(B, C, ball);
-    CD = CollisionSegment(C, D, ball);
-    DA = CollisionSegment(D, A, ball);
+    AB = CollisionSegment(A, B, *ptBall);
+    BC = CollisionSegment(B, C, *ptBall);
+    CD = CollisionSegment(C, D, *ptBall);
+    DA = CollisionSegment(D, A, *ptBall);
 
     if (AB == true || BC == true || CD == true || DA == true)
     {
         if (AB == true ) {
+            // We put ball outside the brick
+            ptBall->position.y = brick.position.y - brick.height/2 - ptBall->radius;
             return 1;
         }
         if (BC == true ) {
+            ptBall->position.x = brick.position.x + brick.width/2 + ptBall->radius;
             return 2;
         }
         if (CD == true ) {
+            ptBall->position.y = brick.position.y + brick.height/2 + ptBall->radius;
             return 3;
         }
         if (DA == true ) {
+            ptBall->position.x = brick.position.x - brick.width/2 - ptBall->radius;
             return 4;
         }
     }    
@@ -116,8 +121,18 @@ int collisionBallWall(PtBall ptBall)
     float LEFT_BORDER = (WINDOW_WIDTH-GAME_WIDTH)/2;
     float RIGHT_BORDER = GAME_WIDTH + (WINDOW_WIDTH-GAME_WIDTH)/2;
 
-    if (ballLeftPosition(ptBall) <= LEFT_BORDER || ballRightPosition(ptBall) >= RIGHT_BORDER)
+    if (ballLeftPosition(ptBall) <= LEFT_BORDER)
+    {
+        // To keep ball inside the game
+        ptBall->position.x = LEFT_BORDER + ptBall->radius;
         return 1;
+    }
+    else if (ballRightPosition(ptBall) >= RIGHT_BORDER)
+    {
+        ptBall->position.x = RIGHT_BORDER - ptBall->radius;
+        return 1;
+    }
+        
     else
         return 0;
 }
@@ -143,7 +158,11 @@ int collisionBallBar(PtBall ptBall, PtBar bar1, PtBar bar2)
     if (ballBottomPosition(ptBall) >= barTopPosition(bar1) && ballBottomPosition(ptBall) <= bar1->position.y)
     {
         if (ballRightPosition(ptBall) >= barLeftPosition(bar1) && ballLeftPosition(ptBall) <= barRightPosition(bar1))
+        {
+            ptBall->position.y = bar1->position.y - bar1->height/2 - ptBall->radius;
             return 1;
+        }
+            
         else return 0;
     }
 
@@ -151,7 +170,10 @@ int collisionBallBar(PtBall ptBall, PtBar bar1, PtBar bar2)
     else if (ballTopPosition(ptBall) <= barBottomPosition(bar2) && ballTopPosition(ptBall) >= bar2->position.y)
     {
         if (ballRightPosition(ptBall) >= barLeftPosition(bar2) && ballLeftPosition(ptBall) <= barRightPosition(bar2))
+        {
+            ptBall->position.y = bar2->position.y + bar2->height/2 + ptBall->radius;
             return 2;
+        }
         else return 0;
     }
     else
@@ -201,7 +223,7 @@ int checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick)
 
     // 0 if no collision with the bar
     colBallBar = collisionBallBar(ptBall, bar1, bar2);
-    colBallBrick = BrickCollision(*ptBrick, *ptBall);
+    colBallBrick = BrickCollision(*ptBrick, ptBall);
     position = ballOutOfGame(ptBall);
 
     // If ball inside the game

@@ -14,7 +14,7 @@
 bool CollisionPointCercle (Point2D A, Ball ball);
 bool CollisionDroite (Point2D A, Point2D B, Ball ball);
 bool CollisionSegment (Point2D A,Point2D B, Ball ball);
-int BrickCollision (Brick brick, Ball ball);
+int BrickCollision (Brick brick, PtBall ptBall);
 int collisionBallWall (PtBall ptBall);
 int ballOutOfGame(PtBall ptBall);
 int collisionBallBar (PtBall ptBall, PtBar bar1, PtBar bar2);

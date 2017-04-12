@@ -56,7 +56,7 @@ int main(int argc, char** argv)
   Direction direction[2] = {NONE, NONE};
 
   bar[0] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50));
-  ball[0] = createBall (PointXY(450, 550), VectorXY(0.5, 0.5));
+  ball[0] = createBall (PointXY(450, 550), VectorXY(0, 0.8));
   player[0] = createPlayer(0, "Toto", &bar[0], &ball[0]);
 
   bar[1] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50));
@@ -88,7 +88,7 @@ int main(int argc, char** argv)
       if (alive < LIFE_MAX)
       {
         // Commenter cette ligne pour continuer à jouer serainement
-        start = false;
+        //start = false;
         if (!alive)
         {
           if (player[0].life == 0)
@@ -103,8 +103,8 @@ int main(int argc, char** argv)
       }
       
       moveBar(player[0].p_bar, direction[0]);
-      //moveBar(&bar[1], direction[1]);
-      AIcontroller (&bar[1], ball[0]);
+      moveBar(&bar[1], direction[1]);
+      //AIcontroller (&bar[1], ball[0]);
     }
 
     /* ****** */    
