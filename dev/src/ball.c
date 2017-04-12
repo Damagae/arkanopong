@@ -83,82 +83,15 @@ int checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick)
     if (colBallBrick == 2 || colBallBrick == 4)
     {
         changeDirection(&(ptBall->direction), HORIZONTAL);
-        printf("Direction change VERTICAL\n");
         inside = 2;
     }
     else if (colBallBrick == 1 || colBallBrick == 3)
     {
         changeDirection(&(ptBall->direction), VERTICAL);
-        printf("Direction change HORIZONTAL\n");
         inside = 2;
     }
 
     return inside;
-}
-
-void changeDirection (Vector2D* direction, Orientation orientation)
-{
-    if (orientation == HORIZONTAL)
-    {
-        direction->x = inverse(direction->x);
-    }
-    else if (orientation == VERTICAL)
-    {
-        direction->y = inverse(direction->y);
-    }
-}
-
-// Change ball's direction. The closer you are to the bar center, the more vertical it will be
-void changeAngle (PtBall ptBall, PtBar ptBar)
-{
-    float dist;
-    float angle;
-
-    dist = ptBall->position.x - ptBar->position.x;
-    // To avoid bugs if you move the bar during collision
-    if (dist > ptBar->width/2)
-        dist = ptBar->width/2;
-    else if (dist < inverse(ptBar->width/2))
-        dist = inverse(ptBar->width/2);
-
-    // Value between 0 and M_PI/3
-    angle = dist/(ptBar->width/2) * M_PI/3;
-
-    ptBall->direction.x = sin(angle);
-    if (ptBall->direction.y > 0)
-        ptBall->direction.y = -cos(angle);
-    else
-        ptBall->direction.y = cos(angle);
-}
-
-int collisionBallWall(PtBall ptBall)
-{
-    if (ballLeftPosition(ptBall) <= 0 || ballRightPosition(ptBall) >= GAME_WIDTH)
-        return 1;
-    else
-        return 0;
-}
-
-/* Return 1 if collision with bar1, 2 if collision with bar2, 0 if no collision */
-int collisionBallBar(PtBall ptBall, PtBar bar1, PtBar bar2)
-{
-    // Bar 1 collision between the center and the top of the bar
-    if (ballBottomPosition(ptBall) >= barTopPosition(bar1) && ballBottomPosition(ptBall) <= bar1->position.y)
-    {
-        if (ballRightPosition(ptBall) >= barLeftPosition(bar1) && ballLeftPosition(ptBall) <= barRightPosition(bar1))
-            return 1;
-        else return 0;
-    }
-
-    // Bar 2 is rotated 180°
-    else if (ballTopPosition(ptBall) <= barBottomPosition(bar2) && ballTopPosition(ptBall) >= bar2->position.y)
-    {
-        if (ballRightPosition(ptBall) >= barLeftPosition(bar2) && ballLeftPosition(ptBall) <= barRightPosition(bar2))
-            return 2;
-        else return 0;
-    }
-    else
-        return 0;
 }
 
 /* Ball edges position */

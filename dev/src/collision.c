@@ -4,6 +4,9 @@
 #include "math.h"
 #include "brick.h"
 
+extern int GAME_WIDTH;
+extern int GAME_HEIGHT;
+
 bool CollisionPointCercle (Point2D A, Ball ball)
 {
     Point2D C = ball.position;
@@ -54,18 +57,18 @@ bool CollisionSegment (Point2D A,Point2D B, Ball ball)
 
     if (pscal1>=0 && pscal2>=0)
     {
-        printf("Collision segment\n");
+        //printf("Collision segment\n");
         return true;   // I entre A et B, ok.
     }
     // dernière possibilité, A ou B dans le cercle
     if (CollisionPointCercle(A,ball))
     {
-        printf("Point A(%.1f,%.1f) dans cercle\n", A.x, A.y);
+        //printf("Point A(%.1f,%.1f) dans cercle\n", A.x, A.y);
         return true;
     }
     if (CollisionPointCercle(B,ball))
     {
-        printf("Point B(%.1f,%.1f) dans cercle\n", B.x, B.y);
+        //printf("Point B(%.1f,%.1f) dans cercle\n", B.x, B.y);
         return true;
     }
     return false;
@@ -87,19 +90,15 @@ int BrickCollision (Brick brick, Ball ball)
     if (AB == true || BC == true || CD == true || DA == true)
     {
         if (AB == true ) {
-            printf("AB\n");
             return 1;
         }
         if (BC == true ) {
-            printf("BC\n");
             return 2;
         }
         if (CD == true ) {
-            printf("CD\n");
             return 3;
         }
         if (DA == true ) {
-            printf("DA\n");
             return 4;
         }
     }    
@@ -109,3 +108,67 @@ int BrickCollision (Brick brick, Ball ball)
     return -1;
 }
 
+int collisionBallWall(PtBall ptBall)
+{
+    if (ballLeftPosition(ptBall) <= 0 || ballRightPosition(ptBall) >= GAME_WIDTH)
+        return 1;
+    else
+        return 0;
+}
+
+/* Return 1 if collision with bar1, 2 if collision with bar2, 0 if no collision */
+int collisionBallBar(PtBall ptBall, PtBar bar1, PtBar bar2)
+{
+    // Bar 1 collision between the center and the top of the bar
+    if (ballBottomPosition(ptBall) >= barTopPosition(bar1) && ballBottomPosition(ptBall) <= bar1->position.y)
+    {
+        if (ballRightPosition(ptBall) >= barLeftPosition(bar1) && ballLeftPosition(ptBall) <= barRightPosition(bar1))
+            return 1;
+        else return 0;
+    }
+
+    // Bar 2 is rotated 180°
+    else if (ballTopPosition(ptBall) <= barBottomPosition(bar2) && ballTopPosition(ptBall) >= bar2->position.y)
+    {
+        if (ballRightPosition(ptBall) >= barLeftPosition(bar2) && ballLeftPosition(ptBall) <= barRightPosition(bar2))
+            return 2;
+        else return 0;
+    }
+    else
+        return 0;
+}
+
+void changeDirection (Vector2D* direction, Orientation orientation)
+{
+    if (orientation == HORIZONTAL)
+    {
+        direction->x = inverse(direction->x);
+    }
+    else if (orientation == VERTICAL)
+    {
+        direction->y = inverse(direction->y);
+    }
+}
+
+// Change ball's direction. The closer you are to the bar center, the more vertical it will be
+void changeAngle (PtBall ptBall, PtBar ptBar)
+{
+    float dist;
+    float angle;
+
+    dist = ptBall->position.x - ptBar->position.x;
+    // To avoid bugs if you move the bar during collision
+    if (dist > ptBar->width/2)
+        dist = ptBar->width/2;
+    else if (dist < inverse(ptBar->width/2))
+        dist = inverse(ptBar->width/2);
+
+    // Value between 0 and M_PI/3
+    angle = dist/(ptBar->width/2) * M_PI/3;
+
+    ptBall->direction.x = sin(angle);
+    if (ptBall->direction.y > 0)
+        ptBall->direction.y = -cos(angle);
+    else
+        ptBall->direction.y = cos(angle);
+}

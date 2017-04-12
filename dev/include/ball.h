@@ -28,11 +28,9 @@ typedef enum Orientation
 Ball createBall (Point2D position, Vector2D direction);
 int moveBall (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick);
 int checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick);
-void changeDirection (Vector2D* direction, Orientation orientation);
+
 void drawBall (Ball ball);
-int collisionBallWall (PtBall ptBall);
-int collisionBallBar (PtBall ptBall, PtBar bar1, PtBar bar2);
-void changeAngle (PtBall ptBall, PtBar ptBar);
+
 
 float ballBottomPosition (PtBall ptBall);
 float ballTopPosition (PtBall ptBall);
