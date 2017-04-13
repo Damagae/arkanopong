@@ -6,6 +6,7 @@
 #include "bar.h"
 #include "brick.h"
 #include "collision.h"
+#include "bonus.h"
 
 /** STRUCTURES **/
 
@@ -14,7 +15,7 @@
 
 int loseLife(PtPlayer player);
 void drawGameBorder();
-void renderGame(Player player1, Player player2, Brick brick);
+void renderGame(Player player1, Player player2, Brick brick, BonusList bonusList);
 int runGame(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer player);
 
 #endif

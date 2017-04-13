@@ -4,6 +4,8 @@
 #include "geometry.h"
 #include "ball.h"
 #include "bool.h"
+#define __BONUS__FORWARD__DECLARATION
+#include "bonus.h"
 
 /** STRUCTURES **/
 
@@ -20,14 +22,12 @@ typedef struct
     char* texture;
     int life;
     BrickType type;
-} Brick;
-
-typedef Brick* PtBrick;
+} Brick, *PtBrick;
 
 
 /** FUNCTIONS **/
 
-Brick createBrick (Point2D position, BrickType type);
+Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList);
 void drawBrick(Brick brick);
 int brickDamaged(PtBrick ptBrick);
 Point2D brickVerticeTopLeft(PtBrick ptBrick);

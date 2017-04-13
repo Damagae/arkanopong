@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <SDL/SDL.h>
 #include <GL/gl.h>
 
@@ -32,7 +33,7 @@ void drawGameBorder()
     glPopMatrix();
 }
 
-void renderGame(Player player1, Player player2, Brick brick)
+void renderGame(Player player1, Player player2, Brick brick, BonusList bonusList)
 {    
     glClear(GL_COLOR_BUFFER_BIT);
   
@@ -51,6 +52,7 @@ void renderGame(Player player1, Player player2, Brick brick)
     drawBar(*(player2.p_bar), player2.num);
 
     drawBrick(brick);
+    drawAllBonus(bonusList);
 
     drawLife(player1);
     drawLife(player2);
@@ -61,17 +63,21 @@ void renderGame(Player player1, Player player2, Brick brick)
 
 int runGame(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer player)
 {
-    int i;
+    int position;
     int alive = LIFE_MAX;
     moveBall(ptBall);
-    i = checkPosition(ptBall, bar1, bar2, ptBrick);
-    if (i == 0)
+    position = checkPosition(ptBall, bar1, bar2, ptBrick, player);
+    if (position == OUT_DOWN)
     {
-        alive = loseLife(&player[i]);
+        alive = loseLife(&player[0]);
     }
-    else if (i == 1)
+    else if (position == OUT_UP)
     {
-        alive = loseLife(&player[i]);
+        alive = loseLife(&player[1]);
+    }
+    else if (position == BRICK)
+    {
+        brickDamaged(ptBrick);
     }
     return alive;
 }

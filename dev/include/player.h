@@ -13,9 +13,7 @@ typedef struct
   int life;
   PtBar p_bar;
   PtBall p_ball;
-} Player;
-
-typedef Player* PtPlayer;
+} Player, *PtPlayer;
 
 /** FUNCTIONS **/
 

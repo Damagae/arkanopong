@@ -1,34 +1,48 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 #include <GL/gl.h>
 
 #include "brick.h"
 #include "primitives.h"
 #include "geometry.h"
+#include "bonus.h"
 
 #define HEIGHT_DEFAULT 40
 #define WIDTH_DEFAULT 90
 
-Brick createBrick (Point2D position, BrickType type)
+Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList)
 {
-    Brick brick;
-    brick.position = position;
-    brick.width = WIDTH_DEFAULT;
-    brick.height = HEIGHT_DEFAULT;
-    brick.type = type;
-    if (brick.type == DISAP)
+    PtBrick ptBrick = malloc(sizeof(Brick));
+    if (ptBrick == NULL)
     {
-        brick.life = 1;
+        fprintf(stderr, "Echec de l'allocation de la brique.\n");
+        exit(EXIT_FAILURE);
     }
-    else if (brick.type == INDES) 
+
+    ptBrick->position = position;
+    ptBrick->width = WIDTH_DEFAULT;
+    ptBrick->height = HEIGHT_DEFAULT;
+    ptBrick->type = type;
+    if (ptBrick->type == DISAP)
     {
-        brick.life = -1;
+        ptBrick->life = 1;
+    }
+    else if (ptBrick->type == INDES) 
+    {
+        ptBrick->life = -1;
     }
     else 
     {
-        brick.life = 3;
+        ptBrick->life = 3;
+        if (ptBrick->type != NORMAL)
+        {
+            Bonus* bonus = createBonus(ptBrick);
+            addBonus(bonusList, bonus);
+        }
     }
    
-    return brick;
+    return ptBrick;
 }
 
 void drawBrick(Brick brick)

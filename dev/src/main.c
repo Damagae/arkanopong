@@ -15,6 +15,7 @@
 #include "ai.h"
 #include "manager.h"
 #include "bool.h"
+#include "bonus.h"
 
 #define MAX_BALL 6
 
@@ -62,10 +63,14 @@ int main(int argc, char** argv)
   bar[1] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50));
   player[1] = createPlayer(1, "Tata", &bar[1], &ball[0]);
 
+  /* Creation de la liste de bonus */
+  BonusList bonusList = NULL;
+
   /** Creation des briques **/
+  PtBrick ptBrick;
   Brick brick;
-  BrickType type = NORMAL;
-  brick = createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), type);
+  BrickType type = BARUP;
+  ptBrick = createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), type, &bonusList);
   
   /** Initialisation de la SDL **/
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -80,11 +85,11 @@ int main(int argc, char** argv)
     Uint32 startTime = SDL_GetTicks();
 
     /* Dessin */
-    renderGame(player[0], player[1], brick);
+    renderGame(player[0], player[1], *ptBrick, bonusList);
 
     if (start)
     {
-      alive = runGame(&ball[0], &bar[0], &bar[1], &brick, player);
+      alive = runGame(&ball[0], &bar[0], &bar[1], ptBrick, player);
       if (alive < LIFE_MAX)
       {
         // Commenter cette ligne pour continuer à jouer serainement

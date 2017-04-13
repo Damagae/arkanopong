@@ -3,6 +3,7 @@
 #include "collision.h"
 #include "math.h"
 #include "brick.h"
+#include "bonus.h"
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
@@ -144,18 +145,18 @@ int collisionBallWall(PtBall ptBall)
         return 0;
 }
 
-// Return -1 if inside game, 0 if player 1 lose, 1 if player 2 lose
-int ballOutOfGame(PtBall ptBall)
+// Tell if the ball is inside or outside the game
+Position ballOutOfGame(PtBall ptBall)
 {
     float TOP_BORDER = (WINDOW_HEIGHT-GAME_HEIGHT)/2;
     float BOTTOM_BORDER = GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2;
 
     if (ballTopPosition(ptBall) <= TOP_BORDER)
-        return 1;
+        return OUT_UP;
     else if (ballBottomPosition(ptBall) >= BOTTOM_BORDER)
-        return 0;
+        return OUT_DOWN;
     else
-        return -1;
+        return INSIDE;
 }
 
 // Return 1 if collision with bar1, 2 if collision with bar2, 0 if no collision
@@ -222,8 +223,8 @@ void changeAngle (PtBall ptBall, PtBar ptBar)
         ptBall->direction.y = cos(angle);
 }
 
-// -1 if ball inside, 0 if player 1 lose, 1 if player 2 lose, 2 if collision detected
-int checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick)
+// Return the position of the ball
+Position checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer ptPlayer)
 {
     int colBallBar, colBallBrick;
     int position;
@@ -233,42 +234,37 @@ int checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick)
     colBallBrick = BrickCollision(*ptBrick, ptBall);
     position = ballOutOfGame(ptBall);
 
-    // If ball inside the game
-    if (position == -1)
+    if (position == INSIDE)
     {
         // If ball hits left or right border
         if (collisionBallWall(ptBall))
         {
             changeDirection(&(ptBall->direction), HORIZONTAL);
-            position = 2;
+            position = WALL;
         }
 
         // If ball hits bar1 (down)
         if (colBallBar == 1)
         {
             changeAngle(ptBall, bar1);
-            position = 2;
+            position = BAR_DOWN;
         }
         // If ball hits bar2 (up)
         else if (colBallBar == 2)
         {
             changeAngle(ptBall, bar2);
-            position = 2;
+            position = BAR_UP;
         }
 
         if (colBallBrick == 2 || colBallBrick == 4)
         {
-            printf("Brick life = %d\n", ptBrick->life);
             changeDirection(&(ptBall->direction), HORIZONTAL);
-            brickDamaged(ptBrick);
-            position = 2;
+            position = BRICK;
         }
         else if (colBallBrick == 1 || colBallBrick == 3)
         {
-            printf("Brick life = %d\n", ptBrick->life);
             changeDirection(&(ptBall->direction), VERTICAL);
-            brickDamaged(ptBrick);
-            position = 2;
+            position = BRICK;
         }
     }
     else

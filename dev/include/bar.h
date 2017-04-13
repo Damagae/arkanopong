@@ -12,9 +12,7 @@ typedef struct
     float height;
     float speed;
     char* texture;
-} Bar;
-
-typedef Bar* PtBar;
+} Bar, *PtBar;
 
 typedef enum Direction
 {

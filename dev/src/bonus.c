@@ -1,9 +1,81 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <GL/gl.h>
+
 #include "bonus.h"
+#include "primitives.h"
+#include "geometry.h"
+
+#define BONUS_RADIUS 10
+#define BONUS_SPEED 10
 
 #define GAME_WIDTH 200
 #define GAME_HEIGHT 400
 #define BAR_SIZE_CHANGE 6
-#define BALL_SIZE_CHANGE 0.5
+#define BALL_SIZE_CHANGE 1
+
+Bonus* createBonus(PtBrick ptBrick)
+{
+    Bonus* bonus = malloc(sizeof(Bonus));
+    if (bonus == NULL)
+    {
+        fprintf(stderr, "Echec de l'allocation du bonus.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    bonus->position = ptBrick->position;
+    bonus->direction = VectorXY(0,0);
+    bonus->radius = BONUS_RADIUS;
+    bonus->speed = BONUS_SPEED;
+    bonus->ptBrick = ptBrick;
+    bonus->next = NULL;
+    
+    return bonus;
+}
+
+void addBonus(BonusList* bonusList, Bonus* bonus)
+{
+    if (*bonusList == NULL)
+        *bonusList = bonus;
+    else
+    {
+        for (; (*bonusList)->next != NULL; bonusList = &((*bonusList)->next));
+        (*bonusList)->next = bonus;
+    }
+}
+
+void bonusOrientation(Bonus* bonus, Player player)
+{
+    if (player.num == 0)
+    {
+        bonus->direction = VectorXY(0,1);
+    }
+    else
+    {
+        bonus->direction = VectorXY(0,-1);
+    }
+}
+
+// Draw only if brick is destroyed
+void drawBonus(Bonus bonus)
+{
+    if (bonus.ptBrick->life == 0)
+    {
+        glPushMatrix();
+        glTranslatef(bonus.position.x, bonus.position.y, 1);
+        glScalef(bonus.radius, bonus.radius, 1);
+        drawCircle();
+        glPopMatrix();
+    }
+}
+
+void drawAllBonus(BonusList bonusList)
+{
+    for (; bonusList != NULL; bonusList = bonusList->next)
+    {
+        drawBonus(*bonusList);
+    }
+}
 
 void barSizeUp (PtBar ptBar)
 {
