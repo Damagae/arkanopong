@@ -10,6 +10,7 @@
 
 #define HEIGHT_DEFAULT 40
 #define WIDTH_DEFAULT 90
+#define LIFE_DEFAULT 3
 
 Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList)
 {
@@ -27,18 +28,25 @@ Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList)
     if (ptBrick->type == DISAP)
     {
         ptBrick->life = 1;
+        ptBrick->bonus = NULL;
     }
     else if (ptBrick->type == INDES) 
     {
         ptBrick->life = -1;
+        ptBrick->bonus = NULL;
     }
     else 
     {
-        ptBrick->life = 3;
+        ptBrick->life = LIFE_DEFAULT;
         if (ptBrick->type != NORMAL)
         {
             Bonus* bonus = createBonus(ptBrick);
+            ptBrick->bonus = bonus;
             addBonus(bonusList, bonus);
+        }
+        else
+        {
+            ptBrick->bonus = NULL;
         }
     }
    
@@ -59,7 +67,7 @@ void drawBrick(Brick brick)
 
 int brickDamaged(PtBrick ptBrick)
 {
-    return ptBrick->life--;
+    return --ptBrick->life;
 }
 
 /* Brick vertices */

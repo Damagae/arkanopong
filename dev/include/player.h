@@ -10,7 +10,7 @@ typedef struct
   int num;
   char* name;
   int life;
-  PtBar p_bar;
+  PtBar ptBar;
 } Player, *PtPlayer;
 
 /** FUNCTIONS **/

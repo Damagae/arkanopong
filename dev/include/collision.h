@@ -19,10 +19,13 @@ bool CollisionSegment (Point2D A,Point2D B, Ball ball);
 int BrickCollision (Brick brick, PtBall ptBall);
 int collisionBallWall (PtBall ptBall);
 Position ballOutOfGame(PtBall ptBall);
+Position bonusOutOfGame(Bonus bonus);
 int collisionBallBar (PtBall ptBall, PtBar bar1, PtBar bar2);
+int collisionBonusBar(Bonus bonus, PtBar bar1, PtBar bar2);
 void changeDirection (Vector2D* direction, Orientation orientation);
 void changeAngle (PtBall ptBall, PtBar ptBar);
-Position checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer ptPlayer);
+Position checkBallPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer ptPlayer);
+Position checkBonusPosition (Bonus bonus, PtBar bar1, PtBar bar2);
 
 
 #endif

@@ -16,6 +16,6 @@
 int loseLife(PtPlayer player);
 void drawGameBorder();
 void renderGame(Player player1, Player player2, PtBall ballList, Brick brick, BonusList bonusList);
-int runGame(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer player);
+int runGame(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer player, BonusList* bonusList);
 
 #endif

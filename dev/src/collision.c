@@ -159,6 +159,20 @@ Position ballOutOfGame(PtBall ptBall)
         return INSIDE;
 }
 
+// Tell if the bonus is inside or outside the game
+Position bonusOutOfGame(Bonus bonus)
+{
+    float TOP_BORDER = (WINDOW_HEIGHT-GAME_HEIGHT)/2;
+    float BOTTOM_BORDER = GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2;
+
+    if (bonusBottomPosition(bonus) <= TOP_BORDER)
+        return OUT_UP;
+    else if (bonusTopPosition(bonus) >= BOTTOM_BORDER)
+        return OUT_DOWN;
+    else
+        return INSIDE;
+}
+
 // Return 1 if collision with bar1, 2 if collision with bar2, 0 if no collision
 int collisionBallBar(PtBall ptBall, PtBar bar1, PtBar bar2)
 {
@@ -223,11 +237,35 @@ void changeAngle (PtBall ptBall, PtBar ptBar)
         ptBall->direction.y = cos(angle);
 }
 
+// Return 1 if collision with bar1, 2 if collision with bar2, 0 if no collision
+int collisionBonusBar(Bonus bonus, PtBar bar1, PtBar bar2)
+{
+    // Bar 1 collision between the bottom and the top of the bar
+    if (bonusBottomPosition(bonus) >= barTopPosition(bar1) && bonusBottomPosition(bonus) <= barBottomPosition(bar1))
+    {
+        if (bonusRightPosition(bonus) >= barLeftPosition(bar1) && bonusLeftPosition(bonus) <= barRightPosition(bar1))
+            return 1;
+        else
+            return 0;
+    }
+
+    // Bar 2 is rotated 180°
+    else if (bonusTopPosition(bonus) <= barBottomPosition(bar2) && bonusTopPosition(bonus) >= barTopPosition(bar2))
+    {
+        if (bonusRightPosition(bonus) >= barLeftPosition(bar2) && bonusLeftPosition(bonus) <= barRightPosition(bar2))
+            return 2;
+        else
+            return 0;
+    }
+    else
+        return 0;
+}
+
 // Return the position of the ball
-Position checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer ptPlayer)
+Position checkBallPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer ptPlayer)
 {
     int colBallBar, colBallBrick;
-    int position;
+    Position position;
 
     // 0 if no collision with the bar
     colBallBar = collisionBallBar(ptBall, bar1, bar2);
@@ -272,5 +310,24 @@ Position checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, 
         changeDirection(&(ptBall->direction), VERTICAL);
     }
 
+    return position;
+}
+
+Position checkBonusPosition (Bonus bonus, PtBar bar1, PtBar bar2)
+{
+    int colBonusBar;
+    Position position;
+
+    colBonusBar = collisionBonusBar(bonus, bar1, bar2);
+    position = bonusOutOfGame(bonus);
+
+    if (colBonusBar == 1)
+    {
+        position = BAR_DOWN;
+    }
+    else if (colBonusBar == 2)
+    {
+        position = BAR_UP;
+    }
     return position;
 }

@@ -7,11 +7,11 @@
 #include "geometry.h"
 
 #define BONUS_RADIUS 10
-#define BONUS_SPEED 10
+#define BONUS_SPEED 2
 
 #define GAME_WIDTH 200
 #define GAME_HEIGHT 400
-#define BAR_SIZE_CHANGE 6
+#define BAR_SIZE_CHANGE 50
 #define BALL_SIZE_CHANGE 1
 
 Bonus* createBonus(PtBrick ptBrick)
@@ -56,6 +56,16 @@ void bonusOrientation(Bonus* bonus, Player player)
     }
 }
 
+// Change bonus position
+void moveBonus (Bonus* bonus)
+{
+    if (bonus != NULL)
+    {
+        Vector2D deplacement = MultVector(bonus->direction, bonus->speed);
+        bonus->position = PointPlusVector(bonus->position, deplacement);
+    }
+}
+
 // Draw only if brick is destroyed
 void drawBonus(Bonus bonus)
 {
@@ -71,6 +81,11 @@ void drawBonus(Bonus bonus)
 
 void drawAllBonus(BonusList bonusList)
 {
+    if (bonusList == NULL)
+    {
+        return;
+    }
+
     for (; bonusList != NULL; bonusList = bonusList->next)
     {
         drawBonus(*bonusList);
@@ -117,13 +132,65 @@ void moreBall (PtBall* ballList, Player* player)
     addBall(ballList, createBall(PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), vector, player));
 }
 
-void deleteBonus(BonusList* bonusList)
+float bonusBottomPosition (Bonus bonus)
 {
+    return bonus.position.y + bonus.radius;
+}
+
+float bonusTopPosition (Bonus bonus)
+{
+    return bonus.position.y + bonus.radius;
+}
+
+float bonusLeftPosition (Bonus bonus)
+{
+    return bonus.position.x - bonus.radius;
+}
+
+float bonusRightPosition (Bonus bonus)
+{
+    return bonus.position.x + bonus.radius;
+}
+
+void deleteBonus(BonusList* bonusList, BonusList* bonus)
+{
+    if (bonusList == NULL)
+        return;
+    if (*bonusList == *bonus)
+    {
+        *bonusList = NULL;
+        free(*bonus);
+        *bonus = NULL;
+        return ;
+    }
+    Bonus* next;
+    for (; (*bonusList)->next != NULL && (*bonusList)->next != *bonus ; bonusList = &next)
+    {
+        next = (*bonusList)->next;
+    }
+
+    (*bonusList)->next = (*bonus)->next;
+    free(*bonus);
+    *bonus = NULL;
+}
+
+void deleteBonusList(BonusList* bonusList)
+{
+    if (bonusList == NULL)
+        return;
     Bonus* next;
     for (; *bonusList != NULL; bonusList = &next)
     {
         next = (*bonusList)->next;
         free(*bonusList);
         *bonusList = NULL;
+    }
+}
+
+void getBonus(Bonus bonus, Ball ball)
+{
+    if (bonus.ptBrick->type == BARUP)
+    {
+        barSizeUp(ball.ptPlayer->ptBar);
     }
 }

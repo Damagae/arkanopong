@@ -17,7 +17,7 @@ Player createPlayer(int num, char* name, PtBar ptBar)
     player.num = num;
     player.name = name;
     player.life = LIFE_MAX;
-    player.p_bar = ptBar;
+    player.ptBar = ptBar;
 
     return player;
 }

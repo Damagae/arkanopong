@@ -22,6 +22,7 @@ typedef struct
     char* texture;
     int life;
     BrickType type;
+    Bonus* bonus;
 } Brick, *PtBrick;
 
 

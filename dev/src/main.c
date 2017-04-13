@@ -87,7 +87,7 @@ int main(int argc, char** argv)
 
     if (start)
     {
-      alive = runGame(ballList, &bar[0], &bar[1], ptBrick, player);
+      alive = runGame(ballList, &bar[0], &bar[1], ptBrick, player, &bonusList);
       if (alive < LIFE_MAX)
       {
         // Commenter cette ligne pour continuer à jouer serainement
@@ -174,6 +174,9 @@ int main(int argc, char** argv)
       SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
     }
   }
+
+  deleteBalls(&ballList);
+  deleteBonusList(&bonusList);
 
   SDL_Quit();
   

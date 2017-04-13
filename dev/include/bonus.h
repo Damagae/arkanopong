@@ -31,6 +31,7 @@ typedef struct bonus
 Bonus* createBonus(PtBrick ptBrick);
 void addBonus(BonusList* bonusList, Bonus* bonus);
 void bonusOrientation(Bonus* bonus, Player player);
+void moveBonus (Bonus* bonus);
 void drawBonus(Bonus bonus);
 void drawAllBonus(BonusList bonusList);
 
@@ -42,7 +43,15 @@ void ballSpeedDown (PtBall ptBall);
 void ballSizeUp (PtBall ptBall);
 void moreBall (PtBall* ballList, Player* player);
 
-void deleteBonus(BonusList* bonusList);
+void getBonus(Bonus bonus, Ball ball);
+
+float bonusBottomPosition (Bonus bonus);
+float bonusTopPosition (Bonus bonus);
+float bonusLeftPosition (Bonus bonus);
+float bonusRightPosition (Bonus bonus);
+
+void deleteBonus(BonusList* bonusList, BonusList* bonus);
+void deleteBonusList(BonusList* bonusList);
 
 #endif
 #endif
