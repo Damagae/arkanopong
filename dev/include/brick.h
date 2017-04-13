@@ -29,6 +29,7 @@ typedef Brick* PtBrick;
 
 Brick createBrick (Point2D position, BrickType type);
 void drawBrick(Brick brick);
+int brickDamaged(PtBrick ptBrick);
 Point2D brickVerticeTopLeft(PtBrick ptBrick);
 Point2D brickVerticeTopRight(PtBrick ptBrick);
 Point2D brickVerticeBottomLeft(PtBrick ptBrick);

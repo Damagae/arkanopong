@@ -79,41 +79,48 @@ bool CollisionSegment (Point2D A,Point2D B, Ball ball)
 
 int BrickCollision (Brick brick, PtBall ptBall)
 {
-    Point2D A = brickVerticeTopLeft(&brick);
-    Point2D B = brickVerticeTopRight(&brick);
-    Point2D C = brickVerticeBottomLeft(&brick);
-    Point2D D = brickVerticeBottomRight(&brick);
-
-    bool AB, BC, CD, DA;
-    AB = CollisionSegment(A, B, *ptBall);
-    BC = CollisionSegment(B, C, *ptBall);
-    CD = CollisionSegment(C, D, *ptBall);
-    DA = CollisionSegment(D, A, *ptBall);
-
-    if (AB == true || BC == true || CD == true || DA == true)
+    if (brick.life == 0)
     {
-        if (AB == true ) {
-            // We put ball outside the brick
-            ptBall->position.y = brick.position.y - brick.height/2 - ptBall->radius;
-            return 1;
-        }
-        if (BC == true ) {
-            ptBall->position.x = brick.position.x + brick.width/2 + ptBall->radius;
-            return 2;
-        }
-        if (CD == true ) {
-            ptBall->position.y = brick.position.y + brick.height/2 + ptBall->radius;
-            return 3;
-        }
-        if (DA == true ) {
-            ptBall->position.x = brick.position.x - brick.width/2 - ptBall->radius;
-            return 4;
-        }
-    }    
-    else {
-        return -1;
+        return 0;
     }
-    return -1;
+    else
+    {
+        Point2D A = brickVerticeTopLeft(&brick);
+        Point2D B = brickVerticeTopRight(&brick);
+        Point2D C = brickVerticeBottomLeft(&brick);
+        Point2D D = brickVerticeBottomRight(&brick);
+
+        bool AB, BC, CD, DA;
+        AB = CollisionSegment(A, B, *ptBall);
+        BC = CollisionSegment(B, C, *ptBall);
+        CD = CollisionSegment(C, D, *ptBall);
+        DA = CollisionSegment(D, A, *ptBall);
+
+        if (AB == true || BC == true || CD == true || DA == true)
+        {
+            if (AB == true ) {
+                // We put ball outside the brick
+                ptBall->position.y = brick.position.y - brick.height/2 - ptBall->radius;
+                return 1;
+            }
+            else if (BC == true ) {
+                ptBall->position.x = brick.position.x + brick.width/2 + ptBall->radius;
+                return 2;
+            }
+            else if (CD == true ) {
+                ptBall->position.y = brick.position.y + brick.height/2 + ptBall->radius;
+                return 3;
+            }
+            else {
+                ptBall->position.x = brick.position.x - brick.width/2 - ptBall->radius;
+                return 4;
+            }
+        }    
+        else
+        {
+            return -1;
+        }
+    }
 }
 
 int collisionBallWall(PtBall ptBall)
@@ -151,7 +158,7 @@ int ballOutOfGame(PtBall ptBall)
         return -1;
 }
 
-/* Return 1 if collision with bar1, 2 if collision with bar2, 0 if no collision */
+// Return 1 if collision with bar1, 2 if collision with bar2, 0 if no collision
 int collisionBallBar(PtBall ptBall, PtBar bar1, PtBar bar2)
 {
     // Bar 1 collision between the center and the top of the bar
@@ -251,12 +258,16 @@ int checkPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick)
 
         if (colBallBrick == 2 || colBallBrick == 4)
         {
+            printf("Brick life = %d\n", ptBrick->life);
             changeDirection(&(ptBall->direction), HORIZONTAL);
+            brickDamaged(ptBrick);
             position = 2;
         }
         else if (colBallBrick == 1 || colBallBrick == 3)
         {
+            printf("Brick life = %d\n", ptBrick->life);
             changeDirection(&(ptBall->direction), VERTICAL);
+            brickDamaged(ptBrick);
             position = 2;
         }
     }

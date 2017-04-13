@@ -33,11 +33,19 @@ Brick createBrick (Point2D position, BrickType type)
 
 void drawBrick(Brick brick)
 {
-    glPushMatrix();
-    glTranslatef(brick.position.x, brick.position.y, 1);
-    glScalef(brick.width, brick.height, 1);
-    drawSquare();
-    glPopMatrix();
+    if (brick.life != 0)
+    {
+        glPushMatrix();
+        glTranslatef(brick.position.x, brick.position.y, 1);
+        glScalef(brick.width, brick.height, 1);
+        drawSquare();
+        glPopMatrix();
+    }
+}
+
+int brickDamaged(PtBrick ptBrick)
+{
+    return ptBrick->life--;
 }
 
 /* Brick vertices */

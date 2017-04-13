@@ -19,12 +19,12 @@
 #define MAX_BALL 6
 
 /* Dimensions de la fenêtre */
-unsigned int WINDOW_WIDTH = 800;
-unsigned int WINDOW_HEIGHT = 800;
+unsigned int WINDOW_WIDTH = 1000;
+unsigned int WINDOW_HEIGHT = 1000;
 
 /* Dimensions du jeu */
-int GAME_WIDTH = 600;
-int GAME_HEIGHT = 600;
+int GAME_WIDTH = 800;
+int GAME_HEIGHT = 800;
 
 int LIFE_MAX = 3;
 
