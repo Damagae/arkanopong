@@ -61,6 +61,7 @@ int main(int argc, char** argv)
 
   /** Creation des balles **/ 
   PtBall ballList = createBall(PointXY(450, 550), VectorXY(0, 0.8), &player[0]);
+  addBall(&ballList, createBall(PointXY(450, 350), VectorXY(0, -0.8), &player[1]));
 
   /* Creation de la liste de bonus */
   BonusList bonusList = NULL;
@@ -88,6 +89,7 @@ int main(int argc, char** argv)
     if (start)
     {
       alive = runGame(ballList, &bar[0], &bar[1], ptBrick, player, &bonusList);
+      // If a player lose a life
       if (alive < LIFE_MAX)
       {
         // Commenter cette ligne pour continuer à jouer serainement
@@ -105,7 +107,7 @@ int main(int argc, char** argv)
         }
       }
       
-      moveBar(player[0].p_bar, direction[0]);
+      moveBar(player[0].ptBar, direction[0]);
       moveBar(&bar[1], direction[1]);
       //AIcontroller (&bar[1], ball[0]);
     }
