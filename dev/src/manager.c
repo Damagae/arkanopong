@@ -76,8 +76,6 @@ int runGame(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer pla
         bonusPosition = checkBonusPosition(*(ptBrick->bonus), bar1, bar2);
     }
         
-
-
     if (ballPosition == OUT_DOWN)
     {
         alive = loseLife(&player[0]);
@@ -93,11 +91,23 @@ int runGame(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer pla
             bonusOrientation(ptBrick->bonus, *(ptBall->ptPlayer));
         }
     }
+    // Change the ball owner
+    else if (ballPosition == BAR_UP)
+    {
+        ptBall->ptPlayer = &player[1];
+    }
+    else if (ballPosition == BAR_DOWN)
+    {
+        ptBall->ptPlayer = &player[0];
+    }
 
     if (bonusPosition == OUT_UP || bonusPosition == OUT_DOWN || bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
     {
         if (bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
+        {
             getBonus(*(ptBrick->bonus), *ptBall);
+        }
+            
         deleteBonus(bonusList, &(ptBrick->bonus));
     }
 
