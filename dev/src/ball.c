@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <GL/gl.h>
 #include <math.h>
 
@@ -9,15 +10,29 @@
 #define BALL_RADIUS 10
 #define BALL_SPEED 10
 
-Ball createBall (Point2D position, Vector2D direction)
+Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer)
 {
-    Ball ball;
-    ball.position = position;
-    ball.direction = direction;
-    ball.radius = BALL_RADIUS;
-    ball.speed = BALL_SPEED;
+    Ball* ball = malloc(sizeof(Ball));
+    if (ball == NULL)
+    {
+        fprintf(stderr, "Echec de l'allocation de la balle.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    ball->position = position;
+    ball->direction = direction;
+    ball->radius = BALL_RADIUS;
+    ball->speed = BALL_SPEED;
+    ball->ptPlayer = ptPlayer;
+    ball->next = NULL;
    
     return ball;
+}
+
+void addBall(PtBall* ballList, PtBall ptBall)
+{
+    for (; (*ballList)->next != NULL; ballList = &((*ballList)->next));
+        (*ballList)->next = ptBall;
 }
 
 void drawBall(Ball ball)
@@ -27,6 +42,14 @@ void drawBall(Ball ball)
     glScalef(ball.radius, ball.radius, 1);
     drawCircle();
     glPopMatrix();
+}
+
+void drawAllBalls(PtBall ballList)
+{
+    for (; ballList != NULL; ballList = ballList->next)
+    {
+        drawBall(*ballList);
+    }
 }
 
 /* BALL MANAGMENT */
@@ -58,4 +81,15 @@ float ballLeftPosition (PtBall ptBall)
 float ballRightPosition (PtBall ptBall)
 {
     return ptBall->position.x + ptBall->radius;
+}
+
+void deleteBalls(PtBall* ballList)
+{
+    PtBall next;
+    for (; *ballList != NULL; ballList = &next)
+    {
+        next = (*ballList)->next;
+        free(*ballList);
+        *ballList = NULL;
+    }
 }

@@ -17,8 +17,6 @@
 #include "bool.h"
 #include "bonus.h"
 
-#define MAX_BALL 6
-
 /* Dimensions de la fenêtre */
 unsigned int WINDOW_WIDTH = 1000;
 unsigned int WINDOW_HEIGHT = 1000;
@@ -50,25 +48,25 @@ int main(int argc, char** argv)
   bool start = false;
   int alive;
 
-  /** Creation des balles, barres et joueurs**/
-  Ball ball[MAX_BALL];
+  /* Création des barres */
   Bar bar[2];
-  Player player[2];
   Direction direction[2] = {NONE, NONE};
-
   bar[0] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50));
-  ball[0] = createBall (PointXY(450, 550), VectorXY(0, 0.8));
-  player[0] = createPlayer(0, "Toto", &bar[0], &ball[0]);
-
   bar[1] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50));
-  player[1] = createPlayer(1, "Tata", &bar[1], &ball[0]);
+
+  /* Création des joueurs */
+  Player player[2];
+  player[0] = createPlayer(0, "Toto", &bar[0]);
+  player[1] = createPlayer(1, "Tata", &bar[1]);
+
+  /** Creation des balles **/ 
+  PtBall ballList = createBall(PointXY(450, 550), VectorXY(0, 0.8), &player[0]);
 
   /* Creation de la liste de bonus */
   BonusList bonusList = NULL;
 
   /** Creation des briques **/
   PtBrick ptBrick;
-  Brick brick;
   BrickType type = BARUP;
   ptBrick = createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), type, &bonusList);
   
@@ -85,11 +83,11 @@ int main(int argc, char** argv)
     Uint32 startTime = SDL_GetTicks();
 
     /* Dessin */
-    renderGame(player[0], player[1], *ptBrick, bonusList);
+    renderGame(player[0], player[1], ballList, *ptBrick, bonusList);
 
     if (start)
     {
-      alive = runGame(&ball[0], &bar[0], &bar[1], ptBrick, player);
+      alive = runGame(ballList, &bar[0], &bar[1], ptBrick, player);
       if (alive < LIFE_MAX)
       {
         // Commenter cette ligne pour continuer à jouer serainement

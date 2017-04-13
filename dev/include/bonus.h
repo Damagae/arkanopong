@@ -40,7 +40,9 @@ void barSpeedUp (PtBar ptBar);
 void ballSpeedUp (PtBall ptBall);
 void ballSpeedDown (PtBall ptBall);
 void ballSizeUp (PtBall ptBall);
-Ball moreBall (Player* player);
+void moreBall (PtBall* ballList, Player* player);
+
+void deleteBonus(BonusList* bonusList);
 
 #endif
 #endif

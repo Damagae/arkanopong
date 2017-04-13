@@ -1,7 +1,6 @@
 #ifndef __PLAYER__H
 #define __PLAYER__H
 
-#include "ball.h"
 #include "bar.h"
 
 /** STRUCTURES **/
@@ -12,12 +11,11 @@ typedef struct
   char* name;
   int life;
   PtBar p_bar;
-  PtBall p_ball;
 } Player, *PtPlayer;
 
 /** FUNCTIONS **/
 
-Player createPlayer(int num, char* name, PtBar ptBar, PtBall ptBall);
+Player createPlayer(int num, char* name, PtBar ptBar);
 void drawLife(Player player);
 
 #endif

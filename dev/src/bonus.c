@@ -29,7 +29,7 @@ Bonus* createBonus(PtBrick ptBrick)
     bonus->speed = BONUS_SPEED;
     bonus->ptBrick = ptBrick;
     bonus->next = NULL;
-    
+
     return bonus;
 }
 
@@ -107,10 +107,23 @@ void ballSizeUp (PtBall ptBall)
     ptBall->radius += BALL_SIZE_CHANGE;
 }
 
-Ball moreBall (Player* player)
+void moreBall (PtBall* ballList, Player* player)
 {
+    Vector2D vector;
     if (player->num == 1)
-        return createBall(PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), VectorXY(0, 1));
+        vector = VectorXY(0,1);
     else
-        return createBall(PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), VectorXY(0,-1));
+        vector = VectorXY(0,-1);
+    addBall(ballList, createBall(PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), vector, player));
+}
+
+void deleteBonus(BonusList* bonusList)
+{
+    Bonus* next;
+    for (; *bonusList != NULL; bonusList = &next)
+    {
+        next = (*bonusList)->next;
+        free(*bonusList);
+        *bonusList = NULL;
+    }
 }

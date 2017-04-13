@@ -33,7 +33,7 @@ void drawGameBorder()
     glPopMatrix();
 }
 
-void renderGame(Player player1, Player player2, Brick brick, BonusList bonusList)
+void renderGame(Player player1, Player player2, PtBall ballList, Brick brick, BonusList bonusList)
 {    
     glClear(GL_COLOR_BUFFER_BIT);
   
@@ -45,8 +45,7 @@ void renderGame(Player player1, Player player2, Brick brick, BonusList bonusList
     drawGameBorder();
 
     glColor3f(1.0, 1.0, 1.0);
-    drawBall(*(player1.p_ball));
-    //drawBall(*(player2.p_ball));
+    drawAllBalls(ballList);
 
     drawBar(*(player1.p_bar), player1.num);
     drawBar(*(player2.p_bar), player2.num);

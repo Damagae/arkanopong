@@ -4,16 +4,19 @@
 #include "geometry.h"
 #include "bar.h"
 #include "brick.h"
+#include "player.h"
 
 /** STRUCTURES **/
 
-typedef struct
+typedef struct ball
 {
   Point2D position;
   Vector2D direction;
   float radius;
   float speed;
   char* texture;
+  PtPlayer ptPlayer;
+  struct ball* next;
 } Ball, *PtBall;
 
 typedef enum Orientation
@@ -23,13 +26,17 @@ typedef enum Orientation
 
 /** FUNCTIONS **/
 
-Ball createBall (Point2D position, Vector2D direction);
+Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer);
+void addBall(PtBall* ballList, PtBall ptBall);
 void moveBall (PtBall ptBall);
 void drawBall (Ball ball);
+void drawAllBalls(PtBall ballList);
 
 float ballBottomPosition (PtBall ptBall);
 float ballTopPosition (PtBall ptBall);
 float ballLeftPosition (PtBall ptBall);
 float ballRightPosition (PtBall ptBall);
+
+void deleteBalls(PtBall* ballList);
 
 #endif

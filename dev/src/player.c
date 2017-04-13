@@ -11,14 +11,13 @@ extern int GAME_HEIGHT;
 
 extern int LIFE_MAX;
 
-Player createPlayer(int num, char* name, PtBar ptBar, PtBall ptBall)
+Player createPlayer(int num, char* name, PtBar ptBar)
 {
     Player player;
     player.num = num;
     player.name = name;
     player.life = LIFE_MAX;
     player.p_bar = ptBar;
-    player.p_ball = ptBall;
 
     return player;
 }
