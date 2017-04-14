@@ -54,6 +54,17 @@ Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList)
     return ptBrick;
 }
 
+void addBrick(PtBrick* brickList, Brick* brick)
+{
+    if (*brickList == NULL)
+        *brickList = brick;
+    else
+    {
+        for (; (*brickList)->next != NULL; brickList = &((*brickList)->next));
+        (*brickList)->next = brick;
+    }
+}
+
 void drawBrick(Brick brick)
 {
     if (brick.life != 0)
@@ -63,6 +74,14 @@ void drawBrick(Brick brick)
         glScalef(brick.width, brick.height, 1);
         drawSquare();
         glPopMatrix();
+    }
+}
+
+void drawAllBricks(PtBrick brickList)
+{
+    for (; brickList != NULL; brickList = brickList->next)
+    {
+        drawBrick(*brickList);
     }
 }
 
@@ -102,3 +121,37 @@ Point2D brickVerticeBottomRight(PtBrick ptBrick)
 }
 
 
+void deleteBrick(PtBrick* brickList, PtBrick* ptBrick)
+{
+    if (brickList == NULL)
+        return;
+    if (*brickList == *ptBrick)
+    {
+        *brickList = NULL;
+        free(*ptBrick);
+        *ptBrick = NULL;
+        return ;
+    }
+    PtBrick next;
+    for (; (*brickList)->next != NULL && (*brickList)->next != *ptBrick ; brickList = &next)
+    {
+        next = (*brickList)->next;
+    }
+
+    (*brickList)->next = (*ptBrick)->next;
+    free(*ptBrick);
+    *ptBrick = NULL;
+}
+
+void deleteBrickList(PtBrick* brickList)
+{
+    if (brickList == NULL)
+        return;
+    PtBrick next;
+    for (; *brickList != NULL; brickList = &next)
+    {
+        next = (*brickList)->next;
+        free(*brickList);
+        *brickList = NULL;
+    }
+}

@@ -30,11 +30,16 @@ typedef struct brick
 /** FUNCTIONS **/
 
 Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList);
+void addBrick(PtBrick* brickList, Brick* brick);
 void drawBrick(Brick brick);
+void drawAllBricks(PtBrick brickList);
 int brickDamaged(PtBrick ptBrick);
 Point2D brickVerticeTopLeft(PtBrick ptBrick);
 Point2D brickVerticeTopRight(PtBrick ptBrick);
 Point2D brickVerticeBottomLeft(PtBrick ptBrick);
 Point2D brickVerticeBottomRight(PtBrick ptBrick);
+
+void deleteBrick(PtBrick* brickList, PtBrick* ptBrick);
+void deleteBrickList(PtBrick* brickList);
 
 #endif

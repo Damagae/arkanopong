@@ -14,7 +14,7 @@
 #define BAR_SIZE_CHANGE 50
 #define BALL_SIZE_CHANGE 1
 
-Bonus* createBonus(PtBrick ptBrick, PtPlayer ptPlayer)
+Bonus* createBonus(PtBrick ptBrick)
 {
     Bonus* bonus = malloc(sizeof(Bonus));
     if (bonus == NULL)
@@ -28,6 +28,7 @@ Bonus* createBonus(PtBrick ptBrick, PtPlayer ptPlayer)
     bonus->radius = BONUS_RADIUS;
     bonus->speed = BONUS_SPEED;
     bonus->ptBrick = ptBrick;
+    bonus->type = ptBrick->type;
     bonus->ptPlayer = NULL;
     bonus->next = NULL;
 
@@ -190,8 +191,18 @@ void deleteBonusList(BonusList* bonusList)
 
 void getBonus(Bonus bonus)
 {
-    if (bonus.ptBrick->type == BARUP)
+    if (bonus.type == BARUP)
     {
         barSizeUp(bonus.ptPlayer->ptBar);
     }
+}
+
+Bonus* findBonus(BonusList bonusList, Brick brick)
+{
+    for(; bonusList != NULL; bonusList = bonusList->next)
+    {
+        if (bonusList == brick.bonus)
+            return brick.bonus;
+    }
+    return NULL;
 }

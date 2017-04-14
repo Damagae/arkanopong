@@ -60,16 +60,17 @@ int main(int argc, char** argv)
   player[1] = createPlayer(1, "Tata", &bar[1]);
 
   /** Creation des balles **/ 
-  PtBall ballList = createBall(PointXY(450, 550), VectorXY(0, 0.8), &player[0]);
+  PtBall ballList = NULL;
+  addBall(&ballList, createBall(PointXY(450, 550), VectorXY(0, 0.8), &player[0]));
   addBall(&ballList, createBall(PointXY(450, 350), VectorXY(0, -0.8), &player[1]));
 
   /* Creation de la liste de bonus */
   BonusList bonusList = NULL;
 
   /** Creation des briques **/
-  PtBrick ptBrick;
-  BrickType type = BARUP;
-  ptBrick = createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), type, &bonusList);
+  PtBrick brickList = NULL;
+  addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
+  addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2 - 200, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
   
   /** Initialisation de la SDL **/
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -84,11 +85,11 @@ int main(int argc, char** argv)
     Uint32 startTime = SDL_GetTicks();
 
     /* Dessin */
-    renderGame(player[0], player[1], ballList, *ptBrick, bonusList);
+    renderGame(player[0], player[1], ballList, brickList, bonusList);
 
     if (start)
     {
-      alive = runGame(ballList, &bar[0], &bar[1], ptBrick, player, &bonusList);
+      alive = runGame(ballList, &bar[0], &bar[1], brickList, player, &bonusList);
       // If a player lose a life
       if (alive < LIFE_MAX)
       {
@@ -178,6 +179,7 @@ int main(int argc, char** argv)
   }
 
   deleteBalls(&ballList);
+  deleteBrickList(&brickList);
   deleteBonusList(&bonusList);
 
   SDL_Quit();

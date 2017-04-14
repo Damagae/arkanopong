@@ -27,7 +27,7 @@ typedef enum Orientation
 /** FUNCTIONS **/
 
 Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer);
-void addBall(PtBall* ballList, PtBall ptBall);
+void addBall(PtBall* ballList, Ball* ball);
 void moveBall (PtBall ptBall);
 void drawBall (Ball ball);
 void drawAllBalls(PtBall ballList);

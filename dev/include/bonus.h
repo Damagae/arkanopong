@@ -23,13 +23,14 @@ typedef struct bonus
   float speed;
   char* texture;
   PtBrick ptBrick;
+  BrickType type;
   PtPlayer ptPlayer;
   struct bonus* next;
 } Bonus, *BonusList;
 
 /** FUNCTIONS **/
 
-Bonus* createBonus(PtBrick ptBrick, PtPlayer ptPlayer);
+Bonus* createBonus(PtBrick ptBrick);
 void addBonus(BonusList* bonusList, Bonus* bonus);
 void bonusOrientation(Bonus* bonus, Player player);
 void moveBonus (Bonus* bonus);
@@ -45,6 +46,7 @@ void ballSizeUp (PtBall ptBall);
 void moreBall (PtBall* ballList, Player* player);
 
 void getBonus(Bonus bonus);
+Bonus* findBonus(BonusList bonusList, Brick brick);
 
 float bonusBottomPosition (Bonus bonus);
 float bonusTopPosition (Bonus bonus);

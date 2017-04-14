@@ -29,10 +29,15 @@ Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer)
     return ball;
 }
 
-void addBall(PtBall* ballList, PtBall ptBall)
+void addBall(PtBall* ballList, Ball* ball)
 {
-    for (; (*ballList)->next != NULL; ballList = &((*ballList)->next));
-        (*ballList)->next = ptBall;
+    if (*ballList == NULL)
+        *ballList = ball;
+    else
+    {
+        for (; (*ballList)->next != NULL; ballList = &((*ballList)->next));
+            (*ballList)->next = ball;
+    }
 }
 
 void drawBall(Ball ball)

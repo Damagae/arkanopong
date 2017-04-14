@@ -33,7 +33,7 @@ void drawGameBorder()
     glPopMatrix();
 }
 
-void renderGame(Player player1, Player player2, PtBall ballList, Brick brick, BonusList bonusList)
+void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickList, BonusList bonusList)
 {    
     glClear(GL_COLOR_BUFFER_BIT);
   
@@ -50,7 +50,7 @@ void renderGame(Player player1, Player player2, PtBall ballList, Brick brick, Bo
     drawBar(*(player1.ptBar), player1.num);
     drawBar(*(player2.ptBar), player2.num);
 
-    drawBrick(brick);
+    drawAllBricks(brickList);
 
     drawAllBonus(bonusList);
 
@@ -61,19 +61,42 @@ void renderGame(Player player1, Player player2, PtBall ballList, Brick brick, Bo
     SDL_GL_SwapBuffers();
 }
 
-int runBall(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer player, BonusList* bonusList)
+void brickManager(PtBall ptBall, PtBrick* brickList, PtBrick* ptBrick)
+{
+    if (brickDamaged(*ptBrick) == 0)
+    {
+        (*ptBrick)->bonus->ptPlayer = ptBall->ptPlayer;
+        bonusOrientation((*ptBrick)->bonus, *(ptBall->ptPlayer));
+        deleteBrick(ptBrick, ptBrick);
+    }
+}
+
+void bonusManager(BonusList* bonusList, BonusList* bonus, Position bonusPosition)
+{
+    if (bonusPosition == OUT_UP || bonusPosition == OUT_DOWN || bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
+    {
+        if (bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
+        {
+            getBonus(*(*bonus));
+        }   
+        deleteBonus(bonusList, bonus);
+    }
+}
+
+int ballManager(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer player, BonusList* bonusList)
 {
     int ballPosition;
     int bonusPosition = INSIDE;
     int alive = LIFE_MAX;
+    Bonus* bonus = findBonus(*bonusList, *ptBrick);
+
     moveBall(ptBall);
-    moveBonus(ptBrick->bonus);
+    moveBonus(bonus);
 
     ballPosition = checkBallPosition(ptBall, bar1, bar2, ptBrick, player);
-
-    if (ptBrick->bonus != NULL)
+    if (bonus != NULL)
     {
-        bonusPosition = checkBonusPosition(*(ptBrick->bonus), bar1, bar2);
+        bonusPosition = checkBonusPosition(*bonus, bar1, bar2);
     }
         
     if (ballPosition == OUT_DOWN)
@@ -84,14 +107,7 @@ int runBall(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer pla
     {
         alive = loseLife(&player[1]);
     }
-    else if (ballPosition == BRICK)
-    {
-        if (brickDamaged(ptBrick) == 0)
-        {
-            ptBrick->bonus->ptPlayer = ptBall->ptPlayer;
-            bonusOrientation(ptBrick->bonus, *(ptBall->ptPlayer));
-        }
-    }
+
     // Change the ball owner
     else if (ballPosition == BAR_UP)
     {
@@ -102,15 +118,12 @@ int runBall(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer pla
         ptBall->ptPlayer = &player[0];
     }
 
-    if (bonusPosition == OUT_UP || bonusPosition == OUT_DOWN || bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
+    else if (ballPosition == BRICK)
     {
-        if (bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
-        {
-            getBonus(*(ptBrick->bonus));
-        }
-            
-        deleteBonus(bonusList, &(ptBrick->bonus));
+        brickManager(ptBall, &ptBrick, &ptBrick);
     }
+
+    bonusManager(bonusList, &bonus, bonusPosition);
 
     return alive;
 }
@@ -123,8 +136,8 @@ int runGame(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer p
         return -1;
     for(; ballList != NULL; ballList = ballList->next)
     {
-        alive = runBall(ballList, bar1, bar2, ptBrick, player, bonusList);
-        if (alive < LIFE_MAX)
+        alive = ballManager(ballList, bar1, bar2, ptBrick, player, bonusList);
+        if (!alive)
             return 0;
     }
     return alive;
