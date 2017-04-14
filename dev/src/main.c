@@ -79,8 +79,8 @@ int main(int argc, char** argv)
   setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
 
   /** Boucle d'affichage **/
-  int loop = 1;
-  while(loop) {
+  bool inGame = true;
+  while(inGame) {
     Uint32 startTime = SDL_GetTicks();
 
     /* Dessin */
@@ -117,7 +117,7 @@ int main(int argc, char** argv)
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
       if(e.type == SDL_QUIT) {
-        loop = 0;
+        inGame = false;
         break;
       }
       

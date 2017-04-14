@@ -61,7 +61,7 @@ void renderGame(Player player1, Player player2, PtBall ballList, Brick brick, Bo
     SDL_GL_SwapBuffers();
 }
 
-int runGame(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer player, BonusList* bonusList)
+int runBall(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer player, BonusList* bonusList)
 {
     int ballPosition;
     int bonusPosition = INSIDE;
@@ -111,5 +111,20 @@ int runGame(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer pla
         deleteBonus(bonusList, &(ptBrick->bonus));
     }
 
+    return alive;
+}
+
+// Parcours la liste chainee de balles
+int runGame(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer player, BonusList* bonusList)
+{
+    int alive = LIFE_MAX;
+    if (ballList == NULL)
+        return -1;
+    for(; ballList != NULL; ballList = ballList->next)
+    {
+        alive = runBall(ballList, bar1, bar2, ptBrick, player, bonusList);
+        if (alive < LIFE_MAX)
+            return 0;
+    }
     return alive;
 }
