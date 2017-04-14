@@ -88,6 +88,7 @@ int runBall(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer pla
     {
         if (brickDamaged(ptBrick) == 0)
         {
+            ptBrick->bonus->ptPlayer = ptBall->ptPlayer;
             bonusOrientation(ptBrick->bonus, *(ptBall->ptPlayer));
         }
     }
@@ -105,7 +106,7 @@ int runBall(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer pla
     {
         if (bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
         {
-            getBonus(*(ptBrick->bonus), *ptBall);
+            getBonus(*(ptBrick->bonus));
         }
             
         deleteBonus(bonusList, &(ptBrick->bonus));

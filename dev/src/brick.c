@@ -49,6 +49,7 @@ Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList)
             ptBrick->bonus = NULL;
         }
     }
+    ptBrick->next = NULL;
    
     return ptBrick;
 }

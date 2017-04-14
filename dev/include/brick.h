@@ -14,7 +14,7 @@ typedef enum BrickType
     INDES, DISAP, BARUP, BARDWN, BARSPDUP, BALLSPDUP, BALLSPDDWN, BALLSIZEUP, MOREBALL, NORMAL
 } BrickType;
 
-typedef struct
+typedef struct brick
 {
     Point2D position;
     float width;
@@ -23,6 +23,7 @@ typedef struct
     int life;
     BrickType type;
     Bonus* bonus;
+    struct brick* next;
 } Brick, *PtBrick;
 
 
