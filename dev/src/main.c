@@ -71,7 +71,9 @@ int main(int argc, char** argv)
   PtBrick brickList = NULL;
   addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
   addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2 - 200, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
-  
+  //addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2 + 200, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
+  //addBrick(&brickList, createBrick(PointXY((WINDOW_WIDTH-GAME_WIDTH), GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
+
   /** Initialisation de la SDL **/
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
@@ -89,7 +91,7 @@ int main(int argc, char** argv)
 
     if (start)
     {
-      alive = runGame(ballList, &bar[0], &bar[1], brickList, player, &bonusList);
+      alive = runGame(ballList, &bar[0], &bar[1], &brickList, player, &bonusList);
       // If a player lose a life
       if (alive < LIFE_MAX)
       {

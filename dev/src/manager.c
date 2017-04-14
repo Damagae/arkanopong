@@ -61,84 +61,128 @@ void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickLi
     SDL_GL_SwapBuffers();
 }
 
-void brickManager(PtBall ptBall, PtBrick* brickList, PtBrick* ptBrick)
+void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2)
 {
-    if (brickDamaged(*ptBrick) == 0)
+    Bonus bonus;
+    BonusList ptBonus = (*bonusList);
+    
+    for(; ptBonus != NULL; ptBonus = ptBonus->next)
     {
-        (*ptBrick)->bonus->ptPlayer = ptBall->ptPlayer;
-        bonusOrientation((*ptBrick)->bonus, *(ptBall->ptPlayer));
-        deleteBrick(ptBrick, ptBrick);
-    }
-}
-
-void bonusManager(BonusList* bonusList, BonusList* bonus, Position bonusPosition)
-{
-    if (bonusPosition == OUT_UP || bonusPosition == OUT_DOWN || bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
-    {
-        if (bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
+        bonus  = *ptBonus;
+        if (ptBonus->actif)
         {
-            getBonus(*(*bonus));
-        }   
-        deleteBonus(bonusList, bonus);
+            Position bonusPosition = INSIDE;
+            moveBonus(ptBonus);
+            //printf("hello\n");
+            bonusPosition = checkBonusPosition(bonus, bar1, bar2);
+
+            if (bonusPosition == OUT_UP || bonusPosition == OUT_DOWN || bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
+            {
+                if (bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
+                {
+                    getBonus(bonus);
+                    ptBonus->actif = false;
+                }   
+                //deleteBonus(bonusList, &ptBonus);
+            }
+        }
     }
 }
 
-int ballManager(PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer player, BonusList* bonusList)
+int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick)
 {
-    int ballPosition;
-    int bonusPosition = INSIDE;
-    int alive = LIFE_MAX;
-    Bonus* bonus = findBonus(*bonusList, *ptBrick);
-
-    moveBall(ptBall);
-    moveBonus(bonus);
-
-    ballPosition = checkBallPosition(ptBall, bar1, bar2, ptBrick, player);
-    if (bonus != NULL)
+    if (ptBrick == NULL)
+        return -1;
+    if (brickDamaged(ptBrick) == 0)
     {
-        bonusPosition = checkBonusPosition(*bonus, bar1, bar2);
+        ptBrick->bonus->ptPlayer = ptBall->ptPlayer;
+        ptBrick->bonus->actif = true;
+        printf("%p\n",ptBrick->bonus);
+        printf("%d\n",ptBrick->bonus->actif);
+        bonusOrientation(ptBrick->bonus, *(ptBall->ptPlayer));
+        //deleteBrick(brickList, ptBrick);
+        return 0;
     }
-        
+    else
+        return ptBrick->life;
+}
+
+int positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtBrick ptBrick, PtPlayer player)
+{
+    int alive = LIFE_MAX;
+    int ballPosition;
+
+    ballPosition = checkBallPosition(ballList, bar1, bar2, ptBrick, player);
+    
     if (ballPosition == OUT_DOWN)
     {
         alive = loseLife(&player[0]);
+        return alive;
     }
     else if (ballPosition == OUT_UP)
     {
         alive = loseLife(&player[1]);
+        return alive;
     }
 
     // Change the ball owner
     else if (ballPosition == BAR_UP)
     {
-        ptBall->ptPlayer = &player[1];
+        ballList->ptPlayer = &player[1];
     }
     else if (ballPosition == BAR_DOWN)
     {
-        ptBall->ptPlayer = &player[0];
+        ballList->ptPlayer = &player[0];
     }
 
-    else if (ballPosition == BRICK)
+    if (ptBrick != NULL)
     {
-        brickManager(ptBall, &ptBrick, &ptBrick);
+        if (ballPosition == BRICK)
+        {
+            brickManager(ballList, brickList, ptBrick);
+        }
     }
-
-    bonusManager(bonusList, &bonus, bonusPosition);
 
     return alive;
 }
 
-// Parcours la liste chainee de balles
-int runGame(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick ptBrick, PtPlayer player, BonusList* bonusList)
+int ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player)
 {
     int alive = LIFE_MAX;
-    if (ballList == NULL)
-        return -1;
+    PtBrick ptBrick;
+
     for(; ballList != NULL; ballList = ballList->next)
     {
-        alive = ballManager(ballList, bar1, bar2, ptBrick, player, bonusList);
-        if (!alive)
-            return 0;
+        
+        moveBall(ballList);
+        
+        alive = positionDetection(ballList, bar1, bar2, brickList, NULL, player);
+        if(alive < LIFE_MAX)
+            return alive;
+        
+        ptBrick = *brickList;
+        for(; ptBrick != NULL; ptBrick = ptBrick->next)
+        {
+            alive = positionDetection(ballList, bar1, bar2, brickList, ptBrick, player);
+            if(alive < LIFE_MAX)
+                return alive;
+        }     
     }
+    
+    return alive;
+}
+
+// Parcours la liste chainee de balles
+int runGame(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, BonusList* bonusList)
+{
+    int alive = LIFE_MAX;
+
+    // If no ball then exit function
+    if (ballList == NULL)
+        return -1;
+    
+    alive = ballManager(ballList, bar1, bar2, brickList, player);
+    bonusManager(bonusList, bar1, bar2);
+
     return alive;
 }

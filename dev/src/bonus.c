@@ -30,6 +30,7 @@ Bonus* createBonus(PtBrick ptBrick)
     bonus->ptBrick = ptBrick;
     bonus->type = ptBrick->type;
     bonus->ptPlayer = NULL;
+    bonus->actif = false;
     bonus->next = NULL;
 
     return bonus;
@@ -71,7 +72,7 @@ void moveBonus (Bonus* bonus)
 // Draw only if brick is destroyed
 void drawBonus(Bonus bonus)
 {
-    if (bonus.ptBrick->life == 0)
+    if (bonus.actif)
     {
         glPushMatrix();
         glTranslatef(bonus.position.x, bonus.position.y, 1);
@@ -195,14 +196,4 @@ void getBonus(Bonus bonus)
     {
         barSizeUp(bonus.ptPlayer->ptBar);
     }
-}
-
-Bonus* findBonus(BonusList bonusList, Brick brick)
-{
-    for(; bonusList != NULL; bonusList = bonusList->next)
-    {
-        if (bonusList == brick.bonus)
-            return brick.bonus;
-    }
-    return NULL;
 }

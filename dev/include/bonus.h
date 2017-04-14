@@ -25,6 +25,7 @@ typedef struct bonus
   PtBrick ptBrick;
   BrickType type;
   PtPlayer ptPlayer;
+  bool actif;
   struct bonus* next;
 } Bonus, *BonusList;
 
@@ -46,7 +47,6 @@ void ballSizeUp (PtBall ptBall);
 void moreBall (PtBall* ballList, Player* player);
 
 void getBonus(Bonus bonus);
-Bonus* findBonus(BonusList bonusList, Brick brick);
 
 float bonusBottomPosition (Bonus bonus);
 float bonusTopPosition (Bonus bonus);

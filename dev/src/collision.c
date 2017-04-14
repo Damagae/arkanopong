@@ -269,7 +269,11 @@ Position checkBallPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBri
 
     // 0 if no collision with the bar
     colBallBar = collisionBallBar(ptBall, bar1, bar2);
-    colBallBrick = BrickCollision(*ptBrick, ptBall);
+    if (ptBrick != NULL)
+        colBallBrick = BrickCollision(*ptBrick, ptBall);
+    else
+        colBallBrick = 0;
+        
     position = ballOutOfGame(ptBall);
 
     if (position == INSIDE)
@@ -305,7 +309,7 @@ Position checkBallPosition (PtBall ptBall, PtBar bar1, PtBar bar2, PtBrick ptBri
             position = BRICK;
         }
     }
-    else
+    else // If Ball Oustide
     {
         changeDirection(&(ptBall->direction), VERTICAL);
     }

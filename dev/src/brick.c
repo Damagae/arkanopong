@@ -121,26 +121,26 @@ Point2D brickVerticeBottomRight(PtBrick ptBrick)
 }
 
 
-void deleteBrick(PtBrick* brickList, PtBrick* ptBrick)
+void deleteBrick(PtBrick* brickList, PtBrick ptBrick)
 {
     if (brickList == NULL)
         return;
-    if (*brickList == *ptBrick)
+    if (*brickList == ptBrick)
     {
         *brickList = NULL;
-        free(*ptBrick);
-        *ptBrick = NULL;
+        //free(*ptBrick);
+        ptBrick = NULL;
         return ;
     }
     PtBrick next;
-    for (; (*brickList)->next != NULL && (*brickList)->next != *ptBrick ; brickList = &next)
+    for (; (*brickList)->next != NULL && (*brickList)->next != ptBrick ; brickList = &next)
     {
         next = (*brickList)->next;
     }
 
-    (*brickList)->next = (*ptBrick)->next;
-    free(*ptBrick);
-    *ptBrick = NULL;
+    (*brickList)->next = ptBrick->next;
+    //free(*ptBrick);
+    ptBrick = NULL;
 }
 
 void deleteBrickList(PtBrick* brickList)

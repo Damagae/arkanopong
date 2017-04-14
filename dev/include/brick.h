@@ -39,7 +39,7 @@ Point2D brickVerticeTopRight(PtBrick ptBrick);
 Point2D brickVerticeBottomLeft(PtBrick ptBrick);
 Point2D brickVerticeBottomRight(PtBrick ptBrick);
 
-void deleteBrick(PtBrick* brickList, PtBrick* ptBrick);
+void deleteBrick(PtBrick* brickList, PtBrick ptBrick);
 void deleteBrickList(PtBrick* brickList);
 
 #endif
