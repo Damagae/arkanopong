@@ -46,7 +46,7 @@ void setVideoMode(unsigned int width, unsigned int height) {
 int main(int argc, char** argv)
 {
   bool start = false;
-  int alive;
+  Position ballPosition;
 
   /* Création des barres */
   Bar bar[2];
@@ -71,7 +71,7 @@ int main(int argc, char** argv)
   PtBrick brickList = NULL;
   addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
   addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2 - 200, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
-  //addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2 + 200, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
+  addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2 + 200, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
   //addBrick(&brickList, createBrick(PointXY((WINDOW_WIDTH-GAME_WIDTH), GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
 
   /** Initialisation de la SDL **/
@@ -91,23 +91,22 @@ int main(int argc, char** argv)
 
     if (start)
     {
-      alive = runGame(ballList, &bar[0], &bar[1], &brickList, player, &bonusList);
+      ballPosition = runGame(ballList, &bar[0], &bar[1], &brickList, player, &bonusList);
       // If a player lose a life
-      if (alive < LIFE_MAX)
+      if (ballPosition == OUT_UP || ballPosition == OUT_DOWN)
       {
         // Commenter cette ligne pour continuer à jouer serainement
         //start = false;
-        if (!alive)
+        
+        if (player[0].life == 0)
         {
-          if (player[0].life == 0)
-          {
-            printf("%s a perdu !\n",player[0].name);
-          }
-          else
-          {
-            printf("%s a perdu !\n",player[1].name);
-          }
+          printf("%s a perdu !\n",player[0].name);
         }
+        else if (player[1].life == 0)
+        {
+          printf("%s a perdu !\n",player[1].name);
+        }
+        
       }
       
       moveBar(player[0].ptBar, direction[0]);
