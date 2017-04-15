@@ -14,6 +14,10 @@
 #define BAR_SIZE_CHANGE 50
 #define BALL_SIZE_CHANGE 1
 
+#define LIFE_MAX 3
+
+/** CREATE FUNCTIONS **/
+
 Bonus* createBonus(PtBrick ptBrick)
 {
     Bonus* bonus = malloc(sizeof(Bonus));
@@ -48,6 +52,8 @@ void addBonus(BonusList* bonusList, Bonus* bonus)
     }
 }
 
+/** MOVING FUNCTIONS **/
+
 void bonusOrientation(Bonus* bonus, Player player)
 {
     if (player.num == 0)
@@ -69,6 +75,8 @@ void moveBonus (Bonus* bonus)
         bonus->position = PointPlusVector(bonus->position, deplacement);
     }
 }
+
+/** DRAWING FUNCTIONS **/
 
 // Draw only if brick is destroyed
 void drawBonus(Bonus bonus)
@@ -96,45 +104,7 @@ void drawAllBonus(BonusList bonusList)
     }
 }
 
-void barSizeUp (PtBar ptBar)
-{
-    ptBar->width += BAR_SIZE_CHANGE;
-}
-
-void barSizeDown (PtBar ptBar)
-{
-    ptBar->width -= BAR_SIZE_CHANGE;
-}
-
-void barSpeedUp (PtBar ptBar)
-{
-    ptBar->speed += 1;
-}
-
-void ballSpeedUp (PtBall ptBall)
-{
-    ptBall->speed += 1;
-}
-
-void ballSpeedDown (PtBall ptBall)
-{
-    ptBall->speed = ptBall->speed/2;
-}
-
-void ballSizeUp (PtBall ptBall)
-{
-    ptBall->radius += BALL_SIZE_CHANGE;
-}
-
-void moreBall (PtBall* ballList, Player* player)
-{
-    Vector2D vector;
-    if (player->num == 1)
-        vector = VectorXY(0,1);
-    else
-        vector = VectorXY(0,-1);
-    addBall(ballList, createBall(PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), vector, player));
-}
+/** UTILITIES FUNCTIONS **/
 
 float bonusBottomPosition (Bonus bonus)
 {
@@ -155,6 +125,8 @@ float bonusRightPosition (Bonus bonus)
 {
     return bonus.position.x + bonus.radius;
 }
+
+/** DELETE FUNCTIONS **/
 
 // This function doesn't work well
 void deleteBonus(BonusList* bonusList, BonusList* bonus)
@@ -192,10 +164,70 @@ void deleteBonusList(BonusList* bonusList)
     }
 }
 
+/** BONUS EFFECT FUNCTIONS **/
+
+void barSizeUp (PtBar ptBar)
+{
+    ptBar->width += BAR_SIZE_CHANGE;
+}
+
+void barSizeDown (PtBar ptBar)
+{
+    ptBar->width -= BAR_SIZE_CHANGE;
+}
+
+void barSpeedUp (PtBar ptBar)
+{
+    ptBar->speed += 5;
+}
+
+void ballSpeedUp (PtBall ptBall)
+{
+    ptBall->speed += 1;
+}
+
+void ballSpeedDown (PtBall ptBall)
+{
+    ptBall->speed = ptBall->speed/2;
+}
+
+void ballSizeUp (PtBall ptBall)
+{
+    ptBall->radius += BALL_SIZE_CHANGE;
+}
+
+void moreBall (PtBall* ballList, Player* player)
+{
+    Vector2D vector;
+    if (player->num == 1)
+        vector = VectorXY(0,1);
+    else
+        vector = VectorXY(0,-1);
+    addBall(ballList, createBall(PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), vector, player));
+}
+
+void addLife (Player* player)
+{
+    if (player->life < LIFE_MAX)
+        ++(player->life);
+}
+
 void getBonus(Bonus bonus)
 {
     if (bonus.type == BARUP)
     {
         barSizeUp(bonus.ptPlayer->ptBar);
+    }
+    else if (bonus.type == BARDWN)
+    {
+        barSizeDown(bonus.ptPlayer->ptBar);
+    }
+    else if (bonus.type == BARSPDUP)
+    {
+        barSpeedUp(bonus.ptPlayer->ptBar);
+    }
+    else if (bonus.type == ADDLIFE)
+    {
+        addLife(bonus.ptPlayer);
     }
 }

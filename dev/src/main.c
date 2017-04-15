@@ -69,10 +69,10 @@ int main(int argc, char** argv)
 
   /** Creation des briques **/
   PtBrick brickList = NULL;
-  addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
+  addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARDWN, &bonusList));
   addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2 - 200, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
-  addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2 + 200, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
-  //addBrick(&brickList, createBrick(PointXY((WINDOW_WIDTH-GAME_WIDTH), GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
+  addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2 + 200, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARSPDUP, &bonusList));
+  addBrick(&brickList, createBrick(PointXY((WINDOW_WIDTH-GAME_WIDTH), GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), ADDLIFE, &bonusList));
 
   /** Initialisation de la SDL **/
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {

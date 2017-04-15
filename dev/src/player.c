@@ -55,7 +55,8 @@ void drawLife(Player player)
 
 int loseLife(PtPlayer player)
 {
-    (player->life)--;
+    if (player->life > 0)
+        (player->life)--;
     if (player->life == 0)
         return 0;
     else

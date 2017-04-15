@@ -45,6 +45,7 @@ void ballSpeedUp (PtBall ptBall);
 void ballSpeedDown (PtBall ptBall);
 void ballSizeUp (PtBall ptBall);
 void moreBall (PtBall* ballList, Player* player);
+void addLife (Player* player);
 
 void getBonus(Bonus bonus);
 
