@@ -13,7 +13,6 @@
 
 /** FONCTIONS **/
 
-int loseLife(PtPlayer player);
 void drawGameBorder();
 void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickList, BonusList bonusList);
 int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick);

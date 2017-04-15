@@ -120,7 +120,7 @@ Point2D brickVerticeBottomRight(PtBrick ptBrick)
     return PointXY(ptBrick->position.x - ptBrick->width/2, ptBrick->position.y + ptBrick->height/2);
 }
 
-
+// This function doesn't work well
 void deleteBrick(PtBrick* brickList, PtBrick ptBrick)
 {
     if (brickList == NULL)

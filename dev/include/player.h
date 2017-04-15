@@ -17,5 +17,6 @@ typedef struct
 
 Player createPlayer(int num, char* name, PtBar ptBar);
 void drawLife(Player player);
+int loseLife(PtPlayer player);
 
 #endif

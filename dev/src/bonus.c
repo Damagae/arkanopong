@@ -27,6 +27,7 @@ Bonus* createBonus(PtBrick ptBrick)
     bonus->direction = VectorXY(0,0);
     bonus->radius = BONUS_RADIUS;
     bonus->speed = BONUS_SPEED;
+    // We don't need this, but if we delete it, it bugs, don't know why
     bonus->ptBrick = ptBrick;
     bonus->type = ptBrick->type;
     bonus->ptPlayer = NULL;
@@ -142,7 +143,7 @@ float bonusBottomPosition (Bonus bonus)
 
 float bonusTopPosition (Bonus bonus)
 {
-    return bonus.position.y + bonus.radius;
+    return bonus.position.y - bonus.radius;
 }
 
 float bonusLeftPosition (Bonus bonus)
@@ -155,13 +156,14 @@ float bonusRightPosition (Bonus bonus)
     return bonus.position.x + bonus.radius;
 }
 
+// This function doesn't work well
 void deleteBonus(BonusList* bonusList, BonusList* bonus)
 {
     if (bonusList == NULL)
         return;
     if (*bonusList == *bonus)
     {
-        *bonusList = NULL;
+        *bonusList = (*bonus)->next;
         free(*bonus);
         *bonus = NULL;
         return ;
