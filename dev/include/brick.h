@@ -39,6 +39,9 @@ Point2D brickVerticeTopRight(PtBrick ptBrick);
 Point2D brickVerticeBottomLeft(PtBrick ptBrick);
 Point2D brickVerticeBottomRight(PtBrick ptBrick);
 
+void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, BonusList* bonusList);
+BrickType getType(int t);
+
 void deleteBrick(PtBrick* brickList, PtBrick ptBrick);
 void deleteBrickList(PtBrick* brickList);
 

@@ -16,6 +16,7 @@
 #include "manager.h"
 #include "bool.h"
 #include "bonus.h"
+#include "level.h"
 
 /* Dimensions de la fenêtre */
 unsigned int WINDOW_WIDTH = 1000;
@@ -24,6 +25,9 @@ unsigned int WINDOW_HEIGHT = 1000;
 /* Dimensions du jeu */
 int GAME_WIDTH = 800;
 int GAME_HEIGHT = 800;
+
+/* Niveau par default */
+char levelpath[] = "../data/level.txt";
 
 int LIFE_MAX = 3;
 
@@ -69,6 +73,8 @@ int main(int argc, char** argv)
 
   /** Creation des briques **/
   PtBrick brickList = NULL;
+  int * level = loadLevel(levelpath);
+  createLevelBricks(level, GAME_WIDTH, GAME_HEIGHT, &brickList, &bonusList);
   addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARDWN, &bonusList));
   addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2 - 200, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARUP, &bonusList));
   addBrick(&brickList, createBrick(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2 + 200, GAME_HEIGHT/2 + (WINDOW_HEIGHT-GAME_HEIGHT)/2), BARSPDUP, &bonusList));

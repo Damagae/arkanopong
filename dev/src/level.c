@@ -42,49 +42,42 @@ int * loadLevel (char *filepath)
         fgets(line1, MAX_SIZE, f); // get the first line with dimensions
         for(i = 0; i < 4; ++i)
         {
-            switch(digitOrSpace(line1[i]))
+            if(i%2 == 1 && digitOrSpace(line1[i])) // odd : digit expected
             {
-                case 0:
-                    lvl[n] = line1[i];
-                    ++n;
-                    break;
-                case -1:
-                    fprintf(stderr, "Fichier niveau non conforme.\n");
-                    return NULL;
-                default:
-                    fprintf(stderr, "Erreur de lecture du fichier.\n");
-                    return NULL;
+                lvl[n] = line2[i];
+                ++n;
+            } else if (i%2 == 0 && digitOrSpace(line1[i]) == 1) // even : space expected
+            {
 
+            } else {
+                fprintf(stderr, "Fichier niveau non conforme.\n");
+                return NULL;
             }
         }
         i = 0;
 
         /* Bricks' type */
         fgets(line2, MAX_SIZE, f); // get the second line with types
-        while(line2[i] != '\n')
+        for(i = 0; i < lvl[0] * lvl[1]; ++i)
         {
-            switch(digitOrSpace(line2[i]))
+            if(i%2 == 1 && digitOrSpace(line2[i])) // odd : digit expected
             {
-                case 0:
-                    lvl[3+n] = line2[i];
-                    ++n;
-                    break;
-                case -1:
-                    fprintf(stderr, "Fichier niveau non conforme.\n");
-                    return NULL;
-                default:
-                    fprintf(stderr, "Erreur de lecture du fichier.\n");
-                    return NULL;
+                lvl[3+n] = line2[i];
+                ++n;
+            } else if (i%2 == 0 && digitOrSpace(line2[i]) == 1) // even : space expected
+            {
 
+            } else {
+                fprintf(stderr, "Fichier niveau non conforme.\n");
+                return NULL;
             }
-            ++i;
         }
 
         return lvl;
 
         fclose(f);
     }
-    
+
     return NULL;
 }
 

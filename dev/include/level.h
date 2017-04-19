@@ -1,7 +1,7 @@
-#ifndef __GEOMETRY__H
-#define __GEOMETRY__H
+#ifndef __LEVEL__H
+#define __LEVEL__H
 
-int * loadLevel (char filepath);
+int * loadLevel (char *filepath);
 int digitOrSpace(char c);
 
 #endif

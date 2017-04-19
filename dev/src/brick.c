@@ -155,3 +155,65 @@ void deleteBrickList(PtBrick* brickList)
         *brickList = NULL;
     }
 }
+
+BrickType getType(int t) {
+    switch(t)
+    {
+        case 0:
+            return INDES;
+        case 1:
+            return DISAP;
+        case 2:
+            return BARUP;
+        case 3:
+            return BARDWN;
+        case 4:
+            return BARSPDUP;
+        case 5:
+            return BALLSPDUP;
+        case 6:
+            return BALLSPDDWN;
+        case 7:
+            return BALLSIZEUP;
+        case 8:
+            return MOREBALL;
+        case 9:
+            return ADDLIFE;
+        case 10:
+            return NORMAL;
+    }
+    return NORMAL;
+}
+
+void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, BonusList* bonusList) {
+    int largeur = lvl[0];
+    int hauteur = lvl[1];
+    int i = 0;
+    int j = 0;
+    float firstLine;
+    float firstColumn;
+
+    if (hauteur%2 == 0)
+    {
+        firstLine = GAME_H/2 - (hauteur/2) * HEIGHT_DEFAULT;
+    } else
+    {
+        firstLine = GAME_H/2 - HEIGHT_DEFAULT/2 - (hauteur-1)/2 * HEIGHT_DEFAULT;
+    }
+
+    if (largeur%2 == 0)
+    {
+        firstColumn = GAME_W/2 - (largeur/2) * WIDTH_DEFAULT;
+    } else
+    {
+        firstColumn = GAME_W/2 - WIDTH_DEFAULT/2 - (largeur-1/2) * WIDTH_DEFAULT;
+    }
+
+    for(i = 0; i < hauteur; ++i)
+    {
+        for(j = 0; j < largeur; ++j)
+        {
+            addBrick(brickList, createBrick(PointXY(firstColumn + j * WIDTH_DEFAULT, firstLine + i * HEIGHT_DEFAULT), getType(lvl[3 + i * largeur + j]), bonusList));
+        }   
+    }
+}
