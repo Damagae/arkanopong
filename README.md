@@ -5,7 +5,7 @@ Game development
 ## Setup
 
 ```sh
-$ git clone https://github.com/damagae/arkanopong.git
+$ git clone https://github.com/Damagae/arkanopong.git
 $ cd arkanopong
 $ make
 $ ./bin/arkanopong
