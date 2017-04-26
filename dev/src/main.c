@@ -75,7 +75,7 @@ int main(int argc, char** argv)
   PtBrick brickList = NULL;
   int * level;
   level = loadLevel(levelpath);
-  createLevelBricks(level, GAME_WIDTH, GAME_HEIGHT, &brickList, &bonusList);
+  createLevelBricks(level, WINDOW_WIDTH, WINDOW_HEIGHT, &brickList, &bonusList);
 
   /** Initialisation de la SDL **/
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {

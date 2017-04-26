@@ -71,9 +71,7 @@ int * loadLevel (const char * filepath)
 
         /* Bricks' type */
         fgets(line2, MAX_SIZE, f); // get the second line with types
-        printf("%s\n", line2);
-        printf("%d\n", lvl[0] * lvl[1]);
-        for(i = 1; i <= lvl[0] * lvl[1]; ++i)
+        for(i = 1; i < lvl[0] * lvl[1]; ++i)
         {
             if(i%2 == 1 && digitOrSpace(line2[i-1]) == 0) // odd : digit expected
             {

@@ -73,6 +73,9 @@ void drawBrick(Brick brick)
         glTranslatef(brick.position.x, brick.position.y, 1);
         glScalef(brick.width, brick.height, 1);
         drawSquare();
+        glColor3ub( 0, 0, 0 );
+        drawSquareBorder();
+        glColor3ub( 255, 255, 255 );
         glPopMatrix();
     }
 }
@@ -203,11 +206,12 @@ void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, Bo
 
     if (largeur%2 == 0)
     {
-        firstColumn = GAME_W/2 - (largeur/2) * WIDTH_DEFAULT;
+        firstColumn = GAME_W/2 - WIDTH_DEFAULT/2 - WIDTH_DEFAULT * (largeur/2 - 1);
     } else
     {
-        firstColumn = GAME_W/2 - WIDTH_DEFAULT/2 - (largeur-1/2) * WIDTH_DEFAULT;
+        firstColumn = GAME_W/2 - WIDTH_DEFAULT/2 - ((largeur-1)/2) * WIDTH_DEFAULT + 0.5 * WIDTH_DEFAULT;
     }
+    printf("C %.0f\n", firstColumn);
 
     for(i = 0; i < hauteur; ++i)
     {
