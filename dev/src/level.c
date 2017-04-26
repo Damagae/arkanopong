@@ -82,9 +82,9 @@ int * loadLevel (const char * filepath)
             if (i%2 == (1 - parity%2) && digitOrSpace(line2[i-1]) == 2 && line2[i] == '0') // if it's a 10
             {
                 lvl[3+n] = 10;
-                ++i;
+                ++i; // We skip a step
                 ++n;
-                ++parity;
+                ++parity; // We add a difference due to a 2 digits number - It is %2 so the result is either 0 or 1
             } else if(i%2 == (1 - parity%2) && (digitOrSpace(line2[i-1]) == 0 || digitOrSpace(line2[i-1]) == 2)) // odd : digit expected
             {
                 lvl[3+n] = atoi(&line2[i-1]);
