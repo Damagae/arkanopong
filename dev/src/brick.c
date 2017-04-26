@@ -211,7 +211,6 @@ void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, Bo
     {
         firstColumn = GAME_W/2 - WIDTH_DEFAULT/2 - ((largeur-1)/2) * WIDTH_DEFAULT + 0.5 * WIDTH_DEFAULT;
     }
-    printf("C %.0f\n", firstColumn);
 
     for(i = 0; i < hauteur; ++i)
     {
