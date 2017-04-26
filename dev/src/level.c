@@ -2,7 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_SIZE 100
+#include <unistd.h>
+#include <errno.h>
+
+#define MAX_SIZE 1024
 
 int digitOrSpace (char c)
 {
@@ -19,14 +22,24 @@ int digitOrSpace (char c)
     return -1;
 }
 
-int * loadLevel (char *filepath)
+int * loadLevel (const char * filepath)
 {
     FILE *f = NULL;
+    char cwd[MAX_SIZE];
+    char path[MAX_SIZE];
     char line1[MAX_SIZE] = "";
     char line2[MAX_SIZE] = "";
     int * lvl;
     int n = 0;
     int i = 0;
+
+    if (getcwd(cwd, sizeof(cwd)) == NULL) {
+        printf("Le chemin spécifié est erroné.\n");
+        return NULL;
+    }
+
+    strcpy(path, cwd);
+    strcat(path, "/data/level.txt");
 
     lvl = malloc(sizeof(int) * MAX_SIZE);
     if (lvl == NULL)
@@ -35,47 +48,47 @@ int * loadLevel (char *filepath)
         return NULL;
     }
 
-    f = fopen(filepath, "r");
+    f = fopen(path, "r");
     if (f != NULL)
     {
         /* Dimensions */
         fgets(line1, MAX_SIZE, f); // get the first line with dimensions
-        for(i = 0; i < 4; ++i)
+        for(i = 1; i < 4; ++i)
         {
-            if(i%2 == 1 && digitOrSpace(line1[i])) // odd : digit expected
+            if(i%2 == 1 && digitOrSpace(line1[i-1]) == 0) // odd : digit expected
             {
-                lvl[n] = line2[i];
+                lvl[n] = atoi(&line1[i-1]);
                 ++n;
-            } else if (i%2 == 0 && digitOrSpace(line1[i]) == 1) // even : space expected
+            } else if (i%2 == 0 && digitOrSpace(line1[i-1]) == 1) // even : space expected
             {
 
             } else {
-                fprintf(stderr, "Fichier niveau non conforme.\n");
+                fprintf(stderr, "Fichier niveau non conforme (dimensions).\n");
                 return NULL;
             }
         }
-        i = 0;
+        n = 0;
 
         /* Bricks' type */
         fgets(line2, MAX_SIZE, f); // get the second line with types
-        for(i = 0; i < lvl[0] * lvl[1]; ++i)
+        printf("%s\n", line2);
+        printf("%d\n", lvl[0] * lvl[1]);
+        for(i = 1; i <= lvl[0] * lvl[1]; ++i)
         {
-            if(i%2 == 1 && digitOrSpace(line2[i])) // odd : digit expected
+            if(i%2 == 1 && digitOrSpace(line2[i-1]) == 0) // odd : digit expected
             {
-                lvl[3+n] = line2[i];
+                lvl[3+n] = atoi(&line2[i-1]);
                 ++n;
-            } else if (i%2 == 0 && digitOrSpace(line2[i]) == 1) // even : space expected
+            } else if (i%2 == 0 && digitOrSpace(line2[i-1]) == 1) // even : space expected
             {
 
             } else {
-                fprintf(stderr, "Fichier niveau non conforme.\n");
+                fprintf(stderr, "[%d] Fichier niveau non conforme (type de brique).\n", i);
                 return NULL;
             }
         }
-
-        return lvl;
-
         fclose(f);
+        return lvl;        
     }
 
     return NULL;
