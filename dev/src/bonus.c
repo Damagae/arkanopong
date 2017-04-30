@@ -18,7 +18,7 @@
 
 /** CREATE FUNCTIONS **/
 
-Bonus* createBonus(PtBrick ptBrick)
+Bonus* createBonus(PtBrick ptBrick, TextureList* bonusTexture, char* textureFile)
 {
     Bonus* bonus = malloc(sizeof(Bonus));
     if (bonus == NULL)
@@ -31,6 +31,7 @@ Bonus* createBonus(PtBrick ptBrick)
     bonus->direction = VectorXY(0,0);
     bonus->radius = BONUS_RADIUS;
     bonus->speed = BONUS_SPEED;
+    bonus->ptTexture = addTexture(bonusTexture, textureFile);
     // We don't need this, but if we delete it, it bugs, don't know why
     bonus->ptBrick = ptBrick;
     bonus->type = ptBrick->type;
@@ -83,11 +84,14 @@ void drawBonus(Bonus bonus)
 {
     if (bonus.actif)
     {
+        glBindTexture(GL_TEXTURE_2D, bonus.ptTexture->texture[bonus.ptTexture->num]);
         glPushMatrix();
-        glTranslatef(bonus.position.x, bonus.position.y, 1);
-        glScalef(bonus.radius, bonus.radius, 1);
-        drawCircle();
+            glTranslatef(bonus.position.x, bonus.position.y, 1);
+            glScalef(bonus.radius, bonus.radius, 1);
+            //drawCircle();
+            drawSquareTexture();
         glPopMatrix();
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 }
 
