@@ -6,6 +6,7 @@
 
 /** FUNCTIONS **/
 
-void AIcontroller (PtBar bar, Ball ball);
+Ball closestBall (PtBar ptBar, PtBall ballList);
+void AIcontroller (PtBar bar, PtBall ballList);
 
 #endif
