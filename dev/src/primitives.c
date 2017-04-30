@@ -17,6 +17,25 @@ void drawSquare()
     glEnd();
 }
 
+void drawSquareTexture()
+{
+    glBegin(GL_QUADS);
+
+        glTexCoord2f(0, 0);
+        glVertex2f(-0.5,0.5);
+
+        glTexCoord2f(1, 0);
+        glVertex2f(0.5,0.5);
+
+        glTexCoord2f(1, 1);
+        glVertex2f(0.5,-0.5);
+
+        glTexCoord2f(0, 1);
+        glVertex2f(-0.5,-0.5);
+
+    glEnd();
+}
+
 void drawSquareBorder()
 {
     glBegin(GL_LINE_LOOP);
@@ -58,6 +77,18 @@ void drawCircle()
     glBegin(GL_POLYGON);
     for (i = 0; i <= SEGMENTS; i++)
     {
+        glVertex2f(cos(i*(M_PI/(SEGMENTS/2))), sin(i*(M_PI/(SEGMENTS/2))));
+    }
+    glEnd();
+}
+
+void drawCircleTexture()
+{
+    int i;
+    glBegin(GL_POLYGON);
+    for (i = 0; i <= SEGMENTS; i++)
+    {
+        //glTexCoord2f(0, 0);
         glVertex2f(cos(i*(M_PI/(SEGMENTS/2))), sin(i*(M_PI/(SEGMENTS/2))));
     }
     glEnd();

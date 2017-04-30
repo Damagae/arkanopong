@@ -28,7 +28,7 @@ void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickLi
   
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
+    glEnable(GL_TEXTURE_2D);
 
     glColor3f(1.0, 0.0, 0.0);
     drawGameBorder();
@@ -46,7 +46,7 @@ void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickLi
     drawLife(player1);
     drawLife(player2);
 
-
+    glDisable(GL_TEXTURE_2D);
     SDL_GL_SwapBuffers();
 }
 

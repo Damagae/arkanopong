@@ -16,6 +16,7 @@
 #include "manager.h"
 #include "bool.h"
 #include "bonus.h"
+#include "textures.h"
 #include "level.h"
 
 /* Dimensions de la fenêtre */
@@ -52,6 +53,18 @@ int main(int argc, char** argv)
   bool start = false;
   Position ballPosition;
 
+  /** Initialisation de la SDL **/
+  if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
+    fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
+    return EXIT_FAILURE;
+  }
+  setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+  /* Création des textures */
+  TextureList brickTexture, ballTexture = NULL;
+  char* brickTextureFile[] = {"data/img/bob.jpg", "data/img/red.jpg", "data/img/border.jpg"};
+  //char* ballTextureFile[] = {"data/img/redGradient.bmp"};
+
   /* Création des barres */
   Bar bar[2];
   Direction direction[2] = {NONE, NONE};
@@ -66,7 +79,7 @@ int main(int argc, char** argv)
   /** Creation des balles **/ 
   PtBall ballList = NULL;
   addBall(&ballList, createBall(PointXY(450, 550), VectorXY(0, 0.8), &player[0]));
-  addBall(&ballList, createBall(PointXY(450, 350), VectorXY(0, -0.8), &player[1]));
+  //addBall(&ballList, createBall(PointXY(450, 350), VectorXY(0, -0.8), &player[1]));
 
   /* Creation de la liste de bonus */
   BonusList bonusList = NULL;
@@ -75,14 +88,7 @@ int main(int argc, char** argv)
   PtBrick brickList = NULL;
   int * level;
   level = loadLevel(levelpath);
-  createLevelBricks(level, WINDOW_WIDTH, WINDOW_HEIGHT, &brickList, &bonusList);
-
-  /** Initialisation de la SDL **/
-  if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
-    fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
-    return EXIT_FAILURE;
-  }
-  setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
+  createLevelBricks(level, WINDOW_WIDTH, WINDOW_HEIGHT, &brickList, &bonusList, &brickTexture, brickTextureFile[2]);
 
   /** Boucle d'affichage **/
   bool inGame = true;
@@ -103,18 +109,18 @@ int main(int argc, char** argv)
         
         if (player[0].life == 0)
         {
-          printf("%s a perdu !\n",player[0].name);
+          //printf("%s a perdu !\n",player[0].name);
         }
         else if (player[1].life == 0)
         {
-          printf("%s a perdu !\n",player[1].name);
+          //printf("%s a perdu !\n",player[1].name);
         }
         
       }
       
       moveBar(player[0].ptBar, direction[0]);
-      moveBar(&bar[1], direction[1]);
-      //AIcontroller (&bar[1], ball[0]);
+      //moveBar(&bar[1], direction[1]);
+      AIcontroller (&bar[1], ballList[0]);
     }
 
     /* ****** */    
@@ -181,6 +187,9 @@ int main(int argc, char** argv)
       SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
     }
   }
+
+  freeTexture(&brickTexture);
+  //freeTexture(&ballTexture);
 
   deleteBalls(&ballList);
   deleteBrickList(&brickList);
