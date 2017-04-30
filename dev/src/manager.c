@@ -16,36 +16,51 @@ void drawGameBorder()
     Point2D GAME_TOP_LEFT = PointXY((WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2);
 
     glPushMatrix();
-    glTranslatef(GAME_TOP_LEFT.x + GAME_WIDTH/2, GAME_TOP_LEFT.y + GAME_HEIGHT/2, 1);
-    glScalef(GAME_WIDTH-1, GAME_HEIGHT-1, 1);
-    drawSquareBorder();
+        glTranslatef(GAME_TOP_LEFT.x + GAME_WIDTH/2, GAME_TOP_LEFT.y + GAME_HEIGHT/2, 1);
+        glScalef(GAME_WIDTH-1, GAME_HEIGHT-1, 1);
+        drawSquareBorder();
     glPopMatrix();
 }
 
-void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickList, BonusList bonusList)
+void drawGameBackground(Texture background)
+{
+    Point2D GAME_TOP_LEFT = PointXY((WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2);
+
+    glBindTexture(GL_TEXTURE_2D, background.texture[background.num]);
+    glPushMatrix();
+        glTranslatef(GAME_TOP_LEFT.x + GAME_WIDTH/2, GAME_TOP_LEFT.y + GAME_HEIGHT/2, 1);
+        glScalef(GAME_WIDTH-1, GAME_HEIGHT-1, 1);
+        drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickList, BonusList bonusList, Texture background, Texture life)
 {    
     glClear(GL_COLOR_BUFFER_BIT);
   
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glEnable(GL_TEXTURE_2D);
+    glPushMatrix();
+        drawGameBackground(background);
+        glColor3f(1.0, 0.0, 0.0);
+        drawGameBorder();
 
-    glColor3f(1.0, 0.0, 0.0);
-    drawGameBorder();
+        glColor3f(1.0, 1.0, 1.0);
+        drawAllBalls(ballList);
 
-    glColor3f(1.0, 1.0, 1.0);
-    drawAllBalls(ballList);
+        drawBar(*(player1.ptBar), player1.num);
+        drawBar(*(player2.ptBar), player2.num);
 
-    drawBar(*(player1.ptBar), player1.num);
-    drawBar(*(player2.ptBar), player2.num);
+        drawAllBricks(brickList);
 
-    drawAllBricks(brickList);
+        drawAllBonus(bonusList);
 
-    drawAllBonus(bonusList);
-
-    drawLife(player1);
-    drawLife(player2);
-
+        drawLife(player1, life);
+        drawLife(player2, life);
+        glColor3f(1.0, 1.0, 1.0);
+    glPopMatrix();
     glDisable(GL_TEXTURE_2D);
     SDL_GL_SwapBuffers();
 }

@@ -61,15 +61,27 @@ int main(int argc, char** argv)
   setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
 
   /* Création des textures */
-  TextureList brickTexture, ballTexture = NULL;
+  TextureList brickTexture = NULL;
+  //TextureList ballTexture = NULL;
+  TextureList barTexture = NULL;
+  TextureList backgroundTexture = NULL;
+  TextureList lifeTexture = NULL;
+
+  char* backgroundTextureFile[] = {"data/img/background.png"};
   char* brickTextureFile[] = {"data/img/bob.jpg", "data/img/red.jpg", "data/img/border.jpg"};
   //char* ballTextureFile[] = {"data/img/redGradient.bmp"};
+  char* barTextureFile[] = {"data/img/bar.png"};
+  char* lifeTextureFile[] = {"data/img/life.png", "data/img/life_empty.png"};
+
+  backgroundTexture = addTexture(&backgroundTexture, backgroundTextureFile[0]);
+  lifeTexture = addTexture(&lifeTexture, lifeTextureFile[0]);
+  //addTexture(&lifeTexture, lifeTextureFile[1]);
 
   /* Création des barres */
   Bar bar[2];
   Direction direction[2] = {NONE, NONE};
-  bar[0] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50));
-  bar[1] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50));
+  bar[0] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50), &barTexture, barTextureFile[0]);
+  bar[1] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50), &barTexture, barTextureFile[0]);
 
   /* Création des joueurs */
   Player player[2];
@@ -96,7 +108,7 @@ int main(int argc, char** argv)
     Uint32 startTime = SDL_GetTicks();
 
     /* Dessin */
-    renderGame(player[0], player[1], ballList, brickList, bonusList);
+    renderGame(player[0], player[1], ballList, brickList, bonusList, *backgroundTexture, *lifeTexture);
 
     if (start)
     {
@@ -188,8 +200,11 @@ int main(int argc, char** argv)
     }
   }
 
+  freeTexture(&backgroundTexture);
   freeTexture(&brickTexture);
   //freeTexture(&ballTexture);
+  freeTexture(&barTexture);
+  freeTexture(&lifeTexture);
 
   deleteBalls(&ballList);
   deleteBrickList(&brickList);

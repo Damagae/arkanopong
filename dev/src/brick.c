@@ -75,10 +75,10 @@ void drawBrick(Brick brick)
     {
         glBindTexture(GL_TEXTURE_2D, brick.ptTexture->texture[brick.ptTexture->num]);
         glPushMatrix();
-        glTranslatef(brick.position.x, brick.position.y, 1);
-        glScalef(brick.width, brick.height, 1);
-        //drawSquare();
-        drawSquareTexture();
+            glTranslatef(brick.position.x, brick.position.y, 1);
+            glScalef(brick.width, brick.height, 1);
+            //drawSquare();
+            drawSquareTexture();
         glPopMatrix();
         glBindTexture(GL_TEXTURE_2D, 0);
     }

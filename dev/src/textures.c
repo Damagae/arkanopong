@@ -60,7 +60,7 @@ GLuint generateTexture(GLuint * texture, char* filename)
       return EXIT_FAILURE;
   }
   /** Envoie les données de la texture à OpenGL **/
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, surface->w, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
   glBindTexture(GL_TEXTURE_2D, 0);
   /** Libere la surface */
   SDL_FreeSurface(surface);
@@ -99,7 +99,7 @@ Texture* addTexture(TextureList* textures, char* filename)
       return exist;
   }
   ((*textures)->texture)[(*textures)->num] = generateTexture(&(((*textures)->texture)[(*textures)->num]), filename);
-  
+
   return (*textures);
 }
 
@@ -110,6 +110,11 @@ void freeTexture(TextureList* textureList)
         return;
     if (((*textureList)->texture) != NULL)
         glDeleteTextures(MAX_TEXTURE, (*textureList)->texture);
-    free(*textureList);
-    *textureList = NULL;
+    TextureList tmp = *textureList;
+    while (tmp != NULL)
+    {
+      tmp = (*textureList)->next;
+      free(*textureList);
+      *textureList = tmp;
+    }
 }

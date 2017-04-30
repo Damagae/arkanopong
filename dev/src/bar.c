@@ -1,5 +1,7 @@
 #include <GL/gl.h>
 
+#include <stdlib.h>
+#include <stdio.h>
 #include "bar.h"
 #include "primitives.h"
 
@@ -13,14 +15,15 @@ extern int WINDOW_HEIGHT;
 extern int GAME_WIDTH;
 extern int GAME_HEIGHT;
 
-Bar createBar (Point2D position)
-{
+Bar createBar (Point2D position, TextureList* barTexture, char* textureFile)
+{   
     Bar bar;
     bar.position = position;
     bar.width = BAR_WIDTH;
     bar.height = BAR_HEIGHT;
     bar.speed = BAR_SPEED;
-   
+    bar.ptTexture = addTexture(barTexture, textureFile);
+
     return bar;
 }
 
@@ -50,13 +53,18 @@ void moveBar(PtBar ptBar, Direction direction)
 
 void drawBar(Bar bar, int numPlayer)
 {
+    glEnable(GL_BLEND);
+    glBindTexture(GL_TEXTURE_2D, bar.ptTexture->texture[bar.ptTexture->num]);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
-    glTranslatef(bar.position.x, bar.position.y, 1);
-    glScalef(bar.width, bar.height, 1);
-    if (numPlayer == 1)
-        glRotatef(180, 0.0, 0.0, 1.0);
-    drawSquare();
+        glTranslatef(bar.position.x, bar.position.y, 1);
+        glScalef(bar.width, bar.height, 1);
+        if (numPlayer == 1)
+            glRotatef(180, 0.0, 0.0, 1.0);
+            drawSquareTexture();
     glPopMatrix();
+    glDisable(GL_BLEND);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 /* Bar edges position */
