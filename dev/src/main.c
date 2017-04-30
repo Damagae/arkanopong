@@ -62,16 +62,14 @@ int main(int argc, char** argv)
 
   /* Création des textures */
   TextureList brickTexture = NULL;
-  //TextureList ballTexture = NULL;
   TextureList barTexture = NULL;
   TextureList backgroundTexture = NULL;
   TextureList lifeTexture = NULL;
   TextureList bonusTexture = NULL;
 
-  char* backgroundTextureFile[] = {"data/img/background.png"};
-  char* brickTextureFile[] = {"data/img/bob.jpg", "data/img/red.jpg", "data/img/border.jpg"};
-  //char* ballTextureFile[] = {"data/img/redGradient.bmp"};
-  char* barTextureFile[] = {"data/img/bar.png"};
+  char* backgroundTextureFile[] = {"data/img/background/greenBackground.jpg", "data/img/background/blueBackground.png"};
+  char* brickTextureFile[] = {"data/img/brick/bob.jpg", "data/img/brick/red.jpg", "data/img/brick/border.jpg"};
+  char* barTextureFile[] = {"data/img/bar/blueBar.png", "data/img/bar/redBar.png"};
   char* lifeTextureFile[] = {"data/img/life.png", "data/img/life_empty.png"};
   char* bonusTextureFile[] = {"data/img/bonus/barUP.png", "data/img/bonus/barDWN.png"};
 
@@ -85,7 +83,7 @@ int main(int argc, char** argv)
   Bar bar[2];
   Direction direction[2] = {NONE, NONE};
   bar[0] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50), &barTexture, barTextureFile[0]);
-  bar[1] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50), &barTexture, barTextureFile[0]);
+  bar[1] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50), &barTexture, barTextureFile[1]);
 
   /* Création des joueurs */
   Player player[2];
@@ -95,7 +93,7 @@ int main(int argc, char** argv)
   /** Creation des balles **/ 
   PtBall ballList = NULL;
   addBall(&ballList, createBall(PointXY(450, 550), VectorXY(0, 0.8), &player[0]));
-  //addBall(&ballList, createBall(PointXY(450, 350), VectorXY(0, -0.8), &player[1]));
+  addBall(&ballList, createBall(PointXY(450, 350), VectorXY(0, -0.8), &player[1]));
 
   /* Creation de la liste de bonus */
   BonusList bonusList = NULL;
@@ -104,7 +102,7 @@ int main(int argc, char** argv)
   PtBrick brickList = NULL;
   int * level;
   level = loadLevel(levelpath);
-  createLevelBricks(level, WINDOW_WIDTH, WINDOW_HEIGHT, &brickList, &bonusList, &brickTexture, brickTextureFile[2], &bonusTexture, &bonusTextureFile);
+  createLevelBricks(level, WINDOW_WIDTH, WINDOW_HEIGHT, &brickList, &bonusList, &brickTexture, brickTextureFile[2], &bonusTexture, bonusTextureFile);
 
   /** Boucle d'affichage **/
   bool inGame = true;
@@ -206,7 +204,6 @@ int main(int argc, char** argv)
 
   freeTexture(&backgroundTexture);
   freeTexture(&brickTexture);
-  //freeTexture(&ballTexture);
   freeTexture(&barTexture);
   freeTexture(&lifeTexture);
   freeTexture(&bonusTexture);

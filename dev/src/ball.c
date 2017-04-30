@@ -43,10 +43,13 @@ void addBall(PtBall* ballList, Ball* ball)
 void drawBall(Ball ball)
 {
     glPushMatrix();
-    glTranslatef(ball.position.x, ball.position.y, 1);
-    glScalef(ball.radius, ball.radius, 1);
-    drawCircle();
+        glTranslatef(ball.position.x, ball.position.y, 1);
+        glScalef(ball.radius, ball.radius, 1);
+        float color = (ball.ptPlayer->num == 1) ? 0.0 : 1.0;
+        glColor3f(1-color, 0.0, color);
+        drawCircle();
     glPopMatrix();
+    glColor3f(1.0, 1.0, 1.0);
 }
 
 void drawAllBalls(PtBall ballList)
