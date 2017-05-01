@@ -1,5 +1,4 @@
 #include "ai.h"
-#include <stdio.h>
 
 Ball closestBall (PtBar ptBar, PtBall ballList)
 {

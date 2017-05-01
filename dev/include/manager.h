@@ -47,6 +47,7 @@ typedef struct
 
 void setVideoMode(unsigned int width, unsigned int height);
 void initSDL();
+float randomNumber(float min, float max);
 Game* createGame();
 void drawGameBorder();
 void drawGameBackground(Texture background);

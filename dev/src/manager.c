@@ -2,6 +2,7 @@
 #include <SDL/SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <time.h>
 
 #include "manager.h"
 #include "primitives.h"
@@ -38,6 +39,29 @@ void initSDL()
     setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
+float randomNumber(float min, float max)
+{
+    int result = 0, low_num = 0, hi_num = 0;
+    int minimum = min*100 + 50;
+    int maximum = max*100 - 50;
+    float fresult = 0;
+
+    if (minimum < maximum)
+    {
+        low_num = minimum;
+        hi_num = maximum + 100;
+    } else {
+        low_num = maximum + 100;
+        hi_num = minimum;
+    }
+
+    srand(time(NULL));
+    result = (rand() % (hi_num - low_num)) + low_num;
+    fresult = result / 100;
+    //SDL_Delay(50);
+    return fresult;
+}
+
 Game* createGame()
 {
     Game* game = malloc(sizeof(Game));
@@ -71,8 +95,10 @@ Game* createGame()
     addTexture(&(game->bonusTexture), game->bonusTextureFile[1]);
 
     /* Création des barres */
-    game->bar[0] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50), &(game->barTexture), game->barTextureFile[0]);
-    game->bar[1] = createBar(PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50), &(game->barTexture), game->barTextureFile[1]);
+    Point2D posDWN = PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50);
+    Point2D posUP = PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50);
+    game->bar[0] = createBar(posDWN, &(game->barTexture), game->barTextureFile[0]);
+    game->bar[1] = createBar(posUP, &(game->barTexture), game->barTextureFile[1]);
     
     /* Création des joueurs */
     game->player[0] = createPlayer(0, "Toto", &(game->bar[0]));
@@ -80,8 +106,12 @@ Game* createGame()
 
     /** Creation des balles **/ 
     game->ballList = NULL;
-    addBall(&(game->ballList), createBall(PointXY(450, 550), VectorXY(0, 0.8), &(game->player[0])));
-    addBall(&(game->ballList), createBall(PointXY(450, 350), VectorXY(0, -0.8), &(game->player[1])));
+    Point2D posBDWN = PointXY(randomNumber(barLeftPosition(&(game->bar[0])), barRightPosition(&(game->bar[0]))), posDWN.y - game->bar[0].height);
+    Point2D posBUP = PointXY(randomNumber(barLeftPosition(&(game->bar[1])), barRightPosition(&(game->bar[1]))), posUP.y + game->bar[1].height);
+    addBall(&(game->ballList), createBall(posBDWN, VectorXY(0, -0.8), &(game->player[0])));
+    addBall(&(game->ballList), createBall(posBUP, VectorXY(0, 0.8), &(game->player[1])));
+    changeAngle (game->ballList, &(game->bar[0]));
+    changeAngle (game->ballList->next, &(game->bar[1]));
 
     /* Creation de la liste de bonus */
     game->bonusList = NULL;
@@ -367,14 +397,12 @@ void playGame(Game* game, bool AI)
                 {
                 //printf("%s a perdu !\n",player[1].name);
                 }
-                
             }
             
             moveBar(game->player[0].ptBar, game->direction[0]);
             if (AI) AIcontroller (game->player[1].ptBar, game->ballList);
-            else moveBar(game->player[1].ptBar, game->direction[1]);
-            
-        }  
+            else moveBar(game->player[1].ptBar, game->direction[1]); 
+        }
 
         inGame = gameEvent(game);
         
