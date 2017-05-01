@@ -1,4 +1,5 @@
 #include <SDL/SDL.h>
+#include <GL/glut.h>
 #include "manager.h"
 
 /* Dimensions de la fenêtre */
@@ -17,6 +18,7 @@ int main(int argc, char** argv)
   bool AI = true;
 
   initSDL();
+  glutInit( &argc, argv );
 
   Game* game = createGame();
   

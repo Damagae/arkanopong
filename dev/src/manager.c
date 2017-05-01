@@ -156,9 +156,12 @@ void drawGameBackground(Texture background)
 void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickList, BonusList bonusList, Texture background, Texture life)
 {    
     glClear(GL_COLOR_BUFFER_BIT);
-  
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    drawText(470,950, player1.name);
+    drawText(470,70, player2.name);
+
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
         drawGameBackground(background);
@@ -180,6 +183,9 @@ void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickLi
         glColor3f(1.0, 1.0, 1.0);
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
+
+    
+
     SDL_GL_SwapBuffers();
 }
 
@@ -313,12 +319,12 @@ bool gameEvent(Game* game)
 
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
-      if(e.type == SDL_QUIT) {
-        inGame = false;
-        break;
-      }
       
-      switch(e.type) {          
+      switch(e.type) {
+
+        case SDL_QUIT:
+            inGame = false;
+            break;          
 
         case SDL_KEYDOWN:
           switch(e.key.keysym.sym)
@@ -411,6 +417,8 @@ void playGame(Game* game, bool AI)
         {
             SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
         }
+
+        //printf("%d\n",startTime);
     }
 }
 

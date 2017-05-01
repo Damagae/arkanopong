@@ -1,6 +1,6 @@
 CC       	=  gcc
 CFLAGS   	= -Wall -O2 -g
-LDFLAGS     = -lm -lSDL -lSDL_image -lGLU -lGL
+LDFLAGS     = -lm -lSDL -lSDL_image -lGLU -lGL -lglut
 
 APP_BIN 	= arkanopong
 

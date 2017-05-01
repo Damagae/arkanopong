@@ -1,5 +1,8 @@
 #include <GL/gl.h>
 #include <math.h>
+#include <GL/glut.h>
+#include <GL/glext.h>
+#include <stdio.h>
 
 #define SEGMENTS 32
 
@@ -92,4 +95,34 @@ void drawCircleTexture()
         glVertex2f(cos(i*(M_PI/(SEGMENTS/2))), sin(i*(M_PI/(SEGMENTS/2))));
     }
     glEnd();
+}
+
+int textLength(char * text)
+{
+    int length = 0;
+    while(text[length])
+        length++;
+    return length;
+}
+
+void drawText(int x, int y, char* txt)
+{
+    if(txt!=NULL)
+    {   
+        //glMatrixMode( GL_PROJECTION );
+        glMatrixMode( GL_MODELVIEW );
+        glPushMatrix();
+        glLoadIdentity();
+
+        glRasterPos2f(x, y);
+    
+        int len = textLength(txt);
+        for (int i = 0; i < len; i++)
+        {
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, txt[i]);
+        }
+    
+        glPopMatrix();
+        glMatrixMode( GL_MODELVIEW );
+    }
 }
