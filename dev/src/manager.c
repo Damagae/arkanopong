@@ -153,7 +153,7 @@ void drawGameBackground(Texture background)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickList, BonusList bonusList, Texture background, Texture life)
+void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickList, BonusList bonusList, Texture background, Texture life, char timer)
 {    
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -161,11 +161,10 @@ void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickLi
 
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
+        //glColor3f(1.0, 0.0, 0.0);
         drawGameBackground(background);
-        
         drawGameBorder();
 
-        glColor3f(1.0, 1.0, 1.0);
         drawAllBalls(ballList);
 
         drawBar(*(player1.ptBar), player1.num);
@@ -183,7 +182,13 @@ void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickLi
 
     drawText(470,950, player1.name);
     drawText(470,70, player2.name);
+    if (timer != '0')
+    {
+        glColor3f(1.0, 0.0, 0.0);
+        drawText(490,485, &timer);
+    }
 
+    glColor3f(1.0, 1.0, 1.0);
     SDL_GL_SwapBuffers();
 }
 
@@ -311,7 +316,7 @@ Position runGame(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, Pt
     return ballPosition;
 }
 
-bool gameEvent(Game* game)
+bool gameEvent(Game* game, char timer)
 {
     bool inGame = true;
 
@@ -360,7 +365,13 @@ bool gameEvent(Game* game)
               game->direction[1] = NONE;
               break;
             case SDLK_SPACE:
-              game->start = true;
+                if(timer == '0')
+                {
+                    if(game->start)
+                        game->start = false;
+                    else
+                        game->start = true;
+                }
               break;
             default:
               break;
@@ -378,11 +389,17 @@ void playGame(Game* game, bool AI)
 {
     /** Boucle d'affichage **/
     bool inGame = true;
+    char timer = '0';
     while(inGame) {
         Uint32 startTime = SDL_GetTicks();
 
+        if(startTime < 5100)
+            timer = gameLaunch(startTime);
+        if(startTime >= 5100 && startTime <= 5500)
+            game->start = true;
+
         /* Dessin */
-        renderGame(game->player[0], game->player[1], game->ballList, game->brickList, game->bonusList, *(game->backgroundTexture), *(game->lifeTexture));
+        renderGame(game->player[0], game->player[1], game->ballList, game->brickList, game->bonusList, *(game->backgroundTexture), *(game->lifeTexture), timer);
 
         if (game->start)
         {
@@ -408,7 +425,7 @@ void playGame(Game* game, bool AI)
             else moveBar(game->player[1].ptBar, game->direction[1]); 
         }
 
-        inGame = gameEvent(game);
+        inGame = gameEvent(game, timer);
         
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
         if (elapsedTime < FRAMERATE_MILLISECONDS)
@@ -418,6 +435,15 @@ void playGame(Game* game, bool AI)
 
         //printf("%d\n",startTime);
     }
+}
+
+char gameLaunch(Uint32 startTime)
+{
+    char timer = '5';
+    timer = timer-(startTime/1000);
+    //printf("%d\n",startTime);
+
+    return timer;
 }
 
 void freeGame(Game* game)

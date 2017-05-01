@@ -51,14 +51,15 @@ float randomNumber(float min, float max);
 Game* createGame();
 void drawGameBorder();
 void drawGameBackground(Texture background);
-void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickList, BonusList bonusList, Texture background, Texture life);
+void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickList, BonusList bonusList, Texture background, Texture life, char timer);
 int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick);
 void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2);
 Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtBrick ptBrick, PtPlayer player);
 Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player);
 Position runGame(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, BonusList* bonusList);
-bool gameEvent(Game* game);
+bool gameEvent(Game* game, char timer);
 void playGame(Game* game, bool AI);
+char gameLaunch(Uint32 startTime);
 void freeGame(Game* game);
 
 #endif
