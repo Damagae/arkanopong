@@ -159,13 +159,10 @@ void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickLi
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    drawText(470,950, player1.name);
-    drawText(470,70, player2.name);
-
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
         drawGameBackground(background);
-        glColor3f(1.0, 0.0, 0.0);
+        
         drawGameBorder();
 
         glColor3f(1.0, 1.0, 1.0);
@@ -184,7 +181,8 @@ void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickLi
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 
-    
+    drawText(470,950, player1.name);
+    drawText(470,70, player2.name);
 
     SDL_GL_SwapBuffers();
 }

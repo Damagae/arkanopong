@@ -42,11 +42,13 @@ void drawSquareTexture()
 void drawSquareBorder()
 {
     glBegin(GL_LINE_LOOP);
+        glColor3f(0.0, 0.0, 1.0);
+        glVertex2f(-0.5, 0.5);
+        glVertex2f(0.5, 0.5);
 
-    glVertex2f(-0.5, 0.5);
-    glVertex2f(0.5, 0.5);
-    glVertex2f(0.5, -0.5);
-    glVertex2f(-0.5, -0.5);
+        glColor3f(1.0, 0.0, 0.0);
+        glVertex2f(0.5, -0.5);
+        glVertex2f(-0.5, -0.5);
 
     glEnd();
 }
