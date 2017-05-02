@@ -19,5 +19,7 @@ typedef struct
 Player createPlayer(int num, char* name, PtBar ptBar);
 void drawLife(Player player, Texture life);
 int loseLife(PtPlayer player);
+void drawNames(char* name1, char* name2);
+void drawWinner(Player player1, Player player2);
 
 #endif

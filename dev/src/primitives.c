@@ -4,6 +4,8 @@
 #include <GL/glext.h>
 #include <stdio.h>
 
+#include "bool.h"
+
 #define SEGMENTS 32
 
 /** Fonctions de dessin canonique. **/
@@ -53,10 +55,10 @@ void drawSquareBorder()
     glEnd();
 }
 
-void drawRoundedSquare(float radius)
+void drawRoundedSquare(bool full, float radius)
 {
     float i;
-    glBegin(GL_POLYGON);
+    glBegin(full ? GL_POLYGON : GL_LINE_LOOP);
     for (i = 0; i <= (SEGMENTS/4); i++)
     {
         glVertex2f(0.5-radius+cos(i*(M_PI/(SEGMENTS/2)))*radius, 0.5-radius+sin(i*(M_PI/(SEGMENTS/2)))*radius);
@@ -115,10 +117,9 @@ void drawText(int x, int y, char* txt)
         glMatrixMode( GL_MODELVIEW );
         glPushMatrix();
         glLoadIdentity();
-
-        glRasterPos2f(x, y);
     
         int len = textLength(txt);
+        glRasterPos2f(x-5*len, y+5);
         for (int i = 0; i < len; i++)
         {
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, txt[i]);
@@ -127,4 +128,19 @@ void drawText(int x, int y, char* txt)
         glPopMatrix();
         glMatrixMode( GL_MODELVIEW );
     }
+}
+
+void drawButton(int x, int y, char* txt, bool select)
+{
+    glPushMatrix();
+        glTranslatef(x, y, 1);
+        glScalef(200, 100, 1);
+        float color = select ? 1.0 : 0.0;
+        glColor3f(color, color, color);
+        drawRoundedSquare(1, 0.05);
+        glColor3f(1.0, 0.0, 0.0);
+        drawRoundedSquare(0, 0.05);
+        drawText(x,y,txt);
+    glPopMatrix();
+    glColor3f(1.0, 1.0, 1.0);
 }

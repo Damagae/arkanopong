@@ -1,4 +1,5 @@
 #include <GL/gl.h>
+#include <string.h>
 
 #include "stdio.h"
 #include "player.h"
@@ -68,4 +69,21 @@ int loseLife(PtPlayer player)
         return 0;
     else
         return player->life;
+}
+
+void drawNames(char* name1, char* name2)
+{
+    drawText(470,940, name1);
+    drawText(470,70, name2);
+}
+
+void drawWinner(Player player1, Player player2)
+{
+    char winner[80];
+    if (player1.life == 0)
+        strcat(winner, player2.name);
+    else
+        strcat(winner, player1.name);
+    strcat(winner, " won !");
+    drawText(480, 400, winner);
 }

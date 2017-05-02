@@ -17,7 +17,7 @@ typedef struct
 
 typedef enum Direction
 {
-    LEFT, RIGHT, NONE
+    LEFT, RIGHT, UP, DOWN, NONE
 } Direction;
 
 /** FUNCTIONS **/
