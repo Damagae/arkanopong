@@ -322,16 +322,16 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
 }
 
 // Parcours la liste chainee de balles
-Position runGame(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, BonusList* bonusList)
+Position runGame(Game* game)
 {
     Position ballPosition;
 
     // If no ball then exit function
-    if (ballList == NULL)
+    if (game->ballList == NULL)
         return -1;
     
-    ballPosition = ballManager(ballList, bar1, bar2, brickList, player);
-    bonusManager(bonusList, bar1, bar2);
+    ballPosition = ballManager(game->ballList, &game->bar[0], &game->bar[1], &game->brickList, game->player);
+    bonusManager(&game->bonusList, &game->bar[0], &game->bar[1]);
 
     return ballPosition;
 }
@@ -451,7 +451,7 @@ bool playGame(Game* game, bool AI)
 
         if (game->start && !game->pause)
         {
-            game->ballPosition = runGame(game->ballList, &(game->bar[0]), &(game->bar[1]), &(game->brickList), game->player, &(game->bonusList));
+            game->ballPosition = runGame(game);
             // If a player lose a life
             if (game->ballPosition == OUT_UP || game->ballPosition == OUT_DOWN)
             {                
