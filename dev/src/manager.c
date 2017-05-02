@@ -454,29 +454,21 @@ void moveBarBall(PtBar bar, PtBall ball, Direction direction)
     float LEFT_BORDER = (WINDOW_WIDTH-GAME_WIDTH)/2;
     float RIGHT_BORDER = GAME_WIDTH + (WINDOW_WIDTH-GAME_WIDTH)/2;
 
-    // Block bar & ball inside the game size
-    if (barRightPosition(bar) >= RIGHT_BORDER)
-    {
-        bar->position.x -= bar->speed;
-        ball->position.x -= bar->speed;
-        return;
-    }
-    else if (barLeftPosition(bar) <= LEFT_BORDER)
-    {
-        bar->position.x += bar->speed;
-        ball->position.x += bar->speed;
-        return;
-    }
-
     if(direction == RIGHT && barRightPosition(bar) <= RIGHT_BORDER)
     {
-        bar->position.x += bar->speed;
-        ball->position.x += bar->speed;
+        if (barRightPosition(bar)+bar->speed <= RIGHT_BORDER)
+        {
+            bar->position.x += bar->speed;
+            ball->position.x += bar->speed;
+        }
     }
     else if (direction == LEFT && barLeftPosition(bar) >= LEFT_BORDER)
     {
-        bar->position.x -= bar->speed;
-        ball->position.x -= bar->speed;
+        if (barLeftPosition(bar)-bar->speed >= LEFT_BORDER)
+        {
+            bar->position.x -= bar->speed;
+            ball->position.x -= bar->speed;
+        }
     }
 }
 
