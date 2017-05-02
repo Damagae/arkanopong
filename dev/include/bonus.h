@@ -21,7 +21,7 @@ typedef struct bonus
   Vector2D direction;
   float radius;
   float speed;
-  char* texture;
+  Texture* ptTexture;
   PtBrick ptBrick;
   BrickType type;
   PtPlayer ptPlayer;
@@ -31,7 +31,7 @@ typedef struct bonus
 
 /** FUNCTIONS **/
 
-Bonus* createBonus(PtBrick ptBrick);
+Bonus* createBonus(PtBrick ptBrick, TextureList* bonusTexture, char* textureFile);
 void addBonus(BonusList* bonusList, Bonus* bonus);
 void bonusOrientation(Bonus* bonus, Player player);
 void moveBonus (Bonus* bonus);

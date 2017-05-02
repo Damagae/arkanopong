@@ -2,6 +2,7 @@
 #define __PLAYER__H
 
 #include "bar.h"
+#include "textures.h"
 
 /** STRUCTURES **/
 
@@ -16,7 +17,7 @@ typedef struct
 /** FUNCTIONS **/
 
 Player createPlayer(int num, char* name, PtBar ptBar);
-void drawLife(Player player);
+void drawLife(Player player, Texture life);
 int loseLife(PtPlayer player);
 
 #endif

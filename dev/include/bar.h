@@ -2,6 +2,7 @@
 #define __BAR__H
 
 #include "geometry.h"
+#include "textures.h"
 
 /** STRUCTURES **/
 
@@ -11,7 +12,7 @@ typedef struct
     float width;
     float height;
     float speed;
-    char* texture;
+    Texture* ptTexture;
 } Bar, *PtBar;
 
 typedef enum Direction
@@ -21,7 +22,7 @@ typedef enum Direction
 
 /** FUNCTIONS **/
 
-Bar createBar (Point2D position);
+Bar createBar (Point2D position, TextureList* barTexture, char* textureFile);
 void moveBar(PtBar ptBar, Direction direction);
 void drawBar(Bar bar, int numPlayer);
 
