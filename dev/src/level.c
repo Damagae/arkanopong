@@ -39,8 +39,8 @@ int * loadLevel (const char * filepath)
     int i = 0;
     int parity = 0;
 
-    if (getcwd(cwd, sizeof(cwd)) == NULL) {
-        printf("Le chemin spécifié est erroné.\n");
+    if (getcwd(cwd, sizeof(cwd)) == NULL) { // Get the program's path
+        printf("Le chemin est erroné.\n");
         return NULL;
     }
 
@@ -50,7 +50,7 @@ int * loadLevel (const char * filepath)
     lvl = malloc(sizeof(int) * MAX_SIZE);
     if (lvl == NULL)
     {
-        fprintf(stderr, "Echec de l'allocation du tableau niveau.\n");
+        fprintf(stderr, "Echec de l'allocation du tableau niveau\n");
         return NULL;
     }
 
@@ -69,7 +69,7 @@ int * loadLevel (const char * filepath)
             {
 
             } else {
-                fprintf(stderr, "Fichier niveau non conforme (dimensions).\n");
+                fprintf(stderr, "Fichier niveau non conforme (dimensions)\n");
                 return NULL;
             }
         }
@@ -79,7 +79,7 @@ int * loadLevel (const char * filepath)
         fgets(line2, MAX_SIZE, f); // get the second line with types
         for(i = 1; i < lvl[0] * lvl[1]; ++i)
         {
-            if (i%2 == (1 - parity%2) && digitOrSpace(line2[i-1]) == 2 && line2[i] == '0') // if it's a 10
+            if (i%2 == (1 - parity%2) && digitOrSpace(line2[i-1]) == 2 && line2[i] == '0') // if it's a 1 followed by a 0 => 10
             {
                 lvl[3+n] = 10;
                 ++i; // We skip a step
@@ -93,7 +93,7 @@ int * loadLevel (const char * filepath)
             {
 
             } else {
-                fprintf(stderr, "[%d] Fichier niveau non conforme (type de brique).\n", i);
+                fprintf(stderr, "[%d] Fichier niveau non conforme (type de brique)\n", i);
                 return NULL;
             }
         }
