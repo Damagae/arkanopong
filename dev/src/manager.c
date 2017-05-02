@@ -281,7 +281,6 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
 
     for(; ballList != NULL; ballList = ballList->next)
     {
-        
         moveBall(ballList);
         
         ballPosition = positionDetection(ballList, bar1, bar2, brickList, NULL, player);
@@ -394,8 +393,12 @@ void playGame(Game* game, bool AI)
         Uint32 startTime = SDL_GetTicks();
 
         if(startTime < 5100)
+        {
+            moveBarBall(game->player[0].ptBar, game->ballList, game->direction[0]);
+            moveBarBall(game->player[1].ptBar, game->ballList->next, game->direction[1]);
             timer = gameLaunch(startTime);
-        if(startTime >= 5100 && startTime <= 5500)
+        }
+        else if(startTime >= 5100 && startTime <= 5500)
             game->start = true;
 
         /* Dessin */
@@ -444,6 +447,37 @@ char gameLaunch(Uint32 startTime)
     //printf("%d\n",startTime);
 
     return timer;
+}
+
+void moveBarBall(PtBar bar, PtBall ball, Direction direction)
+{
+    float LEFT_BORDER = (WINDOW_WIDTH-GAME_WIDTH)/2;
+    float RIGHT_BORDER = GAME_WIDTH + (WINDOW_WIDTH-GAME_WIDTH)/2;
+
+    // Block bar & ball inside the game size
+    if (barRightPosition(bar) >= RIGHT_BORDER)
+    {
+        bar->position.x -= bar->speed;
+        ball->position.x -= bar->speed;
+        return;
+    }
+    else if (barLeftPosition(bar) <= LEFT_BORDER)
+    {
+        bar->position.x += bar->speed;
+        ball->position.x += bar->speed;
+        return;
+    }
+
+    if(direction == RIGHT && barRightPosition(bar) <= RIGHT_BORDER)
+    {
+        bar->position.x += bar->speed;
+        ball->position.x += bar->speed;
+    }
+    else if (direction == LEFT && barLeftPosition(bar) >= LEFT_BORDER)
+    {
+        bar->position.x -= bar->speed;
+        ball->position.x -= bar->speed;
+    }
 }
 
 void freeGame(Game* game)

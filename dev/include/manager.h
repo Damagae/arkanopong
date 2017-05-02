@@ -60,6 +60,7 @@ Position runGame(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, Pt
 bool gameEvent(Game* game, char timer);
 void playGame(Game* game, bool AI);
 char gameLaunch(Uint32 startTime);
+void moveBarBall(PtBar bar, PtBall ball, Direction direction);
 void freeGame(Game* game);
 
 #endif
