@@ -18,6 +18,8 @@
 typedef struct
 {
     bool start;
+    bool pause;
+    bool end;
     
     TextureList brickTexture;
     TextureList barTexture;
@@ -40,6 +42,8 @@ typedef struct
     Direction direction[2];
     Position ballPosition;
 
+    Direction selection;
+
     char* level;
 } Game, *PtGame;
 
@@ -51,15 +55,18 @@ float randomNumber(float min, float max);
 Game* createGame();
 void drawGameBorder();
 void drawGameBackground(Texture background);
-void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickList, BonusList bonusList, Texture background, Texture life, char timer);
+void drawRestart(bool restart);
+void renderGame(Game* game, char timer, bool restart);
 int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick);
 void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2);
 Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtBrick ptBrick, PtPlayer player);
 Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player);
-Position runGame(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, BonusList* bonusList);
+Position runGame(Game* game);
 bool gameEvent(Game* game, char timer);
-void playGame(Game* game, bool AI);
+bool playGame(Game* game, bool AI);
 char gameLaunch(Uint32 startTime);
+void moveBarBall(PtBar bar, PtBall ball, Direction direction);
+bool restartGame(Direction direction);
 void freeGame(Game* game);
 
 #endif

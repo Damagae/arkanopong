@@ -68,6 +68,8 @@ Game* createGame()
     if (game == NULL)    return NULL;
 
     game->start = false;
+    game->pause = false;
+    game->end = false;
 
     /* Création des textures */
     game->brickTexture = NULL;
@@ -123,8 +125,9 @@ Game* createGame()
     level = loadLevel(game->level);
     createLevelBricks(level, WINDOW_WIDTH, WINDOW_HEIGHT, &(game->brickList), &(game->bonusList), &(game->brickTexture), game->brickTextureFile[2], &(game->bonusTexture), game->bonusTextureFile);
     
-    /* Direction pour controler les barres */
+    /* Direction pour controler les barres && le menu */
     game->direction[0] = game->direction[1] = NONE;
+    game->selection = NONE;
 
     return game;
 }
@@ -153,7 +156,7 @@ void drawGameBackground(Texture background)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickList, BonusList bonusList, Texture background, Texture life, char timer)
+void renderGame(Game* game, char timer, bool restart)
 {    
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -161,27 +164,32 @@ void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickLi
 
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
-        //glColor3f(1.0, 0.0, 0.0);
-        drawGameBackground(background);
+        drawGameBackground(*(game->backgroundTexture));
         drawGameBorder();
 
-        drawAllBalls(ballList);
+        drawAllBalls(game->ballList);
 
-        drawBar(*(player1.ptBar), player1.num);
-        drawBar(*(player2.ptBar), player2.num);
+        drawBar(*(game->player[0].ptBar), game->player[0].num);
+        drawBar(*(game->player[1].ptBar), game->player[1].num);
 
-        drawAllBricks(brickList);
+        drawAllBricks(game->brickList);
 
-        drawAllBonus(bonusList);
+        drawAllBonus(game->bonusList);
 
-        drawLife(player1, life);
-        drawLife(player2, life);
+        drawLife(game->player[0], *(game->lifeTexture));
+        drawLife(game->player[1], *(game->lifeTexture));
+
         glColor3f(1.0, 1.0, 1.0);
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 
-    drawText(470,950, player1.name);
-    drawText(470,70, player2.name);
+    if(game->end)
+    {
+        drawWinner(game->player[0], game->player[1]);
+        drawRestart(restart);
+    }
+    drawNames(game->player[0].name, game->player[1].name);
+
     if (timer != '0')
     {
         glColor3f(1.0, 0.0, 0.0);
@@ -190,6 +198,19 @@ void renderGame(Player player1, Player player2, PtBall ballList, PtBrick brickLi
 
     glColor3f(1.0, 1.0, 1.0);
     SDL_GL_SwapBuffers();
+}
+
+void drawRestart(bool restart)
+{
+    drawButton(350, 550, "RESTART", restart);
+    if (restart)
+    {
+        drawButton(650, 550, "EXIT", false);
+    }
+    else
+    {
+        drawButton(650, 550, "EXIT", true);
+    }
 }
 
 void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2)
@@ -281,7 +302,6 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
 
     for(; ballList != NULL; ballList = ballList->next)
     {
-        
         moveBall(ballList);
         
         ballPosition = positionDetection(ballList, bar1, bar2, brickList, NULL, player);
@@ -302,16 +322,16 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
 }
 
 // Parcours la liste chainee de balles
-Position runGame(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, BonusList* bonusList)
+Position runGame(Game* game)
 {
     Position ballPosition;
 
     // If no ball then exit function
-    if (ballList == NULL)
+    if (game->ballList == NULL)
         return -1;
     
-    ballPosition = ballManager(ballList, bar1, bar2, brickList, player);
-    bonusManager(bonusList, bar1, bar2);
+    ballPosition = ballManager(game->ballList, &game->bar[0], &game->bar[1], &game->brickList, game->player);
+    bonusManager(&game->bonusList, &game->bar[0], &game->bar[1]);
 
     return ballPosition;
 }
@@ -334,9 +354,11 @@ bool gameEvent(Game* game, char timer)
           {
             case SDLK_LEFT:
               game->direction[0] = LEFT;
+              game->selection = LEFT;
               break;
             case SDLK_RIGHT:
               game->direction[0] = RIGHT;
+              game->selection = RIGHT;
               break;
             case SDLK_q:
               game->direction[1] = LEFT;
@@ -344,6 +366,16 @@ bool gameEvent(Game* game, char timer)
             case SDLK_d:
               game->direction[1] = RIGHT;
               break;
+            case SDLK_UP:
+              game->selection = UP;
+              break;
+            case SDLK_DOWN:
+              game->selection = DOWN;
+              break;
+            case SDLK_RETURN:
+                if(game->end)
+                    inGame = false;
+                break;
             default:
               break;
           }
@@ -364,13 +396,19 @@ bool gameEvent(Game* game, char timer)
             case SDLK_d:
               game->direction[1] = NONE;
               break;
+            case SDLK_UP:
+              break;
+            case SDLK_DOWN:
+              break;
+            case SDLK_RETURN:
+                break;
             case SDLK_SPACE:
                 if(timer == '0')
                 {
-                    if(game->start)
-                        game->start = false;
+                    if(game->pause)
+                        game->pause = false;
                     else
-                        game->start = true;
+                        game->pause = true;
                 }
               break;
             default:
@@ -385,44 +423,53 @@ bool gameEvent(Game* game, char timer)
     return inGame;
 }
 
-void playGame(Game* game, bool AI)
+bool playGame(Game* game, bool AI)
 {
-    /** Boucle d'affichage **/
     bool inGame = true;
+    bool restart = false;
     char timer = '0';
+    Uint32 ticks_reset = SDL_GetTicks();
+
+    if(AI)
+        game->player[1].name = "Computer";
+
+    /** Boucle d'affichage et de gestion du jeu **/
     while(inGame) {
-        Uint32 startTime = SDL_GetTicks();
+        Uint32 startTime = SDL_GetTicks() - ticks_reset;
 
         if(startTime < 5100)
+        {
+            moveBarBall(game->player[0].ptBar, game->ballList, game->direction[0]);
+            if(!AI) moveBarBall(game->player[1].ptBar, game->ballList->next, game->direction[1]);
             timer = gameLaunch(startTime);
-        if(startTime >= 5100 && startTime <= 5500)
+        }
+        else if(startTime >= 5100 && startTime <= 5500)
             game->start = true;
 
         /* Dessin */
-        renderGame(game->player[0], game->player[1], game->ballList, game->brickList, game->bonusList, *(game->backgroundTexture), *(game->lifeTexture), timer);
+        renderGame(game, timer, restart);
 
-        if (game->start)
+        if (game->start && !game->pause)
         {
-            game->ballPosition = runGame(game->ballList, &(game->bar[0]), &(game->bar[1]), &(game->brickList), game->player, &(game->bonusList));
+            game->ballPosition = runGame(game);
             // If a player lose a life
             if (game->ballPosition == OUT_UP || game->ballPosition == OUT_DOWN)
-            {
-                // Commenter cette ligne pour continuer à jouer serainement
-                //start = false;
-                
-                if (game->player[0].life == 0)
+            {                
+                if (game->player[0].life == 0 || game->player[1].life == 0)
                 {
-                //printf("%s a perdu !\n",player[0].name);
-                }
-                else if (game->player[1].life == 0)
-                {
-                //printf("%s a perdu !\n",player[1].name);
+                    game->start = false;
+                    game->end = true;
                 }
             }
             
             moveBar(game->player[0].ptBar, game->direction[0]);
             if (AI) AIcontroller (game->player[1].ptBar, game->ballList);
             else moveBar(game->player[1].ptBar, game->direction[1]); 
+        }
+
+        if (game->end)
+        {
+            restart = restartGame(game->selection);
         }
 
         inGame = gameEvent(game, timer);
@@ -435,6 +482,7 @@ void playGame(Game* game, bool AI)
 
         //printf("%d\n",startTime);
     }
+    return restart;
 }
 
 char gameLaunch(Uint32 startTime)
@@ -444,6 +492,39 @@ char gameLaunch(Uint32 startTime)
     //printf("%d\n",startTime);
 
     return timer;
+}
+
+void moveBarBall(PtBar bar, PtBall ball, Direction direction)
+{
+    float LEFT_BORDER = (WINDOW_WIDTH-GAME_WIDTH)/2;
+    float RIGHT_BORDER = GAME_WIDTH + (WINDOW_WIDTH-GAME_WIDTH)/2;
+
+    if(direction == RIGHT && barRightPosition(bar) <= RIGHT_BORDER)
+    {
+        if (barRightPosition(bar)+bar->speed <= RIGHT_BORDER)
+        {
+            bar->position.x += bar->speed;
+            ball->position.x += bar->speed;
+        }
+    }
+    else if (direction == LEFT && barLeftPosition(bar) >= LEFT_BORDER)
+    {
+        if (barLeftPosition(bar)-bar->speed >= LEFT_BORDER)
+        {
+            bar->position.x -= bar->speed;
+            ball->position.x -= bar->speed;
+        }
+    }
+}
+
+bool restartGame(Direction direction)
+{
+    bool restart = true;
+    if (direction == LEFT)
+        restart = true;
+    else if (direction == RIGHT)
+        restart = false;
+    return restart;
 }
 
 void freeGame(Game* game)

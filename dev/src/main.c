@@ -11,20 +11,22 @@ int GAME_WIDTH = 800;
 int GAME_HEIGHT = 800;
 
 /* Nombre de vies */
-int LIFE_MAX = 3;
+int LIFE_MAX = 1;
 
 int main(int argc, char** argv)
 {
   bool AI = true;
+  bool play = true;
 
   initSDL();
   glutInit( &argc, argv );
 
-  Game* game = createGame();
-  
-  playGame(game, AI);
-
-  freeGame(game);
+  while (play)
+  {
+    Game* game = createGame();
+    play = playGame(game, AI);
+    freeGame(game);
+  }
 
   SDL_Quit();
   
