@@ -75,7 +75,6 @@ int * loadLevel (const char * filepath)
         fgets(line2, MAX_SIZE, f); // get the second line with types
         for(i = 1; i <= ((lvl[0] * lvl[1])*2 - 1 + parity); ++i)
         {
-            printf("i %d\n", i);
             if(i%2 == (1 - parity%2) && digitOrSpace(line2[i-1]) == 0) // odd : digit expected
             {
                 if (digitOrSpace(line2[i]) == 0) // If it's a 2 digits number
@@ -87,7 +86,6 @@ int * loadLevel (const char * filepath)
                     ++parity; // We add a difference due to a 2 digits number - It is %2 so the result is either 0 or 1
                 } else {
                     lvl[3+n] = atoi(&line2[i-1]);
-                     printf("%c\n", line2[i-1]);
                     ++n;
                 }
             } else if (i%2 == parity%2 && digitOrSpace(line2[i-1]) == 1) // even : space expected
