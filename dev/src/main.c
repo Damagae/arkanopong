@@ -1,5 +1,6 @@
 #include <SDL/SDL.h>
 #include <GL/glut.h>
+#include "menu.h"
 #include "manager.h"
 
 /* Dimensions de la fenêtre */
@@ -21,11 +22,14 @@ int main(int argc, char** argv)
   initSDL();
   glutInit( &argc, argv );
 
-  while (play)
+  if (menuManager() != EXIT)
   {
-    Game* game = createGame();
-    play = playGame(game, AI);
-    freeGame(game);
+    while (play)
+    {
+      Game* game = createGame();
+      play = playGame(game, AI);
+      freeGame(game);
+    }
   }
 
   SDL_Quit();

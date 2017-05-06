@@ -438,10 +438,14 @@ bool playGame(Game* game, bool AI)
     if(AI)
         game->player[1].name = "Computer";
     
-    Ball* ball = createBall(PointXY(545,600), VectorXY(0,-1), &game->player[0]);
-    addBall(&game->ballList, ball);
+    /* FOR COLLISION TEST 
+        Ball* ball = createBall(PointXY(545,600), VectorXY(0,-1), &game->player[0]);
+        addBall(&game->ballList, ball);
+    */
+
     /** Boucle d'affichage et de gestion du jeu **/
-    while(inGame) {
+    while(inGame)
+    {
         Uint32 startTime = SDL_GetTicks() - ticks_reset;
 
         if(startTime < 5100)

@@ -3,7 +3,7 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
-//#include "brick.h"
+
 #include "bool.h"
 
 /** STRUCTURES **/
