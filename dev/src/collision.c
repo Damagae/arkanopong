@@ -88,8 +88,8 @@ int BrickCollision (Brick brick, PtBall ptBall)
     {
         Point2D A = brickVerticeTopLeft(&brick);
         Point2D B = brickVerticeTopRight(&brick);
-        Point2D C = brickVerticeBottomLeft(&brick);
-        Point2D D = brickVerticeBottomRight(&brick);
+        Point2D C = brickVerticeBottomRight(&brick);
+        Point2D D = brickVerticeBottomLeft(&brick);
 
         bool AB, BC, CD, DA;
         AB = CollisionSegment(A, B, *ptBall);
@@ -102,18 +102,22 @@ int BrickCollision (Brick brick, PtBall ptBall)
             if (AB == true ) {
                 // We put ball outside the brick
                 ptBall->position.y = brick.position.y - brick.height/2 - ptBall->radius;
+                //printf("AB\n");
                 return 1;
-            }
-            else if (BC == true ) {
-                ptBall->position.x = brick.position.x + brick.width/2 + ptBall->radius;
-                return 2;
             }
             else if (CD == true ) {
                 ptBall->position.y = brick.position.y + brick.height/2 + ptBall->radius;
+                //printf("CD\n");
                 return 3;
+            }
+            else if (BC == true ) {
+                ptBall->position.x = brick.position.x + brick.width/2 + ptBall->radius;
+                //printf("BC\n");
+                return 2;
             }
             else {
                 ptBall->position.x = brick.position.x - brick.width/2 - ptBall->radius;
+                //printf("DA\n");
                 return 4;
             }
         }    

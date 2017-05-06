@@ -8,7 +8,7 @@
 #include "primitives.h"
 
 #define BALL_RADIUS 10
-#define BALL_SPEED 10
+#define BALL_SPEED 5
 
 Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer)
 {

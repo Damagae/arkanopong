@@ -138,13 +138,13 @@ Point2D brickVerticeTopRight(PtBrick ptBrick)
 }
 
 /* C */
-Point2D brickVerticeBottomLeft(PtBrick ptBrick)
+Point2D brickVerticeBottomRight(PtBrick ptBrick)
 {
     return PointXY(ptBrick->position.x + ptBrick->width/2, ptBrick->position.y + ptBrick->height/2);
 }
 
 /* D */
-Point2D brickVerticeBottomRight(PtBrick ptBrick)
+Point2D brickVerticeBottomLeft(PtBrick ptBrick)
 {
     return PointXY(ptBrick->position.x - ptBrick->width/2, ptBrick->position.y + ptBrick->height/2);
 }
