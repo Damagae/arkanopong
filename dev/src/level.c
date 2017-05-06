@@ -41,7 +41,7 @@ int * loadLevel (const char * filepath)
     }
 
     strcpy(path, cwd);
-    strcat(path, "/data/level.txt");
+    strcat(path, "/data/level/level1.txt");
 
     lvl = malloc(sizeof(int) * MAX_SIZE);
     if (lvl == NULL)
