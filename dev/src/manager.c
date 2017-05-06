@@ -246,9 +246,12 @@ int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick)
         return -1;
     if (brickDamaged(ptBrick) == 0)
     {
-        ptBrick->bonus->ptPlayer = ptBall->ptPlayer;
-        ptBrick->bonus->actif = true;
-        bonusOrientation(ptBrick->bonus, *(ptBall->ptPlayer));
+        if (ptBrick->bonus != NULL)
+        {
+            ptBrick->bonus->ptPlayer = ptBall->ptPlayer;
+            ptBrick->bonus->actif = true;
+            bonusOrientation(ptBrick->bonus, *(ptBall->ptPlayer));
+        }
         //deleteBrick(brickList, ptBrick);
         return 0;
     }

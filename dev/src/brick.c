@@ -27,7 +27,6 @@ Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, Text
     ptBrick->height = HEIGHT_DEFAULT;
     ptBrick->ptTexture = addTexture(brickTexture, textureFile);
     ptBrick->type = type;
-    printf("brick type : %d\n", ptBrick->type);
     if (ptBrick->type == DISAP)
     {
         ptBrick->life = 1;
@@ -35,7 +34,6 @@ Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, Text
     }
     else if (ptBrick->type == INDES) 
     {
-        //printf("brick type : %d\n", ptBrick->type);
         ptBrick->life = -1;
         ptBrick->bonus = NULL;
     }
@@ -83,8 +81,6 @@ int selectBonus(BrickType type)
         case BALLSPDUP:
             return 1;
         case BALLSPDDWN:
-            return 1;
-        case BALLSIZEUP:
             return 1;
         case MOREBALL:
             return 1;
@@ -206,8 +202,6 @@ BrickType getType(int t) {
             return BALLSPDUP;
         case 6:
             return BALLSPDDWN;
-        case 7:
-            return BALLSIZEUP;
         case 8:
             return MOREBALL;
         case 9:
@@ -247,7 +241,7 @@ void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, Bo
     {
         for(j = 0; j < largeur; ++j)
         {
-            addBrick(brickList, createBrick(PointXY(firstColumn + j * WIDTH_DEFAULT, firstLine + i * HEIGHT_DEFAULT), getType(lvl[3 + i * largeur + j]), bonusList, brickTexture, textureFile, bonusTexture, bonusTextureFile));
+            addBrick(brickList, createBrick(PointXY(firstColumn + j * WIDTH_DEFAULT, firstLine + i * HEIGHT_DEFAULT), lvl[3 + i * largeur + j], bonusList, brickTexture, textureFile, bonusTexture, bonusTextureFile));
         }   
     }
 }
