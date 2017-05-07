@@ -22,6 +22,14 @@ int digitOrSpace (char c)
     return -1;
 }
 
+int compatibleType(int nb)
+{
+    if (nb >= 0 && nb <= 11)
+        return 1;
+    else
+        return 0;
+}
+
 int * loadLevel (const char * filepath)
 {
     FILE *f = NULL;
@@ -33,10 +41,10 @@ int * loadLevel (const char * filepath)
     int n = 0;
     int i = 0;
     int parity = 0;
-    char *nb;
+    int nbr;
 
     if (getcwd(cwd, sizeof(cwd)) == NULL) { // Get the program's path
-        printf("Le chemin est erroné.\n");
+        fprintf(stderr, "Le chemin est erroné.\n");
         return NULL;
     }
 
@@ -79,11 +87,18 @@ int * loadLevel (const char * filepath)
             {
                 if (digitOrSpace(line2[i]) == 0) // If it's a 2 digits number
                 {
-                    strcat(&line2[i-1], &line2[i]);
-                    lvl[3+n] = atoi(&line2[i-1]);
-                    ++i; // We skip a step
-                    ++n;
-                    ++parity; // We add a difference due to a 2 digits number - It is %2 so the result is either 0 or 1
+                    strcat(&line2[i-1], &line2[i]); // concatenate the 2 digits in line2[i-1]
+                    nbr = atoi(&line2[i-1]);
+                    if (compatibleType(nbr) == 0)
+                    {
+                        lvl[3+n] = nbr; // put it into lvl array
+                        ++i; // We skip a step
+                        ++n;
+                        ++parity; // We add a difference due to a 2 digits number - It is %2 so the result is either 0 or 1
+                    } else {
+                        fprintf(stderr, "[%d] Fichier niveau non conforme (type de brique)\n", i);
+                        return NULL;
+                    }             
                 } else {
                     lvl[3+n] = atoi(&line2[i-1]);
                     ++n;

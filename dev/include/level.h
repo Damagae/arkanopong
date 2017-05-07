@@ -3,5 +3,6 @@
 
 int * loadLevel (char *filepath);
 int digitOrSpace(char c);
+int compatibleType(int nb);
 
 #endif

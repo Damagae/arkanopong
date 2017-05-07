@@ -189,9 +189,9 @@ BrickType getType(int t) {
     switch(t)
     {
         case 0:
-            return INDES;
+            return EMPTY;
         case 1:
-            return DISAP;
+            return NORMAL;
         case 2:
             return BARUP;
         case 3:
@@ -207,7 +207,9 @@ BrickType getType(int t) {
         case 9:
             return ADDLIFE;
         case 10:
-            return NORMAL;
+            return DISAP;
+        case 11:
+            return INDES;
         default :
             return NORMAL;
     }
@@ -241,7 +243,11 @@ void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, Bo
     {
         for(j = 0; j < largeur; ++j)
         {
-            addBrick(brickList, createBrick(PointXY(firstColumn + j * WIDTH_DEFAULT, firstLine + i * HEIGHT_DEFAULT), lvl[3 + i * largeur + j], bonusList, brickTexture, textureFile, bonusTexture, bonusTextureFile));
+            if(lvl[3 + i * largeur + j] != 0)
+            {
+                addBrick(brickList, createBrick(PointXY(firstColumn + j * WIDTH_DEFAULT, firstLine + i * HEIGHT_DEFAULT), getType(lvl[3 + i * largeur + j]), bonusList, brickTexture, textureFile, bonusTexture, bonusTextureFile));
+            }
+            
         }   
     }
 }

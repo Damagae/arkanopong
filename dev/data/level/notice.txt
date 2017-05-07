@@ -12,8 +12,8 @@ BRICK_TYPE * number of columns * lines
 
 
 Brick Types :
-0 - Brick Indescrutible
-1 - Brick Life = 1
+0 - Empty space
+1 - Normal
 2 - Bar Up
 3 - Bar Down
 4 - Bar speed up
@@ -22,4 +22,5 @@ Brick Types :
 7 - Ball size up
 8 - More  ball
 9 - Add Life
-10 - Normal
+10 - Brick Life = 1
+11 - Brick Indescrutible
