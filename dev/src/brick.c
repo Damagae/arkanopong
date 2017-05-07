@@ -99,6 +99,7 @@ void drawBrick(Brick brick)
         glPushMatrix();
             glTranslatef(brick.position.x, brick.position.y, 1);
             glScalef(brick.width, brick.height, 1);
+            glRotatef(180, 0.0, 0.0, 1.0);
             //drawSquare();
             drawSquareTexture();
         glPopMatrix();

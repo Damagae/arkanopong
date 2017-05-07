@@ -59,9 +59,9 @@ void drawBar(Bar bar, int numPlayer)
     glPushMatrix();
         glTranslatef(bar.position.x, bar.position.y, 1);
         glScalef(bar.width, bar.height, 1);
-        if (numPlayer == 1)
+        // if (numPlayer == 1)
             glRotatef(180, 0.0, 0.0, 1.0);
-            drawSquareTexture();
+        drawSquareTexture();
     glPopMatrix();
     glDisable(GL_BLEND);
     glBindTexture(GL_TEXTURE_2D, 0);
