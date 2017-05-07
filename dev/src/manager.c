@@ -13,6 +13,11 @@ extern int WINDOW_HEIGHT;
 extern int GAME_WIDTH;
 extern int GAME_HEIGHT;
 
+int left1;
+int right1;
+int left2;
+int right2;
+
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
@@ -64,6 +69,8 @@ float randomNumber(float min, float max)
 
 Game* createGame()
 {
+    levelList();
+
     Game* game = malloc(sizeof(Game));
     if (game == NULL)    return NULL;
 
@@ -79,13 +86,13 @@ Game* createGame()
     game->bonusTexture = NULL;
 
     //char* path = "data/img/";
-    game->backgroundTextureFile[0] = "data/img/background/greenBackground.jpg";
+    game->backgroundTextureFile[0] = "data/img/background/fond.jpg";
     game->backgroundTextureFile[1] = "data/img/background/blueBackground.png";
-    game->brickTextureFile[0] = "data/img/brick/bob.jpg";
-    game->brickTextureFile[1] = "data/img/brick/red.jpg";
-    game->brickTextureFile[2] = "data/img/brick/border.jpg";
-    game->barTextureFile[0] = "data/img/bar/blueBar.png";
-    game->barTextureFile[1] = "data/img/bar/redBar.png";
+    game->brickTextureFile[0] = "data/img/brick/B_lego_4x2.png";
+    game->brickTextureFile[1] = "data/img/brick/R_lego_4x2.png";
+    game->brickTextureFile[2] = "data/img/brick/P_lego_4x2.png";
+    game->barTextureFile[0] = "data/img/bar/B_lego_6x1.png";
+    game->barTextureFile[1] = "data/img/bar/R_lego_4x1.png";
     game->lifeTextureFile[0] = "data/img/life.png";
     game->lifeTextureFile[1] = "data/img/life_empty.png";
     game->bonusTextureFile[0] = "data/img/bonus/barUP.png";
@@ -349,7 +356,6 @@ bool gameEvent(Game* game, char timer)
     while(SDL_PollEvent(&e)) {
       
       switch(e.type) {
-
         case SDL_QUIT:
             inGame = false;
             break;          
@@ -358,18 +364,34 @@ bool gameEvent(Game* game, char timer)
           switch(e.key.keysym.sym)
           {
             case SDLK_LEFT:
-              game->direction[0] = LEFT;
-              game->selection = LEFT;
+              if(right1 == 1) {
+                left1 = 2;
+              } else {
+                left1 = 1;
+              }
               break;
             case SDLK_RIGHT:
-              game->direction[0] = RIGHT;
-              game->selection = RIGHT;
+              if(left1 == 1) {
+                right1 = 2;
+              }
+              else {
+                right1 = 1;
+              }
               break;
             case SDLK_q:
-              game->direction[1] = LEFT;
+              if(right2 == 1) {
+                left2 = 2;
+              } else {
+                left2 = 1;
+              }
               break;
             case SDLK_d:
-              game->direction[1] = RIGHT;
+              if(left2 == 1) {
+                right2 = 2;
+              }
+              else {
+                right2 = 1;
+              }
               break;
             case SDLK_UP:
               game->selection = UP;
@@ -390,16 +412,28 @@ bool gameEvent(Game* game, char timer)
           switch(e.key.keysym.sym)
           {
             case SDLK_LEFT:
-              game->direction[0] = NONE;
+              if (right1 == 2) {
+                right1 = 1;
+              }
+              left1 = 0;
               break;
             case SDLK_RIGHT:
-              game->direction[0] = NONE;
+              if (left1 == 2) {
+                left1 = 1;
+              }
+              right1 = 0;
               break;
             case SDLK_q:
-              game->direction[1] = NONE;
+              if (right2 == 2) {
+                right2 = 1;
+              }
+              left2 = 0;
               break;
             case SDLK_d:
-              game->direction[1] = NONE;
+              if (left2 == 2) {
+                left2 = 1;
+              }
+              right2 = 0;
               break;
             case SDLK_UP:
               break;
@@ -424,6 +458,32 @@ bool gameEvent(Game* game, char timer)
         default:
           break;
       }
+
+      if ( (left1 == 1 && right1 == 0) || (left1 == 2 && right1 == 1) )
+      {
+          game->direction[0] = LEFT;
+          game->selection = LEFT;
+      }
+      else if ( (left1 == 0 && right1 == 1) || (left1 == 1 && right1 == 2) )
+      {
+          game->direction[0] = RIGHT;
+          game->selection = RIGHT;
+      }
+      else {
+          game->direction[0] = NONE;
+      }
+      if ( (left2 == 1 && right2 == 0) || (left2 == 2 && right2 == 1) )
+      {
+          game->direction[1] = LEFT;
+      }
+      else if ( (left2 == 0 && right2 == 1) || (left2 == 1 && right2 == 2) )
+      {
+          game->direction[1] = RIGHT;
+      }
+      else {
+          game->direction[1] = NONE;
+      }
+
     }
     return inGame;
 }

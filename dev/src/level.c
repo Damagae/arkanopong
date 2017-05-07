@@ -4,6 +4,11 @@
 
 #include <unistd.h>
 #include <errno.h>
+#include <dirent.h>
+
+#ifndef WIN32
+    #include <sys/types.h>
+#endif
 
 #define MAX_SIZE 1024
 
@@ -116,6 +121,46 @@ int * loadLevel (const char * filepath)
     }
 
     return NULL;
+}
+
+char ** levelList()
+{
+    int i = 0;
+    DIR *dir;
+    struct dirent *ent;
+    char path[MAX_SIZE];
+    char cwd[MAX_SIZE];
+    char ** list;
+
+    list = malloc(MAX_SIZE * MAX_SIZE * sizeof(char));
+    if (list == NULL)
+    {
+        fprintf(stderr, "Erreur de l'allocation.\n");
+        return NULL;
+    }
+
+    if (getcwd(cwd, sizeof(cwd)) == NULL) { // Get the program's path
+        fprintf(stderr, "Le chemin est erroné.\n");
+        return NULL;
+    }
+
+    strcpy(path, cwd);
+    strcat(path, "/data/level/");
+
+    if ((dir = opendir (path)) != NULL) {
+    /* print all the files and directories within directory */
+    while ((ent = readdir (dir)) != NULL) {
+            list[i] = ent->d_name;  
+            ++i;
+    }
+        closedir (dir);
+    } else {
+        /* could not open directory */
+        fprintf(stderr, "Ouverture du dossier impossible\n");
+        return NULL;
+    }
+
+    return list;
 }
 
 
