@@ -342,7 +342,6 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
             return ballPosition;
         }
             
-        
         ptBrick = *brickList;
         for(; ptBrick != NULL; ptBrick = ptBrick->next)
         {
