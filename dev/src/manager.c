@@ -201,6 +201,11 @@ void renderGame(Game* game, char timer, bool restart)
         drawText(490,485, &timer);
     }
 
+    if (game->pause)
+    {
+        drawText(500, 500, "Pause");
+    }
+
     if(game->end)
     {
         drawWinner(game->player[0], game->player[1]);
@@ -407,6 +412,14 @@ bool gameEvent(Game* game, char timer)
                 if(game->end)
                     inGame = false;
                 break;
+            case SDLK_SPACE:
+                if(timer == '0')
+                {
+                    if(game->pause)
+                        game->pause = false;
+                    else
+                        game->pause = true;
+                }
             default:
               break;
           }
@@ -446,13 +459,6 @@ bool gameEvent(Game* game, char timer)
             case SDLK_RETURN:
                 break;
             case SDLK_SPACE:
-                if(timer == '0')
-                {
-                    if(game->pause)
-                        game->pause = false;
-                    else
-                        game->pause = true;
-                }
               break;
             default:
               break;
