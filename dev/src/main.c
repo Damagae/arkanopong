@@ -17,7 +17,7 @@ int LIFE_MAX = 6;
 
 int main(int argc, char** argv)
 {
-  bool AI = false;
+  unsigned int AI = 0;
   bool play = true;
 
   initSDL();

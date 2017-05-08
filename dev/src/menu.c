@@ -56,20 +56,30 @@ void drawWindowBackground(GLuint texture)
     glDisable(GL_TEXTURE_2D);
 }
 
-void drawMenuButton(bool* selection)
+void drawMenuButton(bool* selection, bool direction)
 {
-    drawButton(450, 250, "PLAYER VS PLAYER", selection[0]);
-    drawButton(450, 450, "PLAYER VS COMPUTER", selection[1]);
-    drawButton(450, 650, "EXIT", selection[2]);
+    drawButton(450, 200, "PLAYER VS PLAYER", selection[0]);
+    drawButton(450, 400, "PLAYER VS COMPUTER", selection[1]);
+    if (selection[1])
+    {
+        drawButton(350, 500, "NORMAL", direction);
+        drawButton(550, 500, "HARD", (direction ? 0 : 1));
+    }
+    else
+    {
+        drawButton(350, 500, "NORMAL", false);
+        drawButton(550, 500, "HARD", false);
+    }
+    drawButton(450, 700, "EXIT", selection[2]);
 }
 
 void drawMenuText()
 {
     glColor3f(0.0, 0.0, 0.0);
-    drawText(450,800,"PRESS ENTER TO CONTINUE", 6);
+    drawText(450,820,"PRESS ENTER TO CONTINUE", 6);
 }
 
-void renderMenu(TextureList menuTextures, State state, bool* selection)
+void renderMenu(TextureList menuTextures, State state, bool* selection, bool direction)
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -82,7 +92,7 @@ void renderMenu(TextureList menuTextures, State state, bool* selection)
         else if(state == MENU)
         {
             drawWindowBackground(menuTextures->texture[1]);
-            drawMenuButton(selection);
+            drawMenuButton(selection, direction);
             drawMenuText();
         }
     glPopMatrix();
@@ -124,7 +134,7 @@ void selectButton(bool UP, bool* selection)
     }
 }
  
-State menuEvent(State state, bool* selection)
+State menuEvent(State state, bool* selection, bool* direction)
 {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
@@ -153,6 +163,14 @@ State menuEvent(State state, bool* selection)
                     state = MENU;
                     selectButton(false, selection);
                     break;
+                case SDLK_LEFT:
+                    if(selection[1])
+                        *direction = true;
+                    break;
+                case SDLK_RIGHT:
+                    if(selection[1])
+                        *direction = false;
+                    break;
                 default :
                     state = MENU;
                     break;
@@ -169,7 +187,7 @@ State menuEvent(State state, bool* selection)
     return state;
 }
 
-State menuManager(bool* AI)
+State menuManager(unsigned int* AI)
 {
     State state = SPLASH;
     TextureList menuTextures = NULL;
@@ -178,14 +196,15 @@ State menuManager(bool* AI)
     bool selection[3];
     selection[0] = true;
     selection[1] = selection[2] = false;
+    bool direction = true;
 
     while(state == MENU || state == SPLASH)
     {
         Uint32 startTime = SDL_GetTicks();
 
-        renderMenu(menuTextures, state, selection);
+        renderMenu(menuTextures, state, selection, direction);
 
-        state = menuEvent(state, selection);
+        state = menuEvent(state, selection, &direction);
 
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
         if (elapsedTime < FRAMERATE_MILLISECONDS)
@@ -195,7 +214,12 @@ State menuManager(bool* AI)
     }
 
     if(state == PLAY && selection[1] == true)
-        *AI = true;
+        {
+            if (direction)
+                *AI = 1;
+            else
+                *AI = 2;
+        }
 
     freeTexture(&menuTextures);
 

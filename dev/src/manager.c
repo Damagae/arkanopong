@@ -22,6 +22,8 @@ int right2;
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
+#define AI_HARD 10 //Speed of the bar if AI is hard
+
 void setVideoMode(unsigned int width, unsigned int height)
 {
   if(NULL == SDL_SetVideoMode(width, height, BIT_PER_PIXEL, SDL_OPENGL)) {
@@ -522,7 +524,7 @@ bool gameEvent(Game* game, char timer)
     return inGame;
 }
 
-bool playGame(Game* game, bool AI)
+bool playGame(Game* game, unsigned int AI)
 {
     bool inGame = true;
     bool restart = false;
@@ -530,7 +532,17 @@ bool playGame(Game* game, bool AI)
     Uint32 ticks_reset = SDL_GetTicks();
 
     if(AI)
-        game->player[1].name = "Computer";
+    {
+        if(AI == 1)
+        {
+            game->player[1].name = "Computer NORMAL";
+        }
+        if(AI == 2)
+        {
+            game->player[1].ptBar->speed = AI_HARD;
+            game->player[1].name = "Computer HARD";
+        }
+    }
     
     /* FOR COLLISION TEST 
         Ball* ball = createBall(PointXY(545,600), VectorXY(0,-1), &game->player[0]);

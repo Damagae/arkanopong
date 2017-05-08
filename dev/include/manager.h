@@ -67,7 +67,7 @@ Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* bri
 Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, Mix_Chunk ** sound);
 Position runGame(Game* game);
 bool gameEvent(Game* game, char timer);
-bool playGame(Game* game, bool AI);
+bool playGame(Game* game, unsigned int AI);
 char gameLaunch(Uint32 startTime);
 void moveBarBall(PtBar bar, PtBall ball, Direction direction);
 bool restartGame(Direction direction);

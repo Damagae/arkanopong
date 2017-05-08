@@ -18,10 +18,10 @@ TextureList createMenuTextures();
 void drawSplashScreen(GLuint texture);
 void drawWindowBackground();
 void drawMenuText();
-void drawMenuButton(bool* button);
+void drawMenuButton(bool* selection, bool direction);
 void selectButton(bool UP, bool* button);
-void renderMenu(TextureList menuTextures, State state, bool* selection);
-State menuEvent(State state, bool* button);
-State menuManager(bool* AI);
+void renderMenu(TextureList menuTextures, State state, bool* selection, bool direction);
+State menuEvent(State state, bool* button, bool* direction);
+State menuManager(unsigned int* AI);
 
 #endif
