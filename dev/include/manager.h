@@ -59,7 +59,7 @@ void drawGameBackground(Texture background);
 void drawRestart(bool restart);
 void renderGame(Game* game, char timer, bool restart);
 int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick);
-void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2);
+void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList);
 Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtBrick ptBrick, PtPlayer player);
 Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player);
 Position runGame(Game* game);

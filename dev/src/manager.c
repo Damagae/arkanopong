@@ -233,7 +233,7 @@ void drawRestart(bool restart)
     }
 }
 
-void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2)
+void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList)
 {
     Bonus bonus;
     BonusList ptBonus = (*bonusList);
@@ -251,7 +251,7 @@ void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2)
             {
                 if (bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
                 {
-                    getBonus(bonus);
+                    getBonus(bonus, ballList);
                     ptBonus->actif = false;
                 }   
                 //deleteBonus(bonusList, &ptBonus);
@@ -356,7 +356,7 @@ Position runGame(Game* game)
         return -1;
     
     ballPosition = ballManager(game->ballList, &game->bar[0], &game->bar[1], &game->brickList, game->player);
-    bonusManager(&game->bonusList, &game->bar[0], &game->bar[1]);
+    bonusManager(&game->bonusList, &game->bar[0], &game->bar[1], &game->ballList);
 
     return ballPosition;
 }

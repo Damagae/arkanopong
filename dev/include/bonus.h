@@ -47,7 +47,7 @@ void ballSizeUp (PtBall ptBall);
 void moreBall (PtBall* ballList, Player* player);
 void addLife (Player* player);
 
-void getBonus(Bonus bonus);
+void getBonus(Bonus bonus, PtBall* ballList);
 
 float bonusBottomPosition (Bonus bonus);
 float bonusTopPosition (Bonus bonus);

@@ -82,7 +82,7 @@ int selectBonus(BrickType type)
             return 1;
         case BALLSPDDWN:
             return 1;
-        case MOREBALL:
+        case ADDBALL:
             return 1;
         case ADDLIFE:
             return 1;
@@ -204,7 +204,7 @@ BrickType getType(int t) {
         case 6:
             return BALLSPDDWN;
         case 8:
-            return MOREBALL;
+            return ADDBALL;
         case 9:
             return ADDLIFE;
         case 10:

@@ -207,12 +207,19 @@ void ballSizeUp (PtBall ptBall)
 
 void moreBall (PtBall* ballList, Player* player)
 {
-    Vector2D vector;
+    Point2D position;
     if (player->num == 1)
-        vector = VectorXY(0,1);
+    {
+        position.x = player->ptBar->position.x;
+        position.y = player->ptBar->position.y + player->ptBar->height/2;
+    }
+        
     else
-        vector = VectorXY(0,-1);
-    addBall(ballList, createBall(PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), vector, player, &(*ballList)->ptTexture));
+    {
+        position.x = player->ptBar->position.x;
+        position.y = player->ptBar->position.y - player->ptBar->height/2;
+    }
+    addBall(ballList, createBall(position, VectorXY(0,0), player, &(*ballList)->ptTexture));
 }
 
 void addLife (Player* player)
@@ -221,7 +228,7 @@ void addLife (Player* player)
         ++(player->life);
 }
 
-void getBonus(Bonus bonus)
+void getBonus(Bonus bonus, PtBall* ballList)
 {
     if (bonus.type == BARUP)
     {
@@ -238,5 +245,9 @@ void getBonus(Bonus bonus)
     else if (bonus.type == ADDLIFE)
     {
         addLife(bonus.ptPlayer);
+    }
+    else if (bonus.type == ADDBALL)
+    {
+        moreBall(ballList, bonus.ptPlayer);
     }
 }
