@@ -216,13 +216,15 @@ BrickType getType(int t) {
     }
 }
 
-void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, BonusList* bonusList, TextureList* brickTexture, char* textureFile, TextureList* bonusTexture, char** bonusTextureFile) {
+void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, BonusList* bonusList, TextureList* brickTexture, char** brickTextureFile, TextureList* bonusTexture, char** bonusTextureFile) {
     int largeur = lvl[0];
     int hauteur = lvl[1];
     int i = 0;
     int j = 0;
     float firstLine;
     float firstColumn;
+    BrickType type;
+    int texture = 2;
 
     if (hauteur%2 == 0)
     {
@@ -246,7 +248,12 @@ void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, Bo
         {
             if(lvl[3 + i * largeur + j] != 0)
             {
-                addBrick(brickList, createBrick(PointXY(firstColumn + j * WIDTH_DEFAULT, firstLine + i * HEIGHT_DEFAULT), getType(lvl[3 + i * largeur + j]), bonusList, brickTexture, textureFile, bonusTexture, bonusTextureFile));
+                type = getType(lvl[3 + i * largeur + j]);
+                if (type == ADDLIFE)
+                    texture = 1;
+                else
+                    texture = 2;
+                addBrick(brickList, createBrick(PointXY(firstColumn + j * WIDTH_DEFAULT, firstLine + i * HEIGHT_DEFAULT), type, bonusList, brickTexture, brickTextureFile[texture], bonusTexture, bonusTextureFile));
             }
             
         }   

@@ -23,6 +23,7 @@ typedef struct
     
     TextureList brickTexture;
     TextureList barTexture;
+    TextureList ballTexture;
     TextureList backgroundTexture;
     TextureList lifeTexture;
     TextureList bonusTexture;

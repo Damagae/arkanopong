@@ -86,7 +86,7 @@ Selection menuManager()
     Selection inMenu = MENU;
     TextureList menuTextures = NULL;
     menuTextures = addTexture(&menuTextures, "data/img/menu/splashscreen.jpg");
-    printf("%d\n",menuTextures->texture[0]);
+
     while(inMenu == MENU)
     {
         Uint32 startTime = SDL_GetTicks();

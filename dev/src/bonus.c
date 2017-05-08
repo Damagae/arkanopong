@@ -84,13 +84,18 @@ void drawBonus(Bonus bonus)
 {
     if (bonus.actif)
     {
+        glColor3f(1.0, 1.0, 1.0);
+        glEnable(GL_BLEND);
         glBindTexture(GL_TEXTURE_2D, bonus.ptTexture->texture[bonus.ptTexture->num]);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
             glTranslatef(bonus.position.x, bonus.position.y, 1);
-            glScalef(bonus.radius, bonus.radius, 1);
-            //drawCircle();
+            glScalef(bonus.radius*2, bonus.radius*2, 1);
+            if (bonus.direction.y <= 0)
+                glRotatef(180, 0.0, 0.0, 1.0);
             drawSquareTexture();
         glPopMatrix();
+        glDisable(GL_BLEND);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 }
@@ -207,7 +212,7 @@ void moreBall (PtBall* ballList, Player* player)
         vector = VectorXY(0,1);
     else
         vector = VectorXY(0,-1);
-    addBall(ballList, createBall(PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), vector, player));
+    addBall(ballList, createBall(PointXY(GAME_WIDTH/2, GAME_HEIGHT/2), vector, player, &(*ballList)->ptTexture));
 }
 
 void addLife (Player* player)

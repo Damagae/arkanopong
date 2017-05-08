@@ -73,8 +73,10 @@ int loseLife(PtPlayer player)
 
 void drawNames(char* name1, char* name2)
 {
+    glColor3f(0.0, 0.0, 0.0);
     drawText(470,940, name1);
     drawText(470,70, name2);
+    glColor3f(1.0, 1.0, 1.0);
 }
 
 void drawWinner(Player player1, Player player2)

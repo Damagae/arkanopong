@@ -81,13 +81,14 @@ Game* createGame()
     /* Création des textures */
     game->brickTexture = NULL;
     game->barTexture = NULL;
+    game->ballTexture = NULL;
     game->backgroundTexture = NULL;
     game->lifeTexture = NULL;
     game->bonusTexture = NULL;
 
     //char* path = "data/img/";
     game->backgroundTextureFile[0] = "data/img/background/fond.jpg";
-    game->backgroundTextureFile[1] = "data/img/background/blueBackground.png";
+    game->backgroundTextureFile[1] = "data/img/background/greenBackground.jpg";
     game->brickTextureFile[0] = "data/img/brick/B_lego_4x2.png";
     game->brickTextureFile[1] = "data/img/brick/R_lego_4x2.png";
     game->brickTextureFile[2] = "data/img/brick/P_lego_4x2.png";
@@ -110,15 +111,15 @@ Game* createGame()
     game->bar[1] = createBar(posUP, &(game->barTexture), game->barTextureFile[1]);
     
     /* Création des joueurs */
-    game->player[0] = createPlayer(0, "Toto", &(game->bar[0]));
-    game->player[1] = createPlayer(1, "Tata", &(game->bar[1]));
+    game->player[0] = createPlayer(0, "Player 1", &(game->bar[0]));
+    game->player[1] = createPlayer(1, "Player 2", &(game->bar[1]));
 
     /** Creation des balles **/ 
     game->ballList = NULL;
     Point2D posBDWN = PointXY(randomNumber(barLeftPosition(&(game->bar[0])), barRightPosition(&(game->bar[0]))), posDWN.y - game->bar[0].height);
     Point2D posBUP = PointXY(randomNumber(barLeftPosition(&(game->bar[1])), barRightPosition(&(game->bar[1]))), posUP.y + game->bar[1].height);
-    addBall(&(game->ballList), createBall(posBDWN, VectorXY(0, -0.8), &(game->player[0])));
-    addBall(&(game->ballList), createBall(posBUP, VectorXY(0, 0.8), &(game->player[1])));
+    addBall(&(game->ballList), createBall(posBDWN, VectorXY(0, -0.8), &(game->player[0]), &game->ballTexture));
+    addBall(&(game->ballList), createBall(posBUP, VectorXY(0, 0.8), &(game->player[1]), &game->ballTexture));
     changeAngle (game->ballList, &(game->bar[0]));
     changeAngle (game->ballList->next, &(game->bar[1]));
 
@@ -130,7 +131,7 @@ Game* createGame()
     game->level = "data/level.txt";
     int * level;
     level = loadLevel(game->level);
-    createLevelBricks(level, WINDOW_WIDTH, WINDOW_HEIGHT, &(game->brickList), &(game->bonusList), &(game->brickTexture), game->brickTextureFile[2], &(game->bonusTexture), game->bonusTextureFile);
+    createLevelBricks(level, WINDOW_WIDTH, WINDOW_HEIGHT, &(game->brickList), &(game->bonusList), &(game->brickTexture), game->brickTextureFile, &(game->bonusTexture), game->bonusTextureFile);
     
     /* Direction pour controler les barres && le menu */
     game->direction[0] = game->direction[1] = NONE;
@@ -165,6 +166,8 @@ void drawGameBackground(Texture background)
 
 void renderGame(Game* game, char timer, bool restart)
 {    
+
+    glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -190,17 +193,18 @@ void renderGame(Game* game, char timer, bool restart)
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 
-    if(game->end)
-    {
-        drawWinner(game->player[0], game->player[1]);
-        drawRestart(restart);
-    }
     drawNames(game->player[0].name, game->player[1].name);
 
     if (timer != '0')
     {
         glColor3f(1.0, 0.0, 0.0);
         drawText(490,485, &timer);
+    }
+
+    if(game->end)
+    {
+        drawWinner(game->player[0], game->player[1]);
+        drawRestart(restart);
     }
 
     glColor3f(1.0, 1.0, 1.0);

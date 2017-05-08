@@ -10,7 +10,7 @@
 #define BALL_RADIUS 10
 #define BALL_SPEED 10
 
-Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer)
+Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer, TextureList* ballTexture)
 {
     Ball* ball = malloc(sizeof(Ball));
     if (ball == NULL)
@@ -25,7 +25,11 @@ Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer)
     ball->speed = BALL_SPEED;
     ball->ptPlayer = ptPlayer;
     ball->next = NULL;
-   
+    if(ball->ptPlayer->num == 0)
+        ball->ptTexture = addTexture(ballTexture, "data/img/ball/B_lego_rond.png");
+    else
+        ball->ptTexture = addTexture(ballTexture, "data/img/ball/R_lego_rond.png");
+
     return ball;
 }
 
@@ -42,14 +46,19 @@ void addBall(PtBall* ballList, Ball* ball)
 
 void drawBall(Ball ball)
 {
+    glColor3f(1.0, 1.0, 1.0);
+    glEnable(GL_BLEND);
+    glBindTexture(GL_TEXTURE_2D, ball.ptTexture->texture[ball.ptPlayer->num]);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
         glTranslatef(ball.position.x, ball.position.y, 1);
-        glScalef(ball.radius, ball.radius, 1);
-        float color = (ball.ptPlayer->num == 1) ? 0.0 : 1.0;
-        glColor3f(1-color, 0.0, color);
-        drawCircle();
+        glScalef(ball.radius*2, ball.radius*2, 1);
+        if (ball.ptPlayer->num == 0)
+            glRotatef(180, 0.0, 0.0, 1.0);
+        drawSquareTexture();
     glPopMatrix();
-    glColor3f(1.0, 1.0, 1.0);
+    glDisable(GL_BLEND);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void drawAllBalls(PtBall ballList)
