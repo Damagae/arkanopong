@@ -40,7 +40,36 @@ void drawSplashScreen(GLuint texture)
     drawText(500,500,"PRESS ANY KEY TO CONTINUE");
 }
 
-void renderMenu(TextureList menuTextures)
+void drawMenuBackground(GLuint texture)
+{
+    glEnable(GL_TEXTURE_2D);
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glPushMatrix();
+        glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 1);
+        glScalef(WINDOW_WIDTH,WINDOW_HEIGHT,1);
+        drawSquareTexture();
+
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    glDisable(GL_TEXTURE_2D);
+}
+
+void drawMenuButton(bool* selection)
+{
+    drawButton(450, 250, "PLAYER VS PLAYER", selection[0]);
+    drawButton(450, 450, "PLAYER VS COMPUTER", selection[1]);
+    drawButton(450, 650, "EXIT", selection[2]);
+}
+
+void drawMenuText()
+{
+    glColor3f(0.0, 0.0, 0.0);
+    drawText(450,800,"PRESS ENTER TO CONTINUE");
+}
+
+void renderMenu(TextureList menuTextures, State state, bool* selection)
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -48,27 +77,86 @@ void renderMenu(TextureList menuTextures)
     glColor3f(1.0, 1.0, 1.0);
 
     glPushMatrix();
-        drawSplashScreen(menuTextures->texture[0]);
+        if(state == SPLASH)
+            drawSplashScreen(menuTextures->texture[0]);
+        else if(state == MENU)
+        {
+            drawMenuBackground(menuTextures->texture[1]);
+            drawMenuButton(selection);
+            drawMenuText();
+        }
     glPopMatrix();
         
     SDL_GL_SwapBuffers();
 }
 
-Selection menuEvent()
+void selectButton(bool UP, bool* selection)
 {
-    Selection inMenu = MENU;
-
+    if (UP)
+    {
+        if(selection[0])
+            return;
+        else if(selection[1])
+        {
+            selection[0] = true;
+            selection[1] = false;
+        }
+        else if(selection[2])
+        {
+            selection[1] = true;
+            selection[2] = false;
+        }
+    }
+    else
+    {
+        if(selection[2])
+            return;
+        else if(selection[1])
+        {
+            selection[2] = true;
+            selection[1] = false;
+        }
+        else if(selection[0])
+        {
+            selection[1] = true;
+            selection[0] = false;
+        }
+    }
+}
+ 
+State menuEvent(State state, bool* selection)
+{
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
-      
-      switch(e.type) {
-
+      switch(e.type)
+      {
         case SDL_QUIT:
-            inMenu = EXIT;
+            state = EXIT;
             break;          
 
         case SDL_KEYDOWN:
-            inMenu = PLAY;
+            switch(e.key.keysym.sym)
+            {
+                case SDLK_RETURN:
+                    if (state == MENU && selection[2] == false)
+                        state = PLAY;
+                    else if (selection[2] == true)
+                        state = EXIT;
+                    else
+                        state = MENU;
+                    break;
+                case SDLK_UP:
+                    state = MENU;
+                    selectButton(true, selection);
+                    break;
+                case SDLK_DOWN:
+                    state = MENU;
+                    selectButton(false, selection);
+                    break;
+                default :
+                    state = MENU;
+                    break;
+            }
             break;
 
         case SDL_KEYUP:
@@ -78,22 +166,26 @@ Selection menuEvent()
             break;
       }
     }
-    return inMenu;
+    return state;
 }
 
-Selection menuManager()
+State menuManager(bool* AI)
 {
-    Selection inMenu = MENU;
+    State state = SPLASH;
     TextureList menuTextures = NULL;
     menuTextures = addTexture(&menuTextures, "data/img/menu/splashscreen.jpg");
+    addTexture(&menuTextures, "data/img/menu/menuBackground.jpg");
+    bool selection[3];
+    selection[0] = true;
+    selection[1] = selection[2] = false;
 
-    while(inMenu == MENU)
+    while(state == MENU || state == SPLASH)
     {
         Uint32 startTime = SDL_GetTicks();
 
-        renderMenu(menuTextures);
+        renderMenu(menuTextures, state, selection);
 
-        inMenu = menuEvent();
+        state = menuEvent(state, selection);
 
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
         if (elapsedTime < FRAMERATE_MILLISECONDS)
@@ -102,7 +194,10 @@ Selection menuManager()
         }
     }
 
+    if(state == PLAY && selection[1] == true)
+        *AI = true;
+
     freeTexture(&menuTextures);
 
-    return inMenu;
+    return state;
 }

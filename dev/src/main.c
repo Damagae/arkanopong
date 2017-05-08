@@ -16,13 +16,13 @@ int LIFE_MAX = 6;
 
 int main(int argc, char** argv)
 {
-  bool AI = true;
+  bool AI = false;
   bool play = true;
 
   initSDL();
   glutInit( &argc, argv );
 
-  if (menuManager() != EXIT)
+  if (menuManager(&AI) != EXIT)
   {
     while (play)
     {

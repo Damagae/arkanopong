@@ -6,18 +6,22 @@
 
 /** STRUCTURES **/
 
-typedef enum Selection
+typedef enum State
 {
-    EXIT, MENU, PLAY
-} Selection;
+    EXIT, SPLASH, MENU, PLAY
+} State;
 
 
 /** FONCTIONS **/
 
 TextureList createMenuTextures();
 void drawSplashScreen(GLuint texture);
-void renderMenu(TextureList menuTextures);
-Selection menuEvent();
-Selection menuManager();
+void drawMenuBackground();
+void drawMenuText();
+void drawMenuButton(bool* button);
+void selectButton(bool UP, bool* button);
+void renderMenu(TextureList menuTextures, State state, bool* selection);
+State menuEvent(State state, bool* button);
+State menuManager(bool* AI);
 
 #endif
