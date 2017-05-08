@@ -320,7 +320,7 @@ Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* bri
     return ballPosition;
 }
 
-Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, Mix_Chunk * hitSound)
+Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, Mix_Chunk ** sound)
 {
     Position ballPosition = INSIDE;
     PtBrick ptBrick;
@@ -329,11 +329,16 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
     for(; ballList != NULL; ballList = ballList->next)
     {
         moveBall(ballList);
+        while(Mix_Playing(channel))
+        {
+            ++channel;
+        }
         
         ballPosition = positionDetection(ballList, bar1, bar2, brickList, NULL, player);
         // If the ball hit something, then stop
         if(ballPosition == OUT_UP || ballPosition == OUT_DOWN || ballPosition == BAR_UP ||ballPosition == BAR_DOWN || ballPosition == WALL)
         {
+            //playSound(channel, sound[0]);
             return ballPosition;
         }
             
@@ -344,7 +349,7 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
             ballPosition = positionDetection(ballList, bar1, bar2, brickList, ptBrick, player);
             if(ballPosition == BRICK)
             {
-                playSound(channel, hitSound);
+                playSound(channel, sound[0]);
                 return ballPosition;
             }
         } 
@@ -363,7 +368,7 @@ Position runGame(Game* game)
     if (game->ballList == NULL)
         return -1;
     
-    ballPosition = ballManager(game->ballList, &game->bar[0], &game->bar[1], &game->brickList, game->player, game->sound[0]);
+    ballPosition = ballManager(game->ballList, &game->bar[0], &game->bar[1], &game->brickList, game->player, game->sound);
     bonusManager(&game->bonusList, &game->bar[0], &game->bar[1], &game->ballList);
 
     return ballPosition;
