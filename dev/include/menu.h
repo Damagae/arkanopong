@@ -16,7 +16,7 @@ typedef enum State
 
 TextureList createMenuTextures();
 void drawSplashScreen(GLuint texture);
-void drawMenuBackground();
+void drawWindowBackground();
 void drawMenuText();
 void drawMenuButton(bool* button);
 void selectButton(bool UP, bool* button);

@@ -37,10 +37,10 @@ void drawSplashScreen(GLuint texture)
     glDisable(GL_TEXTURE_2D);
 
     glColor3f(0.0, 0.0, 0.0);
-    drawText(500,500,"PRESS ANY KEY TO CONTINUE");
+    drawText(500,500,"PRESS ANY KEY TO CONTINUE", 6);
 }
 
-void drawMenuBackground(GLuint texture)
+void drawWindowBackground(GLuint texture)
 {
     glEnable(GL_TEXTURE_2D);
 
@@ -66,7 +66,7 @@ void drawMenuButton(bool* selection)
 void drawMenuText()
 {
     glColor3f(0.0, 0.0, 0.0);
-    drawText(450,800,"PRESS ENTER TO CONTINUE");
+    drawText(450,800,"PRESS ENTER TO CONTINUE", 6);
 }
 
 void renderMenu(TextureList menuTextures, State state, bool* selection)
@@ -81,7 +81,7 @@ void renderMenu(TextureList menuTextures, State state, bool* selection)
             drawSplashScreen(menuTextures->texture[0]);
         else if(state == MENU)
         {
-            drawMenuBackground(menuTextures->texture[1]);
+            drawWindowBackground(menuTextures->texture[1]);
             drawMenuButton(selection);
             drawMenuText();
         }

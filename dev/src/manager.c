@@ -6,6 +6,7 @@
 
 #include "manager.h"
 #include "primitives.h"
+#include "menu.h"
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
@@ -88,7 +89,7 @@ Game* createGame()
 
     //char* path = "data/img/";
     game->backgroundTextureFile[0] = "data/img/background/fond.jpg";
-    game->backgroundTextureFile[1] = "data/img/background/greenBackground.jpg";
+    game->backgroundTextureFile[1] = "data/img/menu/menuBackground.jpg";
     game->brickTextureFile[0] = "data/img/brick/B_lego_4x2.png";
     game->brickTextureFile[1] = "data/img/brick/R_lego_4x2.png";
     game->brickTextureFile[2] = "data/img/brick/P_lego_4x2.png";
@@ -100,6 +101,7 @@ Game* createGame()
     game->bonusTextureFile[1] = "data/img/bonus/barDWN.png";
     
     game->backgroundTexture = addTexture(&(game->backgroundTexture), game->backgroundTextureFile[0]);
+    addTexture(&(game->backgroundTexture), game->backgroundTextureFile[1]);
     game->lifeTexture = addTexture(&(game->lifeTexture), game->lifeTextureFile[0]);
     game->bonusTexture = addTexture(&(game->bonusTexture), game->bonusTextureFile[0]);
     addTexture(&(game->bonusTexture), game->bonusTextureFile[1]);
@@ -155,7 +157,7 @@ void drawGameBackground(Texture background)
 {
     Point2D GAME_TOP_LEFT = PointXY((WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2);
 
-    glBindTexture(GL_TEXTURE_2D, background.texture[background.num]);
+    glBindTexture(GL_TEXTURE_2D, background.texture[0]);
     glPushMatrix();
         glTranslatef(GAME_TOP_LEFT.x + GAME_WIDTH/2, GAME_TOP_LEFT.y + GAME_HEIGHT/2, 1);
         glScalef(GAME_WIDTH-1, GAME_HEIGHT-1, 1);
@@ -171,6 +173,8 @@ void renderGame(Game* game, char timer, bool restart)
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    drawWindowBackground(game->backgroundTexture->texture[1]);
 
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
@@ -198,12 +202,12 @@ void renderGame(Game* game, char timer, bool restart)
     if (timer != '0')
     {
         glColor3f(1.0, 0.0, 0.0);
-        drawText(490,485, &timer);
+        drawText(490,485, &timer, 6);
     }
 
     if (game->pause)
     {
-        drawText(500, 500, "Pause");
+        drawText(500, 500, "Pause", 6);
     }
 
     if(game->end)

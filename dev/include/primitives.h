@@ -10,7 +10,7 @@ void drawRoundedSquare(bool full, float radius);
 void drawCircle();
 void drawCircleTexture();
 int textLength(char * text);
-void drawText(int x, int y, char* txt);
+void drawText(int x, int y, char* txt, unsigned int size);
 void drawButton(int x, int y, char* txt, bool select);
 
 #endif

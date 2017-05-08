@@ -109,7 +109,7 @@ int textLength(char * text)
     return length;
 }
 
-void drawText(int x, int y, char* txt)
+void drawText(int x, int y, char* txt, unsigned int size)
 {
     if(txt!=NULL)
     {   
@@ -119,10 +119,21 @@ void drawText(int x, int y, char* txt)
         glLoadIdentity();
     
         int len = textLength(txt);
-        glRasterPos2f(x-5*len, y+5);
+        glRasterPos2f(8+x-5*len, y+5);
+
+        void * font[7] = {
+                    GLUT_BITMAP_8_BY_13,
+                    GLUT_BITMAP_9_BY_15,
+                    GLUT_BITMAP_TIMES_ROMAN_10,
+                    GLUT_BITMAP_TIMES_ROMAN_24,
+                    GLUT_BITMAP_HELVETICA_10,
+                    GLUT_BITMAP_HELVETICA_12,
+                    GLUT_BITMAP_HELVETICA_18
+                };
+
         for (int i = 0; i < len; i++)
         {
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, txt[i]);
+            glutBitmapCharacter(font[size], txt[i]);
         }
     
         glPopMatrix();
@@ -140,7 +151,7 @@ void drawButton(int x, int y, char* txt, bool select)
         drawRoundedSquare(1, 0.05);
         glColor3f(1.0, 0.0, 0.0);
         drawRoundedSquare(0, 0.05);
-        drawText(x,y,txt);
+        drawText(x,y,txt, 1);
     glPopMatrix();
     glColor3f(1.0, 1.0, 1.0);
 }
