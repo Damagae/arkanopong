@@ -2,6 +2,7 @@
 #include <GL/glut.h>
 #include "menu.h"
 #include "manager.h"
+#include "audio.h"
 
 /* Dimensions de la fenêtre */
 unsigned int WINDOW_WIDTH = 1000;
@@ -20,8 +21,11 @@ int main(int argc, char** argv)
   bool play = true;
 
   initSDL();
+  initAudio();
   glutInit( &argc, argv );
 
+  Mix_Music * backgroundMusic = createMusic("data/audio/lego.mp3");
+  playMusic(backgroundMusic);
   if (menuManager(&AI) != EXIT)
   {
     while (play)
@@ -32,6 +36,8 @@ int main(int argc, char** argv)
     }
   }
 
+  freeMusic(backgroundMusic);
+  closeAudio();
   SDL_Quit();
   
   return EXIT_SUCCESS;

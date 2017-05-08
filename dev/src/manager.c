@@ -139,6 +139,8 @@ Game* createGame()
     game->direction[0] = game->direction[1] = NONE;
     game->selection = NONE;
 
+    game->sound[0] = createSound("data/audio/hit.wav");
+
     return game;
 }
 
@@ -318,10 +320,11 @@ Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* bri
     return ballPosition;
 }
 
-Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player)
+Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, Mix_Chunk * hitSound)
 {
     Position ballPosition = INSIDE;
     PtBrick ptBrick;
+    unsigned int channel = 1;
 
     for(; ballList != NULL; ballList = ballList->next)
     {
@@ -330,7 +333,10 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
         ballPosition = positionDetection(ballList, bar1, bar2, brickList, NULL, player);
         // If the ball hit something, then stop
         if(ballPosition == OUT_UP || ballPosition == OUT_DOWN || ballPosition == BAR_UP ||ballPosition == BAR_DOWN || ballPosition == WALL)
+        {
             return ballPosition;
+        }
+            
         
         ptBrick = *brickList;
         for(; ptBrick != NULL; ptBrick = ptBrick->next)
@@ -338,9 +344,11 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
             ballPosition = positionDetection(ballList, bar1, bar2, brickList, ptBrick, player);
             if(ballPosition == BRICK)
             {
+                playSound(channel, hitSound);
                 return ballPosition;
             }
-        }     
+        } 
+        ++channel;   
     }
     
     return ballPosition;
@@ -355,7 +363,7 @@ Position runGame(Game* game)
     if (game->ballList == NULL)
         return -1;
     
-    ballPosition = ballManager(game->ballList, &game->bar[0], &game->bar[1], &game->brickList, game->player);
+    ballPosition = ballManager(game->ballList, &game->bar[0], &game->bar[1], &game->brickList, game->player, game->sound[0]);
     bonusManager(&game->bonusList, &game->bar[0], &game->bar[1], &game->ballList);
 
     return ballPosition;
@@ -417,12 +425,20 @@ bool gameEvent(Game* game, char timer)
                     inGame = false;
                 break;
             case SDLK_SPACE:
-                if(timer == '0')
+                if(timer == '0' && game->end == false)
                 {
                     if(game->pause)
+                    {
                         game->pause = false;
+                        Mix_ResumeMusic();
+                        Mix_Resume(-1);
+                    }
                     else
+                    {
                         game->pause = true;
+                        Mix_PauseMusic();
+                        Mix_Pause(-1);
+                    }
                 }
             default:
               break;
@@ -623,4 +639,6 @@ void freeGame(Game* game)
     deleteBalls(&(game->ballList));
     deleteBrickList(&(game->brickList));
     deleteBonusList(&(game->bonusList));
+
+    freeSound(game->sound[0]);
 }

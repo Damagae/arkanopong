@@ -10,6 +10,7 @@
 #include "textures.h"
 #include "level.h"
 #include "ai.h"
+#include "audio.h"
 
 #define MAX_TEXTURES 10
 
@@ -44,6 +45,8 @@ typedef struct
     Position ballPosition;
 
     Direction selection;
+    
+    Mix_Chunk * sound[2];
 
     char* level;
 } Game, *PtGame;
@@ -61,7 +64,7 @@ void renderGame(Game* game, char timer, bool restart);
 int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick);
 void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList);
 Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtBrick ptBrick, PtPlayer player);
-Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player);
+Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, Mix_Chunk * hitSound);
 Position runGame(Game* game);
 bool gameEvent(Game* game, char timer);
 bool playGame(Game* game, bool AI);
