@@ -10,7 +10,7 @@
 #define BALL_RADIUS 10
 #define BALL_SPEED 10
 
-Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer, TextureList* ballTexture)
+Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer, GLuint* ballTexture)
 {
     Ball* ball = malloc(sizeof(Ball));
     if (ball == NULL)
@@ -25,10 +25,7 @@ Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer, Textu
     ball->speed = BALL_SPEED;
     ball->ptPlayer = ptPlayer;
     ball->next = NULL;
-    if(ball->ptPlayer->num == 0)
-        ball->ptTexture = addTexture(ballTexture, "data/img/ball/B_lego_rond.png");
-    else
-        ball->ptTexture = addTexture(ballTexture, "data/img/ball/R_lego_rond.png");
+    ball->texture = ballTexture;
 
     return ball;
 }
@@ -48,7 +45,7 @@ void drawBall(Ball ball)
 {
     glColor3f(1.0, 1.0, 1.0);
     glEnable(GL_BLEND);
-    glBindTexture(GL_TEXTURE_2D, ball.ptTexture->texture[ball.ptPlayer->num]);
+    glBindTexture(GL_TEXTURE_2D, ball.texture[ball.ptPlayer->num]);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
         glTranslatef(ball.position.x, ball.position.y, 1);

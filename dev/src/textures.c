@@ -64,7 +64,7 @@ GLuint generateTexture(GLuint * texture, char* filename)
   glBindTexture(GL_TEXTURE_2D, 0);
   /** Libere la surface */
   SDL_FreeSurface(surface);
-  //printf("HUM : %p\n", texture);
+  //printf("HUM : %d\n", *texture);
   return *texture;
 }
 

@@ -18,7 +18,7 @@
 
 /** CREATE FUNCTIONS **/
 
-Bonus* createBonus(PtBrick ptBrick, TextureList* bonusTexture, char* textureFile)
+Bonus* createBonus(PtBrick ptBrick, GLuint* bonusTexture)
 {
     Bonus* bonus = malloc(sizeof(Bonus));
     if (bonus == NULL)
@@ -31,10 +31,13 @@ Bonus* createBonus(PtBrick ptBrick, TextureList* bonusTexture, char* textureFile
     bonus->direction = VectorXY(0,0);
     bonus->radius = BONUS_RADIUS;
     bonus->speed = BONUS_SPEED;
-    bonus->ptTexture = addTexture(bonusTexture, textureFile);
-    // We don't need this, but if we delete it, it bugs, don't know why
     bonus->ptBrick = ptBrick;
     bonus->type = ptBrick->type;
+
+    int numBonus = selectBonus(bonus->type);
+    bonus->texture = bonusTexture[numBonus];
+    // We don't need this, but if we delete it, it bugs, don't know why
+
     bonus->ptPlayer = NULL;
     bonus->actif = false;
     bonus->next = NULL;
@@ -50,6 +53,29 @@ void addBonus(BonusList* bonusList, Bonus* bonus)
     {
         for (; (*bonusList)->next != NULL; bonusList = &((*bonusList)->next));
         (*bonusList)->next = bonus;
+    }
+}
+
+int selectBonus(BrickType type)
+{
+    switch(type)
+    {
+        case BARUP:
+            return 0;
+        case BARDWN:
+            return 1;
+        case BARSPDUP:
+            return 1;
+        case BALLSPDUP:
+            return 1;
+        case BALLSPDDWN:
+            return 1;
+        case ADDBALL:
+            return 1;
+        case ADDLIFE:
+            return 1;
+        default :
+            return 0;
     }
 }
 
@@ -86,7 +112,7 @@ void drawBonus(Bonus bonus)
     {
         glColor3f(1.0, 1.0, 1.0);
         glEnable(GL_BLEND);
-        glBindTexture(GL_TEXTURE_2D, bonus.ptTexture->texture[bonus.ptTexture->num]);
+        glBindTexture(GL_TEXTURE_2D, bonus.texture);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
             glTranslatef(bonus.position.x, bonus.position.y, 1);
@@ -219,7 +245,7 @@ void moreBall (PtBall* ballList, Player* player)
         position.x = player->ptBar->position.x;
         position.y = player->ptBar->position.y - player->ptBar->height/2;
     }
-    addBall(ballList, createBall(position, VectorXY(0,0), player, &(*ballList)->ptTexture));
+    addBall(ballList, createBall(position, VectorXY(0,0), player, (*ballList)->texture));
 }
 
 void addLife (Player* player)

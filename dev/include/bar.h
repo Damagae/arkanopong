@@ -12,7 +12,7 @@ typedef struct
     float width;
     float height;
     float speed;
-    Texture* ptTexture;
+    GLuint texture;
 } Bar, *PtBar;
 
 typedef enum Direction
@@ -22,7 +22,7 @@ typedef enum Direction
 
 /** FUNCTIONS **/
 
-Bar createBar (Point2D position, TextureList* barTexture, char* textureFile);
+Bar createBar (Point2D position, GLuint texture);
 void moveBar(PtBar ptBar, Direction direction);
 void drawBar(Bar bar, int numPlayer);
 

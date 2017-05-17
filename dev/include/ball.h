@@ -14,7 +14,7 @@ typedef struct ball
   Vector2D direction;
   float radius;
   float speed;
-  Texture* ptTexture;
+  GLuint* texture;
   PtPlayer ptPlayer;
   struct ball* next;
 } Ball, *PtBall;
@@ -26,7 +26,7 @@ typedef enum Orientation
 
 /** FUNCTIONS **/
 
-Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer, TextureList* ballTexture);
+Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer, GLuint* ballTexture);
 void addBall(PtBall* ballList, Ball* ball);
 void moveBall (PtBall ptBall);
 void drawBall (Ball ball);

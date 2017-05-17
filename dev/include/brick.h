@@ -22,7 +22,7 @@ typedef struct brick
     Point2D position;
     float width;
     float height;
-    Texture* ptTexture;
+    GLuint texture;
     int life;
     BrickType type;
     Bonus* bonus;
@@ -31,7 +31,7 @@ typedef struct brick
 
 /** FUNCTIONS **/
 
-Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, TextureList* brickTexture, char* textureFile, TextureList* bonusTexture, char** bonusTextureFile);
+Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, GLuint brickTexture, GLuint* bonusTexture);
 void addBrick(PtBrick* brickList, Brick* brick);
 void drawBrick(Brick brick);
 void drawAllBricks(PtBrick brickList);
@@ -41,9 +41,8 @@ Point2D brickVerticeTopRight(PtBrick ptBrick);
 Point2D brickVerticeBottomLeft(PtBrick ptBrick);
 Point2D brickVerticeBottomRight(PtBrick ptBrick);
 
-void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, BonusList* bonusList, TextureList* brickTexture, char** brickTextureFile, TextureList* bonusTexture, char** bonusTextureFile);
+void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, BonusList* bonusList, GLuint* brickTexture, GLuint* bonusTexture);
 BrickType getType(int t);
-int selectBonus(BrickType type);
 
 void deleteBrick(PtBrick* brickList, PtBrick ptBrick);
 void deleteBrickList(PtBrick* brickList);

@@ -13,7 +13,7 @@
 #define WIDTH_DEFAULT 90
 #define LIFE_DEFAULT 3
 
-Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, TextureList* brickTexture, char* textureFile, TextureList* bonusTexture, char** bonusTextureFile)
+Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, GLuint brickTexture, GLuint* bonusTexture)
 {
     PtBrick ptBrick = malloc(sizeof(Brick));
     if (ptBrick == NULL)
@@ -25,7 +25,7 @@ Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, Text
     ptBrick->position = position;
     ptBrick->width = WIDTH_DEFAULT;
     ptBrick->height = HEIGHT_DEFAULT;
-    ptBrick->ptTexture = addTexture(brickTexture, textureFile);
+    ptBrick->texture = brickTexture;
     ptBrick->type = type;
     if (ptBrick->type == DISAP)
     {
@@ -42,8 +42,7 @@ Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, Text
         ptBrick->life = LIFE_DEFAULT;
         if (ptBrick->type != NORMAL)
         {
-            int numBonus = selectBonus(type);
-            Bonus* bonus = createBonus(ptBrick, bonusTexture, bonusTextureFile[numBonus]);
+            Bonus* bonus = createBonus(ptBrick, bonusTexture);
             ptBrick->bonus = bonus;
             addBonus(bonusList, bonus);
         }
@@ -68,34 +67,11 @@ void addBrick(PtBrick* brickList, Brick* brick)
     }
 }
 
-int selectBonus(BrickType type)
-{
-    switch(type)
-    {
-        case BARUP:
-            return 0;
-        case BARDWN:
-            return 1;
-        case BARSPDUP:
-            return 1;
-        case BALLSPDUP:
-            return 1;
-        case BALLSPDDWN:
-            return 1;
-        case ADDBALL:
-            return 1;
-        case ADDLIFE:
-            return 1;
-        default :
-            return 0;
-    }
-}
-
 void drawBrick(Brick brick)
 {
     if (brick.life != 0)
     {
-        glBindTexture(GL_TEXTURE_2D, brick.ptTexture->texture[brick.ptTexture->num]);
+        glBindTexture(GL_TEXTURE_2D, brick.texture);
         glPushMatrix();
             glTranslatef(brick.position.x, brick.position.y, 1);
             glScalef(brick.width, brick.height, 1);
@@ -216,7 +192,7 @@ BrickType getType(int t) {
     }
 }
 
-void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, BonusList* bonusList, TextureList* brickTexture, char** brickTextureFile, TextureList* bonusTexture, char** bonusTextureFile) {
+void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, BonusList* bonusList, GLuint* brickTexture, GLuint* bonusTexture) {
     int largeur = lvl[0];
     int hauteur = lvl[1];
     int i = 0;
@@ -253,7 +229,7 @@ void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, Bo
                     texture = 1;
                 else
                     texture = 2;
-                addBrick(brickList, createBrick(PointXY(firstColumn + j * WIDTH_DEFAULT, firstLine + i * HEIGHT_DEFAULT), type, bonusList, brickTexture, brickTextureFile[texture], bonusTexture, bonusTextureFile));
+                addBrick(brickList, createBrick(PointXY(firstColumn + j * WIDTH_DEFAULT, firstLine + i * HEIGHT_DEFAULT), type, bonusList, brickTexture[texture], bonusTexture));
             }
             
         }   

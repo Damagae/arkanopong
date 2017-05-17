@@ -15,14 +15,14 @@ extern int WINDOW_HEIGHT;
 extern int GAME_WIDTH;
 extern int GAME_HEIGHT;
 
-Bar createBar (Point2D position, TextureList* barTexture, char* textureFile)
+Bar createBar (Point2D position, GLuint texture)
 {   
     Bar bar;
     bar.position = position;
     bar.width = BAR_WIDTH;
     bar.height = BAR_HEIGHT;
     bar.speed = BAR_SPEED;
-    bar.ptTexture = addTexture(barTexture, textureFile);
+    bar.texture = texture;
 
     return bar;
 }
@@ -54,7 +54,7 @@ void moveBar(PtBar ptBar, Direction direction)
 void drawBar(Bar bar, int numPlayer)
 {
     glEnable(GL_BLEND);
-    glBindTexture(GL_TEXTURE_2D, bar.ptTexture->texture[bar.ptTexture->num]);
+    glBindTexture(GL_TEXTURE_2D, bar.texture);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
         glTranslatef(bar.position.x, bar.position.y, 1);

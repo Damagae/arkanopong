@@ -22,15 +22,16 @@ typedef struct
     bool pause;
     bool end;
     
-    TextureList brickTexture;
-    TextureList barTexture;
-    TextureList ballTexture;
-    TextureList backgroundTexture;
-    TextureList lifeTexture;
-    TextureList bonusTexture;
+    GLuint brickTexture[MAX_TEXTURES];
+    GLuint barTexture[2];
+    GLuint ballTexture[2];
+    GLuint backgroundTexture[MAX_TEXTURES];
+    GLuint lifeTexture[2];
+    GLuint bonusTexture[MAX_TEXTURES];
 
     char* backgroundTextureFile[MAX_TEXTURES];
     char* brickTextureFile[MAX_TEXTURES];
+    char* ballTextureFile[2];
     char* barTextureFile[2];
     char* lifeTextureFile[2];
     char* bonusTextureFile[MAX_TEXTURES];
@@ -57,9 +58,11 @@ void setVideoMode(unsigned int width, unsigned int height);
 void initSDL();
 float randomNumber(float min, float max);
 Game* createGame();
+
 void drawGameBorder();
-void drawGameBackground(Texture background);
+void drawGameBackground(GLuint backgroundTexture);
 void drawRestart(bool restart);
+
 void renderGame(Game* game, char timer, bool restart);
 int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick);
 void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList);
@@ -71,6 +74,8 @@ bool playGame(Game* game, unsigned int AI);
 char gameLaunch(Uint32 startTime);
 void moveBarBall(PtBar bar, PtBall ball, Direction direction);
 bool restartGame(Direction direction);
+
+void freeGameTextures(Game* game);
 void freeGame(Game* game);
 
 #endif

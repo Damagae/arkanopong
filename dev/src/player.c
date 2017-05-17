@@ -24,7 +24,7 @@ Player createPlayer(int num, char* name, PtBar ptBar)
     return player;
 }
 
-void drawLife(Player player, Texture life)
+void drawLife(Player player, GLuint lifeTexture)
 {
     Point2D GAME_TOP_LEFT = PointXY((WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2);
     Point2D GAME_BOTTOM_RIGHT = PointXY(GAME_WIDTH + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2);
@@ -37,7 +37,7 @@ void drawLife(Player player, Texture life)
         
         if (player.life >= i+1)
         {
-            glBindTexture(GL_TEXTURE_2D, life.texture[0]);
+            glBindTexture(GL_TEXTURE_2D, lifeTexture);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             if (player.num == 0)
             {

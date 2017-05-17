@@ -8,6 +8,8 @@
 #include "primitives.h"
 #include "menu.h"
 
+#define MAX_TEXTURES 10
+
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 
@@ -82,37 +84,40 @@ Game* createGame()
     game->end = false;
 
     /* Création des textures */
-    game->brickTexture = NULL;
-    game->barTexture = NULL;
-    game->ballTexture = NULL;
-    game->backgroundTexture = NULL;
-    game->lifeTexture = NULL;
-    game->bonusTexture = NULL;
-
-    //char* path = "data/img/";
-    game->backgroundTextureFile[0] = "data/img/background/fond.jpg";
-    game->backgroundTextureFile[1] = "data/img/menu/menuBackground.jpg";
     game->brickTextureFile[0] = "data/img/brick/B_lego_4x2.png";
     game->brickTextureFile[1] = "data/img/brick/R_lego_4x2.png";
     game->brickTextureFile[2] = "data/img/brick/P_lego_4x2.png";
+    game->brickTextureFile[3] = "data/img/brick/B_lego_4x2_2.png";
     game->barTextureFile[0] = "data/img/bar/B_lego_6x1.png";
     game->barTextureFile[1] = "data/img/bar/R_lego_4x1.png";
+    game->ballTextureFile[0] = "data/img/ball/B_lego_rond.png";
+    game->ballTextureFile[1] = "data/img/ball/R_lego_rond.png";
+    game->backgroundTextureFile[0] = "data/img/background/fond.jpg";
+    game->backgroundTextureFile[1] = "data/img/background/greyBackground.jpg";
     game->lifeTextureFile[0] = "data/img/life.png";
     game->lifeTextureFile[1] = "data/img/life_empty.png";
     game->bonusTextureFile[0] = "data/img/bonus/barUP.png";
     game->bonusTextureFile[1] = "data/img/bonus/barDWN.png";
-    
-    game->backgroundTexture = addTexture(&(game->backgroundTexture), game->backgroundTextureFile[0]);
-    addTexture(&(game->backgroundTexture), game->backgroundTextureFile[1]);
-    game->lifeTexture = addTexture(&(game->lifeTexture), game->lifeTextureFile[0]);
-    game->bonusTexture = addTexture(&(game->bonusTexture), game->bonusTextureFile[0]);
-    addTexture(&(game->bonusTexture), game->bonusTextureFile[1]);
+
+    game->brickTexture[0] = generateTexture(&(game->brickTexture[0]), game->brickTextureFile[0]);
+    game->brickTexture[1] = generateTexture(&(game->brickTexture[1]), game->brickTextureFile[1]);
+    game->brickTexture[2] = generateTexture(&(game->brickTexture[2]), game->brickTextureFile[2]);
+    game->brickTexture[3] = generateTexture(&(game->brickTexture[3]), game->brickTextureFile[3]);
+    game->barTexture[0] = generateTexture(&(game->barTexture[0]), game->barTextureFile[0]);
+    game->barTexture[1] = generateTexture(&(game->barTexture[1]), game->barTextureFile[1]);
+    game->ballTexture[0] = generateTexture(&(game->ballTexture[0]), game->ballTextureFile[0]);
+    game->ballTexture[1] = generateTexture(&(game->ballTexture[1]), game->ballTextureFile[1]);
+    game->backgroundTexture[0] = generateTexture(&(game->backgroundTexture[0]), game->backgroundTextureFile[0]);
+    game->backgroundTexture[1] = generateTexture(&(game->backgroundTexture[1]), game->backgroundTextureFile[1]);
+    game->lifeTexture[0] = generateTexture(&(game->lifeTexture[0]), game->lifeTextureFile[0]);
+    game->bonusTexture[0] = generateTexture(&(game->bonusTexture[0]), game->bonusTextureFile[0]);
+    game->bonusTexture[1] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
 
     /* Création des barres */
     Point2D posDWN = PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50);
     Point2D posUP = PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50);
-    game->bar[0] = createBar(posDWN, &(game->barTexture), game->barTextureFile[0]);
-    game->bar[1] = createBar(posUP, &(game->barTexture), game->barTextureFile[1]);
+    game->bar[0] = createBar(posDWN, game->barTexture[0]);
+    game->bar[1] = createBar(posUP, game->barTexture[1]);
     
     /* Création des joueurs */
     game->player[0] = createPlayer(0, "Player 1", &(game->bar[0]));
@@ -122,8 +127,8 @@ Game* createGame()
     game->ballList = NULL;
     Point2D posBDWN = PointXY(randomNumber(barLeftPosition(&(game->bar[0])), barRightPosition(&(game->bar[0]))), posDWN.y - game->bar[0].height);
     Point2D posBUP = PointXY(randomNumber(barLeftPosition(&(game->bar[1])), barRightPosition(&(game->bar[1]))), posUP.y + game->bar[1].height);
-    addBall(&(game->ballList), createBall(posBDWN, VectorXY(0, -0.8), &(game->player[0]), &game->ballTexture));
-    addBall(&(game->ballList), createBall(posBUP, VectorXY(0, 0.8), &(game->player[1]), &game->ballTexture));
+    addBall(&(game->ballList), createBall(posBDWN, VectorXY(0, -0.8), &(game->player[0]), game->ballTexture));
+    addBall(&(game->ballList), createBall(posBUP, VectorXY(0, 0.8), &(game->player[1]), game->ballTexture));
     changeAngle (game->ballList, &(game->bar[0]));
     changeAngle (game->ballList->next, &(game->bar[1]));
 
@@ -135,8 +140,8 @@ Game* createGame()
     game->level = "data/level.txt";
     int * level;
     level = loadLevel(game->level);
-    createLevelBricks(level, WINDOW_WIDTH, WINDOW_HEIGHT, &(game->brickList), &(game->bonusList), &(game->brickTexture), game->brickTextureFile, &(game->bonusTexture), game->bonusTextureFile);
-    
+    createLevelBricks(level, WINDOW_WIDTH, WINDOW_HEIGHT, &(game->brickList), &(game->bonusList), game->brickTexture, game->bonusTexture);
+
     /* Direction pour controler les barres && le menu */
     game->direction[0] = game->direction[1] = NONE;
     game->selection = NONE;
@@ -157,11 +162,11 @@ void drawGameBorder()
     glPopMatrix();
 }
 
-void drawGameBackground(Texture background)
+void drawGameBackground(GLuint backgroundTexture)
 {
     Point2D GAME_TOP_LEFT = PointXY((WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2);
 
-    glBindTexture(GL_TEXTURE_2D, background.texture[0]);
+    glBindTexture(GL_TEXTURE_2D, backgroundTexture);
     glPushMatrix();
         glTranslatef(GAME_TOP_LEFT.x + GAME_WIDTH/2, GAME_TOP_LEFT.y + GAME_HEIGHT/2, 1);
         glScalef(GAME_WIDTH-1, GAME_HEIGHT-1, 1);
@@ -178,11 +183,11 @@ void renderGame(Game* game, char timer, bool restart)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    drawWindowBackground(game->backgroundTexture->texture[1]);
+    drawWindowBackground(game->backgroundTexture[1]);
 
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
-        drawGameBackground(*(game->backgroundTexture));
+        drawGameBackground(game->backgroundTexture[0]);
         drawGameBorder();
 
         drawAllBalls(game->ballList);
@@ -194,8 +199,8 @@ void renderGame(Game* game, char timer, bool restart)
 
         drawAllBonus(game->bonusList);
 
-        drawLife(game->player[0], *(game->lifeTexture));
-        drawLife(game->player[1], *(game->lifeTexture));
+        drawLife(game->player[0], game->lifeTexture[0]);
+        drawLife(game->player[1], game->lifeTexture[0]);
 
         glColor3f(1.0, 1.0, 1.0);
     glPopMatrix();
@@ -280,7 +285,18 @@ int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick)
         return 0;
     }
     else
+    {
+        /*
+        ptBrick->ptTexture = ptBrick->ptTexture->next;
+        if (ptBrick->type != ADDLIFE)
+        {
+            if (ptBrick->life == 2)
+                ptBrick->ptTexture = &ptBrick->ptTexture[0];
+            else if (ptBrick->life == 1)
+                ptBrick->ptTexture = &ptBrick->ptTexture[2];
+        }*/
         return ptBrick->life;
+    }
 }
 
 Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtBrick ptBrick, PtPlayer player)
@@ -316,6 +332,7 @@ Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* bri
         if (ballPosition == BRICK)
         {
             brickManager(ballList, brickList, ptBrick);
+            printf("Brick Life = %d\n", ptBrick->life);
         }
     }
 
@@ -337,7 +354,7 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
         }
         
         ballPosition = positionDetection(ballList, bar1, bar2, brickList, NULL, player);
-        // If the ball hit something, then stop
+        // If the ball hit something (not a brick), then stop
         if(ballPosition == OUT_UP || ballPosition == OUT_DOWN || ballPosition == BAR_UP ||ballPosition == BAR_DOWN || ballPosition == WALL)
         {
             //playSound(channel, sound[0]);
@@ -345,13 +362,17 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
         }
             
         ptBrick = *brickList;
+        // Check all brick / ball collision
         for(; ptBrick != NULL; ptBrick = ptBrick->next)
         {
-            ballPosition = positionDetection(ballList, bar1, bar2, brickList, ptBrick, player);
-            if(ballPosition == BRICK)
+            if (ptBrick->life != 0)
             {
-                playSound(channel, sound[0]);
-                return ballPosition;
+                ballPosition = positionDetection(ballList, bar1, bar2, brickList, ptBrick, player);
+                if(ballPosition == BRICK)
+                {
+                    playSound(channel, sound[0]);
+                    return ballPosition;
+                }
             }
         } 
         ++channel;   
@@ -644,13 +665,19 @@ bool restartGame(Direction direction)
     return restart;
 }
 
+void freeGameTextures(Game* game)
+{
+    glDeleteTextures(MAX_TEXTURES, game->brickTexture);
+    glDeleteTextures(2, game->barTexture);
+    glDeleteTextures(2, game->ballTexture);
+    glDeleteTextures(2, game->lifeTexture);
+    glDeleteTextures(MAX_TEXTURES, game->backgroundTexture);
+    glDeleteTextures(MAX_TEXTURES, game->bonusTexture);
+}
+
 void freeGame(Game* game)
 {
-    freeTexture(&(game->backgroundTexture));
-    freeTexture(&(game->brickTexture));
-    freeTexture(&(game->barTexture));
-    freeTexture(&(game->lifeTexture));
-    freeTexture(&(game->bonusTexture));
+    freeGameTextures(game);
 
     deleteBalls(&(game->ballList));
     deleteBrickList(&(game->brickList));
