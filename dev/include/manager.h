@@ -43,6 +43,7 @@ typedef struct
     PtBrick brickList;
 
     Direction direction[2];
+    bool power[2];
     Position ballPosition;
 
     Direction selection;
@@ -74,6 +75,10 @@ bool playGame(Game* game, unsigned int AI);
 char gameLaunch(Uint32 startTime);
 void moveBarBall(PtBar bar, PtBall ball, Direction direction);
 bool restartGame(Direction direction);
+
+void slowGame(Game* game);
+void accelerateGame(Game* game);
+void powerManager(Game* game);
 
 void freeGameTextures(Game* game);
 void freeGame(Game* game);

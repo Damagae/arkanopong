@@ -6,12 +6,19 @@
 
 /** STRUCTURES **/
 
+typedef enum Power
+{
+    OFF, SLOW, FAST
+} Power;
+
 typedef struct
 {
   int num;
   char* name;
   int life;
   PtBar ptBar;
+  Power power;
+  int gauge;
 } Player, *PtPlayer;
 
 /** FUNCTIONS **/

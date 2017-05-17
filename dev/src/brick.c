@@ -9,8 +9,8 @@
 #include "bonus.h"
 #include "textures.h"
 
-#define HEIGHT_DEFAULT 40
-#define WIDTH_DEFAULT 90
+#define HEIGHT_DEFAULT 30
+#define WIDTH_DEFAULT 60
 #define LIFE_DEFAULT 3
 
 Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, GLuint brickTexture, GLuint* bonusTexture)
@@ -176,9 +176,9 @@ BrickType getType(int t) {
         case 4:
             return BARSPDUP;
         case 5:
-            return BALLSPDUP;
+            return SLOWPOW;
         case 6:
-            return BALLSPDDWN;
+            return FASTPOW;
         case 8:
             return ADDBALL;
         case 9:

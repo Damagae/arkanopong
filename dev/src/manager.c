@@ -142,8 +142,9 @@ Game* createGame()
     level = loadLevel(game->level);
     createLevelBricks(level, WINDOW_WIDTH, WINDOW_HEIGHT, &(game->brickList), &(game->bonusList), game->brickTexture, game->bonusTexture);
 
-    /* Direction pour controler les barres && le menu */
+    /* Direction pour controler les barres && le menu && savoir si un pouvoir est actif */
     game->direction[0] = game->direction[1] = NONE;
+    game->power[0] = game->power[1] = false;
     game->selection = NONE;
 
     game->sound[0] = createSound("data/audio/hit.wav");
@@ -158,6 +159,7 @@ void drawGameBorder()
     glPushMatrix();
         glTranslatef(GAME_TOP_LEFT.x + GAME_WIDTH/2, GAME_TOP_LEFT.y + GAME_HEIGHT/2, 1);
         glScalef(GAME_WIDTH-1, GAME_HEIGHT-1, 1);
+        glColor3f(0.0,0.0,0.0);
         drawSquareBorder();
     glPopMatrix();
 }
@@ -177,7 +179,6 @@ void drawGameBackground(GLuint backgroundTexture)
 
 void renderGame(Game* game, char timer, bool restart)
 {    
-
     glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -188,12 +189,16 @@ void renderGame(Game* game, char timer, bool restart)
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
         drawGameBackground(game->backgroundTexture[0]);
-        drawGameBorder();
+        //drawGameBorder();
 
         drawAllBalls(game->ballList);
 
         drawBar(*(game->player[0].ptBar), game->player[0].num);
         drawBar(*(game->player[1].ptBar), game->player[1].num);
+        if (game->player[0].power != OFF)
+            drawGauge(*(game->player[0].ptBar), game->player[0].gauge, game->player[0].num);
+        if (game->player[1].power != OFF)
+            drawGauge(*(game->player[1].ptBar), game->player[1].gauge, game->player[1].num);
 
         drawAllBricks(game->brickList);
 
@@ -387,6 +392,7 @@ Position runGame(Game* game)
     if (game->ballList == NULL)
         return -1;
     
+    powerManager(game);
     ballPosition = ballManager(game->ballList, &game->bar[0], &game->bar[1], &game->brickList, game->player, game->brickTexture, game->sound);
     bonusManager(&game->bonusList, &game->bar[0], &game->bar[1], &game->ballList);
 
@@ -439,10 +445,30 @@ bool gameEvent(Game* game, char timer)
               }
               break;
             case SDLK_UP:
-              game->selection = UP;
+                //game->selection = UP;
+                game->power[0] = true;
+                if (game->player[0].power == SLOW)
+                {
+                    slowGame(game);
+                }
+                if (game->player[0].power == FAST)
+                {
+                    accelerateGame(game);
+                }
+              break;
+            case SDLK_z:
+                game->power[1] = true;
+                if (game->player[1].power == SLOW)
+                {
+                    slowGame(game);
+                }
+                if (game->player[1].power == FAST)
+                {
+                    accelerateGame(game);
+                }
               break;
             case SDLK_DOWN:
-              game->selection = DOWN;
+              //game->selection = DOWN;
               break;
             case SDLK_RETURN:
                 if(game->end)
@@ -497,6 +523,26 @@ bool gameEvent(Game* game, char timer)
               right2 = 0;
               break;
             case SDLK_UP:
+                game->power[0] = false;
+                if (game->player[0].power == SLOW)
+                {
+                    accelerateGame(game);
+                }
+                if (game->player[0].power == FAST)
+                {
+                    slowGame(game);
+                }
+              break;
+            case SDLK_z:
+                game->power[1] = false;
+                if (game->player[1].power == SLOW)
+                {
+                    accelerateGame(game);
+                }
+                if (game->player[1].power == FAST)
+                {
+                    slowGame(game);
+                }
               break;
             case SDLK_DOWN:
               break;
@@ -660,6 +706,45 @@ bool restartGame(Direction direction)
     else if (direction == RIGHT)
         restart = false;
     return restart;
+}
+
+void slowGame(Game* game)
+{
+    Ball* tmp = game->ballList;
+    while (tmp != NULL)
+    {
+        tmp->speed = tmp->speed - 5;
+        tmp = tmp->next;
+    }
+}
+
+void accelerateGame(Game* game)
+{
+    Ball* tmp = game->ballList;
+    while (tmp != NULL)
+    {
+        tmp->speed = tmp->speed + 5;
+        tmp = tmp->next;
+    }
+}
+
+void powerManager(Game* game)
+{
+    int i;
+    for (i = 0; i < 2; i++)
+    {
+        if (game->player[i].power != OFF && game->power[i] == true)
+        {
+            if ( --(game->player[i].gauge) == 0)
+            {
+                if (game->player[i].power == SLOW)
+                    accelerateGame(game);
+                else if (game->player[i].power == FAST)
+                    slowGame(game);
+                game->player[i].power = OFF;
+            }
+        }
+    }
 }
 
 void freeGameTextures(Game* game)

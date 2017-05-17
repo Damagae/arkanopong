@@ -67,6 +67,30 @@ void drawBar(Bar bar, int numPlayer)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+/* For Power */
+void drawGauge(Bar bar, int gauge, int numPlayer)
+{
+    int yPos = 20;
+    if (numPlayer == 1)
+        yPos = -20;
+
+    glPushMatrix();
+        glTranslatef(bar.position.x, bar.position.y+yPos, 1);
+        glScalef(gauge, bar.height/2, 1);
+        glColor3f(1.0, 0.5, 0.0);
+        drawSquare();
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(bar.position.x, bar.position.y+yPos, 1);
+        glScalef(bar.width, bar.height/2, 1);
+        glColor3f(1.0, 0.0, 0.0);
+        drawSquareBorder();
+    glPopMatrix();
+
+    glColor3f(1.0, 1.0, 1.0);  
+}
+
 /* Bar edges position */
 
 float barTopPosition(PtBar ptBar)

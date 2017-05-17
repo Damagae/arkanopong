@@ -25,6 +25,7 @@ typedef enum Direction
 Bar createBar (Point2D position, GLuint texture);
 void moveBar(PtBar ptBar, Direction direction);
 void drawBar(Bar bar, int numPlayer);
+void drawGauge(Bar bar, int gauge, int numPlayer);
 
 float barTopPosition(PtBar ptBar);
 float barBottomPosition(PtBar ptBar);

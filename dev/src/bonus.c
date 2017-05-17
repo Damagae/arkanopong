@@ -66,9 +66,9 @@ int selectBonus(BrickType type)
             return 1;
         case BARSPDUP:
             return 1;
-        case BALLSPDUP:
+        case SLOWPOW:
             return 1;
-        case BALLSPDDWN:
+        case FASTPOW:
             return 1;
         case ADDBALL:
             return 1;
@@ -254,6 +254,18 @@ void addLife (Player* player)
         ++(player->life);
 }
 
+void slowPower(Player* player)
+{
+    player->power = SLOW;
+    player->gauge = 100;
+}
+
+void fastPower(Player* player)
+{
+    player->power = FAST;
+    player->gauge = 100;
+}
+
 void getBonus(Bonus bonus, PtBall* ballList)
 {
     if (bonus.type == BARUP)
@@ -275,5 +287,13 @@ void getBonus(Bonus bonus, PtBall* ballList)
     else if (bonus.type == ADDBALL)
     {
         moreBall(ballList, bonus.ptPlayer);
+    }
+    else if (bonus.type == SLOWPOW)
+    {
+        slowPower(bonus.ptPlayer);
+    }
+    else if (bonus.type == FASTPOW)
+    {
+        fastPower(bonus.ptPlayer);
     }
 }
