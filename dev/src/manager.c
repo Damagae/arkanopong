@@ -269,7 +269,7 @@ void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList
     }
 }
 
-int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick)
+int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick, GLuint* brickTexture)
 {
     if (ptBrick == NULL)
         return -1;
@@ -286,20 +286,18 @@ int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick)
     }
     else
     {
-        /*
-        ptBrick->ptTexture = ptBrick->ptTexture->next;
         if (ptBrick->type != ADDLIFE)
         {
             if (ptBrick->life == 2)
-                ptBrick->ptTexture = &ptBrick->ptTexture[0];
+                ptBrick->texture = brickTexture[3];
             else if (ptBrick->life == 1)
-                ptBrick->ptTexture = &ptBrick->ptTexture[2];
-        }*/
+                ptBrick->texture = brickTexture[0];
+        }
         return ptBrick->life;
     }
 }
 
-Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtBrick ptBrick, PtPlayer player)
+Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtBrick ptBrick, PtPlayer player, GLuint* brickTexture)
 {
     Position ballPosition;
 
@@ -331,15 +329,14 @@ Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* bri
     {
         if (ballPosition == BRICK)
         {
-            brickManager(ballList, brickList, ptBrick);
-            printf("Brick Life = %d\n", ptBrick->life);
+            brickManager(ballList, brickList, ptBrick, brickTexture);
         }
     }
 
     return ballPosition;
 }
 
-Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, Mix_Chunk ** sound)
+Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, GLuint* brickTexture, Mix_Chunk ** sound)
 {
     Position ballPosition = INSIDE;
     PtBrick ptBrick;
@@ -353,7 +350,7 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
             ++channel;
         }
         
-        ballPosition = positionDetection(ballList, bar1, bar2, brickList, NULL, player);
+        ballPosition = positionDetection(ballList, bar1, bar2, brickList, NULL, player, brickTexture);
         // If the ball hit something (not a brick), then stop
         if(ballPosition == OUT_UP || ballPosition == OUT_DOWN || ballPosition == BAR_UP ||ballPosition == BAR_DOWN || ballPosition == WALL)
         {
@@ -367,7 +364,7 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
         {
             if (ptBrick->life != 0)
             {
-                ballPosition = positionDetection(ballList, bar1, bar2, brickList, ptBrick, player);
+                ballPosition = positionDetection(ballList, bar1, bar2, brickList, ptBrick, player, brickTexture);
                 if(ballPosition == BRICK)
                 {
                     playSound(channel, sound[0]);
@@ -390,7 +387,7 @@ Position runGame(Game* game)
     if (game->ballList == NULL)
         return -1;
     
-    ballPosition = ballManager(game->ballList, &game->bar[0], &game->bar[1], &game->brickList, game->player, game->sound);
+    ballPosition = ballManager(game->ballList, &game->bar[0], &game->bar[1], &game->brickList, game->player, game->brickTexture, game->sound);
     bonusManager(&game->bonusList, &game->bar[0], &game->bar[1], &game->ballList);
 
     return ballPosition;
