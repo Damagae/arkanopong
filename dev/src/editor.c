@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <SDL/SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -43,21 +44,49 @@ void drawGrid()
     glPopMatrix();
 }
 
-void drawBrickPreview(GLuint texture)
+void drawBrickPreview(GLuint texture, int position)
 {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
-        glTranslatef(404, 485, 1);
+        glTranslatef(146+66*(position%12), 355+(33*(position/12)), 1);
         glScalef(WIDTH_DEFAULT, HEIGHT_DEFAULT, 1);
         glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 }
 
-void renderEditor(TextureList editorTextures)
+void drawTab(int* tab, TextureList editorTextures)
+{
+    int i;
+
+    glEnable(GL_TEXTURE_2D);
+    for (i = 0; i < 120; ++i)
+    {
+        if (tab[i] != 0)
+        {
+            glBindTexture(GL_TEXTURE_2D, editorTextures->texture[tab[i]+2]);
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glPushMatrix();
+                glTranslatef(146+66*(i%12), 355+(33*(i/12)), 1);
+                glScalef(WIDTH_DEFAULT, HEIGHT_DEFAULT, 1);
+                glRotatef(180, 0.0, 0.0, 1.0);
+                drawSquareTexture();
+            glPopMatrix();
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glDisable(GL_BLEND);
+        }
+    }
+    glDisable(GL_TEXTURE_2D);
+}
+
+void renderEditor(TextureList editorTextures, int position, int* tab, int selection)
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -74,7 +103,8 @@ void renderEditor(TextureList editorTextures)
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 
-    drawBrickPreview(editorTextures->texture[2]);
+    drawTab(tab, editorTextures);
+    drawBrickPreview(editorTextures->texture[selection+2], position);
 
     drawGrid();
 
@@ -83,7 +113,39 @@ void renderEditor(TextureList editorTextures)
 
 /* Interaction functions */
 
-bool editorEvent(State* state)
+// UP - 0 / DOWN = 1 / LEFT = 2 / RIGHT = 3
+int changePosition(int direction, int position)
+{
+    if (direction == 0 && (position-12)>=0)
+        return -12;
+    else if (direction == 1 && (position+12)<=119)
+        return 12;
+    else if (direction == 2 && (position-1)>=0)
+        return -1;
+    else if (direction == 3 && (position+1)<=119)
+        return +1;
+    else return 0;
+}
+
+int switchSelection(int selection)
+{
+    switch (selection)
+    {
+        case 0 :
+            return 1;
+            break;
+        case 1 :
+            return 2;
+            break;
+        case 2 :
+            return 0;
+            break;
+        default :
+            return 1;
+    }
+}
+
+bool editorEvent(State* state, int* position, int *tab, int* selection)
 {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
@@ -100,14 +162,22 @@ bool editorEvent(State* state)
                 case SDLK_ESCAPE:
                     break;
                 case SDLK_RETURN:
+                    tab[*position] = *selection;
+                    break;
+                case SDLK_SPACE:
+                    *selection = switchSelection(*selection);
                     break;
                 case SDLK_UP:
+                    *position += changePosition(0, *position);
                     break;
                 case SDLK_DOWN:
+                    *position += changePosition(1, *position);
                     break;
                 case SDLK_LEFT:
+                    *position += changePosition(2, *position);
                     break;
                 case SDLK_RIGHT:
+                    *position += changePosition(3, *position);
                     break;
                 default :
                     break;
@@ -137,18 +207,29 @@ bool editorManager(State* state)
     TextureList editorTextures = NULL;
     editorTextures = addTexture(&editorTextures, "data/img/background/greyBackground.jpg");
     addTexture(&editorTextures, "data/img/background/fond.jpg");
+    addTexture(&editorTextures, "data/img/delete.png");
     addTexture(&editorTextures, "data/img/brick/P_lego_4x2.png");
     addTexture(&editorTextures, "data/img/brick/R_lego_4x2.png");
 
-    bool inEditor = true;
+    int tab[120];
+    int position = 0;
+    int i;
+    
+    for (i=0; i < 120; i++)
+    {
+        tab[i] = 0;
+    }
 
+    int selection = 1;
+
+    bool inEditor = true;
     while(inEditor)
     {
         Uint32 startTime = SDL_GetTicks();
 
-        renderEditor(editorTextures);
+        renderEditor(editorTextures, position, tab, selection);
 
-        inEditor = editorEvent(state);
+        inEditor = editorEvent(state, &position, tab, &selection);
 
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
         if (elapsedTime < FRAMERATE_MILLISECONDS)

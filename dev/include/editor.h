@@ -15,10 +15,13 @@
 /** FUNCTIONS **/
 
 void drawGrid();
-void drawBrickPreview(GLuint texture);
-void renderEditor(TextureList editorTextures);
+void drawBrickPreview(GLuint texture, int position);
+void drawTab(int* tab, TextureList editorTextures);
+void renderEditor(TextureList editorTextures, int position, int* tab, int selection);
 
-bool editorEvent(State* state);
+int changePosition(int direction, int position);
+int switchSelection(int selection);
+bool editorEvent(State* state, int* position, int *tab, int* selection);
 bool editorManager(State* state);
 
 #endif
