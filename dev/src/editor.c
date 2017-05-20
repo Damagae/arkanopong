@@ -20,9 +20,11 @@ void drawGrid()
 {
     glColor3f(1.0, 0.0, 0.0);
     glPushMatrix();
-        glTranslatef(0, 0, 1);
-        glScalef(10, 10, 1);
-        drawLine(100, 100, GAME_WIDTH, 100);
+        glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 1);
+        glScalef(GAME_WIDTH, GAME_HEIGHT, 1);
+        drawSquare();
+        glColor3f(0.0, 0.0, 1.0);
+        drawLine(-0.5, 0, 0.5, 0);
     glPopMatrix();
 }
 
@@ -40,23 +42,24 @@ void renderEditor(TextureList editorTextures)
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
         drawGameBackground(editorTextures->texture[1]);
-        drawGrid();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
             
+    drawGrid();
 
     SDL_GL_SwapBuffers();
 }
 
 /* Interaction functions */
 
-bool editorEvent()
+bool editorEvent(State* state)
 {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
       switch(e.type)
       {
         case SDL_QUIT:
+            *state = QUIT;
             return false;
             break;          
 
@@ -98,7 +101,7 @@ bool editorEvent()
     return true;
 }
 
-bool editorManager()
+bool editorManager(State* state)
 {
     TextureList editorTextures = NULL;
     editorTextures = addTexture(&editorTextures, "data/img/background/greyBackground.jpg");
@@ -116,7 +119,7 @@ bool editorManager()
 
         renderEditor(editorTextures);
 
-        inEditor = editorEvent();
+        inEditor = editorEvent(state);
 
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
         if (elapsedTime < FRAMERATE_MILLISECONDS)

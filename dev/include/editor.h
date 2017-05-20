@@ -16,7 +16,7 @@
 
 void renderEditor(TextureList editorTextures);
 
-bool editorEvent();
-bool editorManager();
+bool editorEvent(State* state);
+bool editorManager(State* state);
 
 #endif

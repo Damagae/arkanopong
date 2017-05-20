@@ -419,6 +419,7 @@ bool gameEvent(Game* game, char timer, State* state)
       
       switch(e.type) {
         case SDL_QUIT:
+            *state = QUIT;
             inGame = false;
             break;          
 

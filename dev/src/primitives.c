@@ -10,12 +10,12 @@
 
 /** Fonctions de dessin canonique. **/
 
-void drawLine(int x1, int y1, int x2, int y2)
+void drawLine(float x1, float y1, float x2, float y2)
 {
-    glBegin(GL_LINE);
+    glBegin(GL_LINES);
 
-    glVertex2f(-1, 0);
-    glVertex2f(1, 0);
+        glVertex2f(x1, y1);
+        glVertex2f(x2, y2);
 
     glEnd();
 }

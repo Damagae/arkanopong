@@ -48,8 +48,9 @@ int main(int argc, char** argv)
       }
       else if (state == EDITOR)
       {
-        if (editorManager() == false)
-          state = MENU;
+        if (editorManager(&state) == false)
+          if (state != QUIT)
+            state = MENU;
       }
     }
   }
