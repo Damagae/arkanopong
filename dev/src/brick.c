@@ -9,8 +9,8 @@
 #include "bonus.h"
 #include "textures.h"
 
-#define HEIGHT_DEFAULT 30
-#define WIDTH_DEFAULT 60
+#define HEIGHT_DEFAULT 33
+#define WIDTH_DEFAULT 66
 #define LIFE_DEFAULT 3
 
 Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, GLuint brickTexture, GLuint* bonusTexture)

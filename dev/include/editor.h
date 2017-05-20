@@ -14,6 +14,8 @@
 
 /** FUNCTIONS **/
 
+void drawGrid();
+void drawBrickPreview(GLuint texture);
 void renderEditor(TextureList editorTextures);
 
 bool editorEvent(State* state);

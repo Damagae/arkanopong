@@ -14,18 +14,47 @@ extern int WINDOW_HEIGHT;
 extern int GAME_WIDTH;
 extern int GAME_HEIGHT;
 
+#define HEIGHT_DEFAULT 33
+#define WIDTH_DEFAULT 66
+
 /* Drawing Functions */
 
 void drawGrid()
 {
+    int i, j;
+    float x, y;
     glColor3f(1.0, 0.0, 0.0);
     glPushMatrix();
         glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 1);
         glScalef(GAME_WIDTH, GAME_HEIGHT, 1);
-        drawSquare();
+        //drawSquare();
         glColor3f(0.0, 0.0, 1.0);
-        drawLine(-0.5, 0, 0.5, 0);
+        for (i = 0; i <= 10; ++i)
+        {
+            y = -0.2+0.04*i;
+            drawLine(-0.48, y, -0.48+(12*0.08), y);
+        }
+        for (j = 0; j <= 12; ++j)
+        {
+            x = -0.48+0.08*j;
+            drawLine(x, -0.2, x, 0.2);
+        }
+    glColor3f(1.0, 1.0, 1.0);
     glPopMatrix();
+}
+
+void drawBrickPreview(GLuint texture)
+{
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glPushMatrix();
+        glTranslatef(404, 485, 1);
+        glScalef(WIDTH_DEFAULT, HEIGHT_DEFAULT, 1);
+        glRotatef(180, 0.0, 0.0, 1.0);
+        drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
 }
 
 void renderEditor(TextureList editorTextures)
@@ -44,7 +73,9 @@ void renderEditor(TextureList editorTextures)
         drawGameBackground(editorTextures->texture[1]);
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
-            
+
+    drawBrickPreview(editorTextures->texture[2]);
+
     drawGrid();
 
     SDL_GL_SwapBuffers();
@@ -108,8 +139,6 @@ bool editorManager(State* state)
     addTexture(&editorTextures, "data/img/background/fond.jpg");
     addTexture(&editorTextures, "data/img/brick/P_lego_4x2.png");
     addTexture(&editorTextures, "data/img/brick/R_lego_4x2.png");
-
-
 
     bool inEditor = true;
 

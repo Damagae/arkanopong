@@ -19,7 +19,7 @@ typedef enum Button
 
 TextureList createMenuTextures();
 void drawSplashScreen(GLuint texture);
-void drawWindowBackground();
+void drawWindowBackground(GLuint texture);
 void drawLogo(GLuint texture);
 void drawHowToPlay(GLuint texture);
 void drawMenuText();
