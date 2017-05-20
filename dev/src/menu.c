@@ -215,12 +215,19 @@ State menuManager(unsigned int* AI, int* level)
     menuTextures = addTexture(&menuTextures, "data/img/menu/splashscreen.jpg");
     addTexture(&menuTextures, "data/img/menu/menuBackground.jpg");
 
-    int numLvl;
+    int numLvl, i;
     char ** levelFiles = levelList(&numLvl);
-    printf("%s\n",levelFiles[0]);
-    printf("%s\n",levelFiles[1]);
-    printf("%s\n",levelFiles[2]);
-
+    char* levels[numLvl];
+    for (i = 0; i <= numLvl; ++i)
+    {
+        levels[i] = levelFiles[i];
+    }
+    free(levelFiles);
+    
+    printf("%s\n",levels[0]);
+    printf("%s\n",levels[1]);
+    printf("%s\n",levels[2]);
+    printf("test\n");
     Button selection = PVP;
     int difficulty = 1;
     int lvl = 1;
@@ -228,10 +235,6 @@ State menuManager(unsigned int* AI, int* level)
     while(state == MENU || state == SPLASH)
     {
         Uint32 startTime = SDL_GetTicks();
-
-            printf("%s\n",levelFiles[0]);
-    printf("%s\n",levelFiles[1]);
-    printf("%s\n",levelFiles[2]);
 
         renderMenu(menuTextures, state, selection, difficulty, lvl, levelFiles);
 
@@ -243,8 +246,6 @@ State menuManager(unsigned int* AI, int* level)
             SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
         }
     }
-
-    free(levelFiles);
 
     // If AI Selected
     if(state == PLAY && selection == COMPUTER)

@@ -10,7 +10,7 @@
     #include <sys/types.h>
 #endif
 
-#define MAX_SIZE 1024
+#define MAX_SIZE 200
 
 int digitOrSpace (char c)
 {
