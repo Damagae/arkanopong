@@ -25,8 +25,8 @@ TextureList createMenuTextures();
 void drawSplashScreen(GLuint texture);
 void drawWindowBackground();
 void drawMenuText();
-void drawMenuButton(Button selection, int difficulty, int lvl, char** levelFiles);
-void renderMenu(TextureList menuTextures, State state, Button selection, int difficulty, int lvl, char** levelFiles);
+void drawMenuButton(Button selection, int difficulty, int lvl);
+void renderMenu(TextureList menuTextures, State state, Button selection, int difficulty, int lvl);
 
 void selectDifficulty(bool RIGHT, Button* selection, int* difficulty);
 void selectButton(bool UP, Button* selection);

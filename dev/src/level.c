@@ -124,7 +124,7 @@ int * loadLevel (const char * filepath)
     return NULL;
 }
 
-/* NumFiles is here to get the length of levelList */
+/* NumFiles is here to get the length of levelList*/
 char ** levelList(int* numFiles)
 {
     int i = 0;
@@ -165,7 +165,7 @@ char ** levelList(int* numFiles)
         return NULL;
     }
 
-    *numFiles = i-1;
+    *numFiles = i;
     return list;
 }
 

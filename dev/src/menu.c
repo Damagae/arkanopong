@@ -3,6 +3,7 @@
 #include <GL/glu.h>
 #include <time.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "menu.h"
 #include "primitives.h"
@@ -59,10 +60,14 @@ void drawWindowBackground(GLuint texture)
     glDisable(GL_TEXTURE_2D);
 }
 
-void drawMenuButton(Button selection, int difficulty, int lvl, char** levelFiles)
+void drawMenuButton(Button selection, int difficulty, int lvl)
 {
     bool selected[4];
     int i;
+    char level[8];
+    strcpy(level, "LEVEL ");
+    level[6] = '1'+lvl;
+
     for (i = 0; i < 4; ++i)
     {
         if (selection != i)
@@ -78,30 +83,29 @@ void drawMenuButton(Button selection, int difficulty, int lvl, char** levelFiles
     else
         drawButton(250, 400, "HARD", false);
     drawButton(250, 550, "LEVEL", selected[2]);
-    drawButton(250, 650, levelFiles[lvl], false);
+    drawButton(250, 650, level, false);
     drawButton(250, 800, "EXIT", selected[3]);
 }
 
 void drawMenuText()
 {
     glColor3f(0.0, 0.0, 0.0);
-    drawText(250,950,"PRESS ENTER TO CONTINUE", 6);
+    drawText(250,900,"PRESS ENTER TO CONTINUE", 6);
 }
 
-void renderMenu(TextureList menuTextures, State state, Button selection, int difficulty, int lvl, char** levelFiles)
+void renderMenu(TextureList menuTextures, State state, Button selection, int difficulty, int lvl)
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glColor3f(1.0, 1.0, 1.0);
-
     glPushMatrix();
         if(state == SPLASH)
             drawSplashScreen(menuTextures->texture[0]);
         else if(state == MENU)
         {
             drawWindowBackground(menuTextures->texture[1]);
-            drawMenuButton(selection, difficulty, lvl, levelFiles);
+            drawMenuButton(selection, difficulty, lvl);
             drawMenuText();
         }
     glPopMatrix();
@@ -146,7 +150,7 @@ void selectLevel(bool RIGHT, Button* selection, int* lvl, int numLvl)
     {
         if(RIGHT)
         {
-            if (*lvl < numLvl)
+            if (*lvl < numLvl-1)
                 ++(*lvl);
         }
         else
@@ -215,28 +219,18 @@ State menuManager(unsigned int* AI, int* level)
     menuTextures = addTexture(&menuTextures, "data/img/menu/splashscreen.jpg");
     addTexture(&menuTextures, "data/img/menu/menuBackground.jpg");
 
-    int numLvl, i;
-    char ** levelFiles = levelList(&numLvl);
-    char* levels[numLvl];
-    for (i = 0; i <= numLvl; ++i)
-    {
-        levels[i] = levelFiles[i];
-    }
-    free(levelFiles);
+    int numLvl;
+    free(levelList(&numLvl));
     
-    printf("%s\n",levels[0]);
-    printf("%s\n",levels[1]);
-    printf("%s\n",levels[2]);
-    printf("test\n");
     Button selection = PVP;
     int difficulty = 1;
-    int lvl = 1;
+    int lvl = 0;
 
     while(state == MENU || state == SPLASH)
     {
         Uint32 startTime = SDL_GetTicks();
 
-        renderMenu(menuTextures, state, selection, difficulty, lvl, levelFiles);
+        renderMenu(menuTextures, state, selection, difficulty, lvl);
 
         state = menuEvent(state, &selection, &difficulty, &lvl, numLvl);
 
