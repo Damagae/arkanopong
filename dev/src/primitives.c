@@ -10,14 +10,24 @@
 
 /** Fonctions de dessin canonique. **/
 
+void drawLine(int x1, int y1, int x2, int y2)
+{
+    glBegin(GL_LINE);
+
+    glVertex2f(-1, 0);
+    glVertex2f(1, 0);
+
+    glEnd();
+}
+
 void drawSquare()
 {
     glBegin(GL_QUADS);
 
-    glVertex2f(-0.5, 0.5);
-    glVertex2f(0.5, 0.5);
-    glVertex2f(0.5, -0.5);
-    glVertex2f(-0.5, -0.5);
+        glVertex2f(-0.5, 0.5);
+        glVertex2f(0.5, 0.5);
+        glVertex2f(0.5, -0.5);
+        glVertex2f(-0.5, -0.5);
 
     glEnd();
 }

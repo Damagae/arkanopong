@@ -11,6 +11,7 @@
 #include "level.h"
 #include "ai.h"
 #include "audio.h"
+#include "utilities.h"
 
 #define MAX_TEXTURES 10
 
@@ -70,8 +71,8 @@ void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList
 Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtBrick ptBrick, PtPlayer player, GLuint* brickTexture);
 Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, GLuint* brickTexture, Mix_Chunk ** sound);
 Position runGame(Game* game);
-bool gameEvent(Game* game, char timer);
-bool playGame(Game* game, unsigned int AI);
+bool gameEvent(Game* game, char timer, State* state);
+bool playGame(Game* game, unsigned int AI, State* state);
 char gameLaunch(Uint32 startTime);
 void moveBarBall(PtBar bar, PtBall ball, Direction direction);
 bool restartGame(Direction direction);

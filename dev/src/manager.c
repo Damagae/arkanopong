@@ -410,7 +410,7 @@ Position runGame(Game* game)
     return ballPosition;
 }
 
-bool gameEvent(Game* game, char timer)
+bool gameEvent(Game* game, char timer, State* state)
 {
     bool inGame = true;
 
@@ -426,7 +426,6 @@ bool gameEvent(Game* game, char timer)
           switch(e.key.keysym.sym)
           {
             case SDLK_ESCAPE:
-                inGame = false;
                 break;
             case SDLK_LEFT:
               if(right1 == 1) {
@@ -511,7 +510,11 @@ bool gameEvent(Game* game, char timer)
 
         case SDL_KEYUP:
           switch(e.key.keysym.sym)
-          {
+          {            
+            case SDLK_ESCAPE:
+                *state = MENU;
+                inGame = false;
+                break;
             case SDLK_LEFT:
               if (right1 == 2) {
                 right1 = 1;
@@ -602,7 +605,7 @@ bool gameEvent(Game* game, char timer)
     return inGame;
 }
 
-bool playGame(Game* game, unsigned int AI)
+bool playGame(Game* game, unsigned int AI, State* state)
 {
     bool inGame = true;
     bool restart = false;
@@ -667,7 +670,7 @@ bool playGame(Game* game, unsigned int AI)
             restart = restartGame(game->selection);
         }
 
-        inGame = gameEvent(game, timer);
+        inGame = gameEvent(game, timer, state);
         
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
         if (elapsedTime < FRAMERATE_MILLISECONDS)

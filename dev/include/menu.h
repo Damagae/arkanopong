@@ -3,19 +3,15 @@
 
 #include "textures.h"
 #include "bool.h"
+#include "utilities.h"
 
 /** STRUCTURES **/
 
-typedef enum State
-{
-    QUIT, SPLASH, MENU, PLAY
-} State;
-
 typedef enum Button
 {
-    PVP = 0,
-    COMPUTER = 1,
-    LVL = 2,
+    PLAY_GAME = 0,
+    LVL = 1,
+    EDIT = 2,
     EXIT = 3
 } Button;
 
@@ -24,14 +20,17 @@ typedef enum Button
 TextureList createMenuTextures();
 void drawSplashScreen(GLuint texture);
 void drawWindowBackground();
+void drawLogo(GLuint texture);
+void drawHowToPlay(GLuint texture);
 void drawMenuText();
-void drawMenuButton(Button selection, int difficulty, int lvl);
-void renderMenu(TextureList menuTextures, State state, Button selection, int difficulty, int lvl);
+void drawMenuButton(bool* selected, char* mode, char* levelTxt);
+void renderMenu(TextureList menuTextures, State state, bool* selected, char* mode, char* levelTxt);
 
-void selectDifficulty(bool RIGHT, Button* selection, int* difficulty);
+void selectMode(bool RIGHT, Button* selection, int* gameMode);
 void selectButton(bool UP, Button* selection);
 void selectLevel(bool RIGHT, Button* selection, int* lvl, int numLvl);
+void textManager(int gameMode, int lvl, char* mode, char* levelTxt);
 State menuEvent(State state, Button* selection, int* dificulty, int* lvl, int numLvl);
-State menuManager(unsigned int* AI, int* level);
+State menuManager(State state, unsigned int* AI, int* level);
 
 #endif
