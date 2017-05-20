@@ -4,6 +4,6 @@
 int * loadLevel (char *filepath);
 int digitOrSpace(char c);
 int compatibleType(int nb);
-char * levelList();
+char ** levelList(int* numFiles);
 
 #endif

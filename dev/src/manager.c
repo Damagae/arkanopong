@@ -72,16 +72,30 @@ float randomNumber(float min, float max)
     return fresult;
 }
 
-Game* createGame()
+Game* createGame(int lvl)
 {
-    levelList();
+    int numFiles;
+    char ** levelFiles = levelList(&numFiles);
 
     Game* game = malloc(sizeof(Game));
     if (game == NULL)    return NULL;
 
+    /* Etat du jeu */
     game->start = false;
     game->pause = false;
     game->end = false;
+
+    /* Lecture du level */
+    game->level = levelFiles[lvl];
+    int * level;
+    level = loadLevel(game->level);
+    free(levelFiles);
+
+    if (level == NULL)
+    {
+        fprintf(stderr, "Fermeture du programme\n");
+        return NULL;
+    }
 
     /* Création des textures */
     game->brickTextureFile[0] = "data/img/brick/B_lego_4x2.png";
@@ -137,9 +151,6 @@ Game* createGame()
 
     /** Creation des briques **/
     game->brickList = NULL;
-    game->level = "data/level.txt";
-    int * level;
-    level = loadLevel(game->level);
     createLevelBricks(level, WINDOW_WIDTH, WINDOW_HEIGHT, &(game->brickList), &(game->bonusList), game->brickTexture, game->bonusTexture);
 
     /* Direction pour controler les barres && le menu && savoir si un pouvoir est actif */
@@ -414,6 +425,9 @@ bool gameEvent(Game* game, char timer)
         case SDL_KEYDOWN:
           switch(e.key.keysym.sym)
           {
+            case SDLK_ESCAPE:
+                inGame = false;
+                break;
             case SDLK_LEFT:
               if(right1 == 1) {
                 left1 = 2;
@@ -609,7 +623,7 @@ bool playGame(Game* game, unsigned int AI)
     }
     
     /* FOR COLLISION TEST 
-        Ball* ball = createBall(PointXY(545,600), VectorXY(0,-1), &game->player[0]);
+        Ball* ball = createBall(PointXY(525,890), VectorXY(0,-1), &game->player[0], game->ballTexture);
         addBall(&game->ballList, ball);
     */
 

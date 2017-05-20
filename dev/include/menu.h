@@ -8,9 +8,16 @@
 
 typedef enum State
 {
-    EXIT, SPLASH, MENU, PLAY
+    QUIT, SPLASH, MENU, PLAY
 } State;
 
+typedef enum Button
+{
+    PVP = 0,
+    COMPUTER = 1,
+    LVL = 2,
+    EXIT = 3
+} Button;
 
 /** FONCTIONS **/
 
@@ -18,10 +25,13 @@ TextureList createMenuTextures();
 void drawSplashScreen(GLuint texture);
 void drawWindowBackground();
 void drawMenuText();
-void drawMenuButton(bool* selection, bool direction);
-void selectButton(bool UP, bool* button);
-void renderMenu(TextureList menuTextures, State state, bool* selection, bool direction);
-State menuEvent(State state, bool* button, bool* direction);
-State menuManager(unsigned int* AI);
+void drawMenuButton(Button selection, int difficulty, int lvl, char** levelFiles);
+void renderMenu(TextureList menuTextures, State state, Button selection, int difficulty, int lvl, char** levelFiles);
+
+void selectDifficulty(bool RIGHT, Button* selection, int* difficulty);
+void selectButton(bool UP, Button* selection);
+void selectLevel(bool RIGHT, Button* selection, int* lvl, int numLvl);
+State menuEvent(State state, Button* selection, int* dificulty, int* lvl, int numLvl);
+State menuManager(unsigned int* AI, int* level);
 
 #endif

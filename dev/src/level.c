@@ -54,7 +54,8 @@ int * loadLevel (const char * filepath)
     }
 
     strcpy(path, cwd);
-    strcat(path, "/data/level/level1.txt");
+    strcat(path, "/data/level/");
+    strcat(path, filepath);
 
     lvl = malloc(sizeof(int) * MAX_SIZE);
     if (lvl == NULL)
@@ -123,7 +124,8 @@ int * loadLevel (const char * filepath)
     return NULL;
 }
 
-char ** levelList()
+/* NumFiles is here to get the length of levelList */
+char ** levelList(int* numFiles)
 {
     int i = 0;
     DIR *dir;
@@ -132,7 +134,7 @@ char ** levelList()
     char cwd[MAX_SIZE];
     char ** list;
 
-    list = malloc(MAX_SIZE * MAX_SIZE * sizeof(char));
+    list = malloc(10 * MAX_SIZE * sizeof(char));
     if (list == NULL)
     {
         fprintf(stderr, "Erreur de l'allocation.\n");
@@ -150,8 +152,11 @@ char ** levelList()
     if ((dir = opendir (path)) != NULL) {
     /* print all the files and directories within directory */
     while ((ent = readdir (dir)) != NULL) {
-            list[i] = ent->d_name;  
-            ++i;
+            list[i] = ent->d_name;
+            if (list[i][0] != '.')
+            {
+                ++i;
+            }
     }
         closedir (dir);
     } else {
@@ -160,7 +165,7 @@ char ** levelList()
         return NULL;
     }
 
+    *numFiles = i-1;
     return list;
 }
-
 

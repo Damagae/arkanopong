@@ -17,8 +17,10 @@ int LIFE_MAX = 6;
 
 int main(int argc, char** argv)
 {
+  /* Parametres de la partie */
   unsigned int AI = 0;
-  bool play = true;
+  bool play = false;
+  int level = 0;
 
   initSDL();
   initAudio();
@@ -26,14 +28,16 @@ int main(int argc, char** argv)
 
   Mix_Music * backgroundMusic = createMusic("data/audio/lego.mp3");
   playMusic(backgroundMusic);
-  if (menuManager(&AI) != EXIT)
+
+  if (menuManager(&AI, &level) != QUIT)
   {
-    while (play)
+    do
     {
-      Game* game = createGame();
-      play = playGame(game, AI);
+      Game* game = createGame(level);
+      if (game != NULL)
+        play = playGame(game, AI);
       freeGame(game);
-    }
+    } while (play);
   }
 
   freeMusic(backgroundMusic);

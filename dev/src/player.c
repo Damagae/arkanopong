@@ -20,7 +20,7 @@ Player createPlayer(int num, char* name, PtBar ptBar)
     player.name = name;
     player.life = LIFE_MAX;
     player.ptBar = ptBar;
-    player.power = SLOW;
+    player.power = OFF;
     player.gauge = 100;
 
     return player;

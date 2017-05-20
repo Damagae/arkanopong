@@ -17,8 +17,8 @@ Brick Types :
 2 - Bar Up
 3 - Bar Down
 4 - Bar speed up
-5 - Ball speed up
-6 - Ball speed down
+5 - Slow Power
+6 - Accelerate Power
 7 - Ball size up
 8 - More  ball
 9 - Add Life
