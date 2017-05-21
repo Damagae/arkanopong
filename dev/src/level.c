@@ -202,8 +202,7 @@ void createLevel(int* level)
     free(levelList(&numFiles));
     printf("test\n");
     numFiles += 1;
-    nbr[0] = (char) numFiles;
-    sprintf(nbr, "%d", *numFiles);
+    sprintf(nbr, "%d", numFiles);
     strcat(filepath, nbr);
     strcat(filepath, ".txt");
 
