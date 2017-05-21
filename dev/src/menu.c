@@ -15,13 +15,15 @@ static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 
+int animate = 0;
+
 /* DRAWING FUNCTIONS */
 
 TextureList createMenuTextures()
 {
     TextureList menuTextures = NULL;
     menuTextures = addTexture(&menuTextures, "data/img/menu/splashscreen.jpg");
-    addTexture(&menuTextures, "data/img/menu/menuBackground.jpg");
+    addTexture(&menuTextures, "data/img/background/greyBackground.jpg");
     addTexture(&menuTextures, "data/img/menu/ARKANOPONG.png");
     addTexture(&menuTextures, "data/img/menu/howTo.png");
     addTexture(&menuTextures, "data/img/menu/button.jpg");
@@ -96,7 +98,7 @@ void drawMenuButton(GLuint texture, int x, int y, bool selected, char* txt)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
-        glTranslatef(x, y, 1);
+        glTranslatef(x-5*animate, y, 1);
         glScalef(280,100,1);
         drawSquareTexture();
     glPopMatrix();
@@ -104,7 +106,7 @@ void drawMenuButton(GLuint texture, int x, int y, bool selected, char* txt)
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 
-    drawText(x-15, y, txt, 6);
+    drawText(x-15-5*animate, y, txt, 6);
     glColor4f(1.0,1.0,1.0,1.0);
 }
 
@@ -117,7 +119,7 @@ void drawArrow(GLuint texture, int x, int y, int orientation, bool selected)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
-        glTranslatef(x, y, 1);
+        glTranslatef(x-5*animate, y, 1);
         glScalef(60,60,1);
         glRotatef(orientation, 0.0, 0.0, 1.0);
         drawSquareTexture();
@@ -131,7 +133,7 @@ void drawArrow(GLuint texture, int x, int y, int orientation, bool selected)
 void drawMenuText()
 {
     glColor3f(0.0, 0.0, 0.0);
-    drawText(250,900,"PRESS ENTER TO CONTINUE", 6);
+    drawText(250-5*animate,900,"PRESS ENTER TO CONTINUE", 6);
 }
 
 void drawLogo(GLuint texture)
@@ -140,7 +142,7 @@ void drawLogo(GLuint texture)
 
     glBindTexture(GL_TEXTURE_2D, texture);
     glPushMatrix();
-        glTranslatef(WINDOW_WIDTH/2, 100, 1);
+        glTranslatef(WINDOW_WIDTH/2, 100-2*animate, 1);
         glScalef(-766,143,1);
         glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
@@ -157,7 +159,7 @@ void drawHowToPlay(GLuint texture)
 
     glBindTexture(GL_TEXTURE_2D, texture);
     glPushMatrix();
-        glTranslatef(WINDOW_WIDTH-300, 500, 1);
+        glTranslatef(WINDOW_WIDTH-300+5*animate, 500, 1);
         glScalef(-300,600,1);
         glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
@@ -170,24 +172,29 @@ void drawHowToPlay(GLuint texture)
 
 void renderMenu(TextureList menuTextures, State state, bool* selected, char* mode, char* levelTxt, int lvl, int numLvl)
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glColor3f(1.0, 1.0, 1.0);
-    glPushMatrix();
-        if(state == SPLASH)
-            drawSplashScreen(menuTextures->texture[0]);
-        else if(state == MENU)
-        {
-            drawWindowBackground(menuTextures->texture[1]);
-            drawLogo(menuTextures->texture[2]);
-            drawHowToPlay(menuTextures->texture[3]);
-            drawMenuSelection(selected, mode, levelTxt, menuTextures, lvl, numLvl);
-            drawMenuText();
-        }
-    glPopMatrix();
-        
-    SDL_GL_SwapBuffers();
+    do
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glColor3f(1.0, 1.0, 1.0);
+        glPushMatrix();
+            if(state == SPLASH)
+                drawSplashScreen(menuTextures->texture[0]);
+            else if(state == MENU || state == GAME || state == EDITOR)
+            {
+                drawWindowBackground(menuTextures->texture[1]);
+                drawLogo(menuTextures->texture[2]);
+                drawHowToPlay(menuTextures->texture[3]);
+                drawMenuSelection(selected, mode, levelTxt, menuTextures, lvl, numLvl);
+                drawMenuText();
+            }
+        glPopMatrix();
+            
+        SDL_GL_SwapBuffers();
+        if (state == GAME)
+            ++animate;
+    } while (animate !=0 && animate < 100);
 }
 
 /* INTERACTION FUNCTIONS */
@@ -360,10 +367,10 @@ State menuManager(State state, unsigned int* AI, int* level)
                 selected[i] = true;
         }
 
+        state = menuEvent(state, &selection, &gameMode, &lvl, numLvl);
+
         textManager(gameMode, lvl, mode, levelTxt);
         renderMenu(menuTextures, state, selected, mode, levelTxt, lvl, numLvl);
-
-        state = menuEvent(state, &selection, &gameMode, &lvl, numLvl);
 
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
         if (elapsedTime < FRAMERATE_MILLISECONDS)
@@ -374,9 +381,12 @@ State menuManager(State state, unsigned int* AI, int* level)
 
     // If AI Selected
     if(state == GAME && selection == PLAY_GAME)
-       *AI = gameMode;
-
+    {
+        *AI = gameMode;
+    }
+       
     *level = lvl;
+    animate = 0;
 
     freeTexture(&menuTextures);
 
