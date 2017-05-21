@@ -6,6 +6,7 @@
 #include "editor.h"
 #include "primitives.h"
 #include "audio.h"
+#include "level.h"
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
@@ -190,6 +191,10 @@ bool editorEvent(State* state, int* position, int *tab, int* selection)
                     break;
                 case SDLK_RIGHT:
                     *position += changePosition(3, *position);
+                    break;
+                case SDLK_s:
+                    createLevel(tab);
+                    return false;
                     break;
                 default :
                     break;

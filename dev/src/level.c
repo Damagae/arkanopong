@@ -183,8 +183,7 @@ char ** levelList(int* numFiles)
 
 void createLevel(int* level)
 {
-    int* numFiles;
-    numFiles = NULL;
+    int numFiles;
     char nbr[MAX_SIZE];
     FILE* f;
     char filepath[MAX_SIZE];
@@ -200,9 +199,11 @@ void createLevel(int* level)
     strcat(filepath, "/data/level/level");
 
     /* Get to know the number of existing levels and create a correct filename */
-    levelList(numFiles);
-    *numFiles += 1;
-    nbr[0] = (char) *numFiles;
+    free(levelList(&numFiles));
+    printf("test\n");
+    numFiles += 1;
+    nbr[0] = (char) numFiles;
+    printf("%c\n", nbr[0]);
     strcat(filepath, nbr);
     strcat(filepath, ".txt");
 
@@ -218,6 +219,7 @@ void createLevel(int* level)
         bt[0] = (char) level[i];
         strcat(bt, " ");
         fputs(bt, f);
+        printf("%s\n",bt);
     }
 
     fclose(f);
