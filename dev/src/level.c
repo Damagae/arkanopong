@@ -69,21 +69,33 @@ int * loadLevel (const char * filepath)
     {
         /* Dimensions */
         fgets(line1, MAX_SIZE, f); // get the first line with dimensions
-        for(i = 1; i < 4; ++i)
+        for(i = 1; i <= (4 + parity); ++i)
         {
-            if(i%2 == 1 && digitOrSpace(line1[i-1])%2 == 0) // odd : digit expected
+           if(i%2 == (1 - parity%2) && digitOrSpace(line1[i-1]) == 0) // odd : digit expected
             {
-                lvl[n] = atoi(&line1[i-1]);
-                ++n;
-            } else if (i%2 == 0 && digitOrSpace(line1[i-1]) == 1) // even : space expected
+                if (digitOrSpace(line1[i]) == 0) // If it's a 2 digits number
+                {
+                    strcat(&line1[i-1], &line1[i]); // concatenate the 2 digits in line2[i-1]
+                    nbr = atoi(&line1[i-1]);
+                    lvl[n] = nbr; // put it into lvl array
+                    ++i; // We skip a step
+                    ++n;
+                    ++parity; // We add a difference due to a 2 digits number - It is %2 so the result is either 0 or 1          
+                } else {
+                    lvl[n] = atoi(&line1[i-1]);
+                    ++n;
+                }
+            } else if (i%2 == parity%2 && digitOrSpace(line2[i-1]) == 1) // even : space expected
             {
 
             } else {
-                fprintf(stderr, "Fichier niveau non conforme (dimensions)\n");
+                fprintf(stderr, "[%d] Fichier niveau non conforme (type de brique)\n", i);
                 return NULL;
             }
         }
         n = 0;
+        i = 0;
+        parity = 0;
 
         /* Bricks' type */
         fgets(line2, MAX_SIZE, f); // get the second line with types
@@ -167,5 +179,47 @@ char ** levelList(int* numFiles)
 
     *numFiles = i;
     return list;
+}
+
+void createLevel(int* level)
+{
+    int* numFiles;
+    numFiles = NULL;
+    char nbr[MAX_SIZE];
+    FILE* f;
+    char filepath[MAX_SIZE];
+    char cwd[MAX_SIZE];
+    char bt[MAX_SIZE];
+    int i;
+
+    if (getcwd(cwd, sizeof(cwd)) == NULL) { // Get the program's path
+        fprintf(stderr, "Le chemin est erroné.\n");
+    }
+
+    strcpy(filepath, cwd);
+    strcat(filepath, "/data/level/level");
+
+    /* Get to know the number of existing levels and create a correct filename */
+    levelList(numFiles);
+    *numFiles += 1;
+    nbr[0] = (char) *numFiles;
+    strcat(filepath, nbr);
+    strcat(filepath, ".txt");
+
+    /* Create a file */
+    f = fopen(filepath ,"a");
+
+    /* Dimensions */
+    fputs("12 10\n", f);
+
+    /* Bricks */
+    for(i = 0; i < (12 * 10); ++i)
+    {
+        bt[0] = (char) level[i];
+        strcat(bt, " ");
+        fputs(bt, f);
+    }
+
+    fclose(f);
 }
 
