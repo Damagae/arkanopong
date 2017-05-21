@@ -202,7 +202,7 @@ void createLevel(int* level)
     /* Get to know the number of existing levels and create a correct filename */
     levelList(numFiles);
     *numFiles += 1;
-    nbr[0] = (char) *numFiles;
+    sprintf(nbr, "%d", *numFiles);
     strcat(filepath, nbr);
     strcat(filepath, ".txt");
 
@@ -213,12 +213,14 @@ void createLevel(int* level)
     fputs("12 10\n", f);
 
     /* Bricks */
-    for(i = 0; i < (12 * 10); ++i)
+    for(i = 0; i < (12 * 10) - 1; ++i)
     {
-        bt[0] = (char) level[i];
+        sprintf(bt, "%d ", level[i]);
         strcat(bt, " ");
         fputs(bt, f);
     }
+    sprintf(bt, "%d ", level[12 * 10 - 1]);
+    fputs(bt, f);
 
     fclose(f);
 }
