@@ -72,7 +72,7 @@ void drawBrickPreview(GLuint texture, int position)
     glDisable(GL_TEXTURE_2D);
 }
 
-void drawTab(int* tab, TextureList editorTextures)
+void drawTab(int* tab, int* tabColor, TextureList editorTextures)
 {
     int i;
     float x, y;
@@ -81,7 +81,10 @@ void drawTab(int* tab, TextureList editorTextures)
     {
         if (tab[i] != 0)
         {
-            glBindTexture(GL_TEXTURE_2D, editorTextures->texture[tab[i]+2]);
+            if (tab[i] == 9)
+                glBindTexture(GL_TEXTURE_2D, editorTextures->texture[3]);
+            else
+                glBindTexture(GL_TEXTURE_2D, editorTextures->texture[3+tabColor[i]]);
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glPushMatrix();
@@ -99,7 +102,7 @@ void drawTab(int* tab, TextureList editorTextures)
     glDisable(GL_TEXTURE_2D);
 }
 
-void renderEditor(TextureList editorTextures, int position, int* tab, int selection)
+void renderEditor(TextureList editorTextures, int position, int* tab, int* tabColor, int selection, int color)
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -116,8 +119,11 @@ void renderEditor(TextureList editorTextures, int position, int* tab, int select
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 
-    drawTab(tab, editorTextures);
-    drawBrickPreview(editorTextures->texture[selection+2], position);
+    drawTab(tab, tabColor, editorTextures);
+    if (selection != 2)
+        drawBrickPreview(editorTextures->texture[selection+2], position);
+    else
+        drawBrickPreview(editorTextures->texture[selection+1+color], position);
 
     drawGrid();
 
@@ -179,7 +185,17 @@ int switchColor(int color)
     }
 }
 
-bool editorEvent(State* state, int* position, int *tab, int* selection, int* color)
+int putBrick(int selection)
+{
+    if (selection == 0)
+        return 0;
+    else if (selection == 1)
+        return 9;
+    else
+        return ((int) randomNumber(2, 8));
+}
+
+bool editorEvent(State* state, int* position, int *tab, int* selection, int* color, int* tabColor)
 {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
@@ -196,7 +212,9 @@ bool editorEvent(State* state, int* position, int *tab, int* selection, int* col
                 case SDLK_ESCAPE:
                     break;
                 case SDLK_RETURN:
-                    tab[*position] = *selection;
+                    tab[*position] = putBrick(*selection);
+                    if (tab[*position]!=0)
+                        tabColor[*position] = *color;
                     break;
                 case SDLK_SPACE:
                     *selection = switchSelection(*selection);
@@ -267,6 +285,7 @@ bool editorManager(State* state)
     addTexture(&editorTextures, "data/img/brick/B_lego_4x2.png");
 
     int tab[120];
+    int tabColor[120];
     int position = 0;
     int i;
     int color = 1;
@@ -274,6 +293,7 @@ bool editorManager(State* state)
     for (i=0; i < 120; i++)
     {
         tab[i] = 0;
+        tabColor[i] = 0;
     }
 
     int selection = 1;
@@ -283,9 +303,9 @@ bool editorManager(State* state)
     {
         Uint32 startTime = SDL_GetTicks();
 
-        renderEditor(editorTextures, position, tab, selection);
+        renderEditor(editorTextures, position, tab, tabColor, selection, color);
 
-        inEditor = editorEvent(state, &position, tab, &selection, &color);
+        inEditor = editorEvent(state, &position, tab, &selection, &color, tabColor);
 
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
         if (elapsedTime < FRAMERATE_MILLISECONDS)

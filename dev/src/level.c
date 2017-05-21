@@ -200,7 +200,7 @@ void createLevel(int* level)
 
     /* Get to know the number of existing levels and create a correct filename */
     free(levelList(&numFiles));
-    printf("test\n");
+
     numFiles += 1;
     sprintf(nbr, "%d", numFiles);
     strcat(filepath, nbr);
@@ -218,7 +218,6 @@ void createLevel(int* level)
         sprintf(bt, "%d ", level[i]);
         strcat(bt, " ");
         fputs(bt, f);
-        printf("%s\n",bt);
     }
     sprintf(bt, "%d ", level[12 * 10 - 1]);
     fputs(bt, f);

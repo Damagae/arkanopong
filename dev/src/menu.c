@@ -121,7 +121,7 @@ void drawMenuButton(GLuint texture, int x, int y, bool selected, char* txt)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
-        glTranslatef(x-5*animate, y, 1);
+        glTranslatef(x-7*animate, y, 1);
         glScalef(-400,75,1);
         glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
@@ -144,7 +144,7 @@ void drawArrow(GLuint texture, int x, int y, bool selected, int left)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
-        glTranslatef(x-5*animate, y, 1);
+        glTranslatef(x-7*animate, y, 1);
         glScalef(-60*(-1+2*left),60,1);
         glRotatef(180,0,0,1.0);
         drawSquareTexture();
@@ -158,7 +158,7 @@ void drawArrow(GLuint texture, int x, int y, bool selected, int left)
 void drawMenuText()
 {
     glColor3f(0.0, 0.0, 0.0);
-    drawText(250-5*animate,900,"PRESS ENTER TO CONTINUE", 6);
+    drawText(300-7*animate,900,"PRESS ENTER TO CONTINUE", 6);
 }
 
 void drawLogo(GLuint texture)
@@ -186,7 +186,7 @@ void drawHowToPlay(GLuint texture)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
-        glTranslatef(WINDOW_WIDTH-200+5*animate, 550, 1);
+        glTranslatef(WINDOW_WIDTH-200+7*animate, 550, 1);
         glScalef(-300,600,1);
         glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
@@ -381,7 +381,14 @@ State menuManager(State state, unsigned int* AI, int* level)
     TextureList menuTextures = createMenuTextures();
 
     int numLvl;
-    free(levelList(&numLvl));
+    //free(levelList(&numLvl));
+    char** txt = levelList(&numLvl);
+    int t;
+    for (t = 0; t < numLvl; t++)
+    {
+        printf("%s\n", txt[t]);
+    }
+    free(txt);
     
     Button selection = PLAY_GAME;
     int gameMode = 0;
