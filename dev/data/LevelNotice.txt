@@ -3,7 +3,7 @@ How to create a level ?
 
 Example :
 5 1
-2 9 1 1 1
+2 9 1 0 1
 
 
 How to :
@@ -19,8 +19,6 @@ Brick Types :
 4 - Bar speed up
 5 - Slow Power
 6 - Accelerate Power
-7 - Ball size up
-8 - More  ball
-9 - Add Life
-10 - Brick Life = 1
-11 - Brick Indescrutible
+7 - Add ball
+8 - Add Life
+9 - Brick Indescrutible

@@ -158,7 +158,28 @@ int switchSelection(int selection)
     }
 }
 
-bool editorEvent(State* state, int* position, int *tab, int* selection)
+int switchColor(int color)
+{
+    switch (color)
+    {
+        case 1 :
+            return 2;
+            break;
+        case 2 :
+            return 3;
+            break;
+        case 3 :
+            return 4;
+            break;
+        case 4 :
+            return 1;
+            break;
+        default :
+            return 1;
+    }
+}
+
+bool editorEvent(State* state, int* position, int *tab, int* selection, int* color)
 {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
@@ -191,6 +212,9 @@ bool editorEvent(State* state, int* position, int *tab, int* selection)
                     break;
                 case SDLK_RIGHT:
                     *position += changePosition(3, *position);
+                    break;
+                case SDLK_c:
+                    *color = switchColor(*color);
                     break;
                 case SDLK_s:
                     createLevel(tab);
@@ -237,12 +261,15 @@ bool editorManager(State* state)
     editorTextures = addTexture(&editorTextures, "data/img/background/greyBackground.jpg");
     addTexture(&editorTextures, "data/img/background/fond.jpg");
     addTexture(&editorTextures, "data/img/delete.png");
+    addTexture(&editorTextures, "data/img/brick/bob.jpg");
     addTexture(&editorTextures, "data/img/brick/P_lego_4x2.png");
     addTexture(&editorTextures, "data/img/brick/R_lego_4x2.png");
+    addTexture(&editorTextures, "data/img/brick/B_lego_4x2.png");
 
     int tab[120];
     int position = 0;
     int i;
+    int color = 1;
     
     for (i=0; i < 120; i++)
     {
@@ -258,7 +285,7 @@ bool editorManager(State* state)
 
         renderEditor(editorTextures, position, tab, selection);
 
-        inEditor = editorEvent(state, &position, tab, &selection);
+        inEditor = editorEvent(state, &position, tab, &selection, &color);
 
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
         if (elapsedTime < FRAMERATE_MILLISECONDS)

@@ -21,7 +21,8 @@ void renderEditor(TextureList editorTextures, int position, int* tab, int select
 
 int changePosition(int direction, int position);
 int switchSelection(int selection);
-bool editorEvent(State* state, int* position, int *tab, int* selection);
+int switchColor(int color);
+bool editorEvent(State* state, int* position, int *tab, int* selection, int* color);
 bool editorManager(State* state);
 
 #endif

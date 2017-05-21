@@ -25,6 +25,7 @@ Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, GLui
     ptBrick->position = position;
     ptBrick->width = WIDTH_DEFAULT;
     ptBrick->height = HEIGHT_DEFAULT;
+    ptBrick->color = 1;
     ptBrick->texture = brickTexture;
     ptBrick->type = type;
     if (ptBrick->type == DISAP)
@@ -71,6 +72,7 @@ void drawBrick(Brick brick)
 {
     if (brick.life != 0)
     {
+        //glColor3f(1.0,0.0,0.0);
         glBindTexture(GL_TEXTURE_2D, brick.texture);
         glPushMatrix();
             glTranslatef(brick.position.x, brick.position.y, 1);
@@ -225,7 +227,7 @@ void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, Bo
             if(lvl[3 + i * largeur + j] != 0)
             {
                 type = getType(lvl[3 + i * largeur + j]);
-                if (type == ADDLIFE)
+                if (type == INDES)
                     texture = 1;
                 else
                     texture = 2;

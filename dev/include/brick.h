@@ -14,7 +14,17 @@
 
 typedef enum BrickType
 {
-    EMPTY, NORMAL, BARUP, BARDWN, BARSPDUP, SLOWPOW, FASTPOW, ADDBALL, ADDLIFE, DISAP, INDES
+    EMPTY = 0,
+    NORMAL = 1,
+    BARUP = 2,
+    BARDWN = 3,
+    BARSPDUP = 4, 
+    SLOWPOW = 5,
+    FASTPOW = 6,
+    ADDBALL = 7,
+    ADDLIFE = 8,
+    DISAP = 9,
+    INDES = 10
 } BrickType;
 
 typedef struct brick
@@ -22,8 +32,9 @@ typedef struct brick
     Point2D position;
     float width;
     float height;
-    GLuint texture;
     int life;
+    int color;
+    GLuint texture;
     BrickType type;
     Bonus* bonus;
     struct brick* next;
