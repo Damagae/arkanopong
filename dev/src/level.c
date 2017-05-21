@@ -69,7 +69,7 @@ int * loadLevel (const char * filepath)
     {
         /* Dimensions */
         fgets(line1, MAX_SIZE, f); // get the first line with dimensions
-        for(i = 1; i <= (4 + parity); ++i)
+        for(i = 1; i < (4 + parity); ++i)
         {
            if(i%2 == (1 - parity%2) && digitOrSpace(line1[i-1]) == 0) // odd : digit expected
             {
@@ -85,11 +85,11 @@ int * loadLevel (const char * filepath)
                     lvl[n] = atoi(&line1[i-1]);
                     ++n;
                 }
-            } else if (i%2 == parity%2 && digitOrSpace(line2[i-1]) == 1) // even : space expected
+            } else if (i%2 == parity%2 && digitOrSpace(line1[i-1]) == 1) // even : space expected
             {
 
             } else {
-                fprintf(stderr, "[%d] Fichier niveau non conforme (type de brique)\n", i);
+                fprintf(stderr, "[%d] Fichier niveau non conforme (dimension)\n", i);
                 return NULL;
             }
         }
