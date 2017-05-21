@@ -21,6 +21,8 @@ int right1;
 int left2;
 int right2;
 
+float transition = 0;
+
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
@@ -190,59 +192,71 @@ void drawGameBackground(GLuint backgroundTexture)
 
 void renderGame(Game* game, char timer, bool restart)
 {    
-    glClearColor(1, 1, 1, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    drawWindowBackground(game->backgroundTexture[1]);
-
-    glEnable(GL_TEXTURE_2D);
-    glPushMatrix();
-        drawGameBackground(game->backgroundTexture[0]);
-        //drawGameBorder();
-
-        drawAllBalls(game->ballList);
-
-        drawBar(*(game->player[0].ptBar), game->player[0].num);
-        drawBar(*(game->player[1].ptBar), game->player[1].num);
-        if (game->player[0].power != OFF)
-            drawGauge(*(game->player[0].ptBar), game->player[0].gauge, game->player[0].num);
-        if (game->player[1].power != OFF)
-            drawGauge(*(game->player[1].ptBar), game->player[1].gauge, game->player[1].num);
-
-        drawAllBricks(game->brickList);
-
-        drawAllBonus(game->bonusList);
-
-        drawLife(game->player[0], game->lifeTexture[0]);
-        drawLife(game->player[1], game->lifeTexture[0]);
-
-        glColor3f(1.0, 1.0, 1.0);
-    glPopMatrix();
-    glDisable(GL_TEXTURE_2D);
-
-    drawNames(game->player[0].name, game->player[1].name);
-
-    if (timer != '0')
+    do
     {
-        glColor3f(1.0, 0.0, 0.0);
-        drawText(490,485, &timer, 6);
-    }
+        glClearColor(1, 1, 1, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
 
-    if (game->pause)
-    {
-        drawText(500, 500, "Pause", 6);
-    }
+        drawWindowBackground(game->backgroundTexture[1]);
 
-    if(game->end)
-    {
-        drawWinner(game->player[0], game->player[1]);
-        drawRestart(restart);
-    }
+        glPushMatrix();
+            glScalef(transition/100,transition/100,1.0);
 
-    glColor3f(1.0, 1.0, 1.0);
-    SDL_GL_SwapBuffers();
+            glEnable(GL_TEXTURE_2D);
+            glPushMatrix();
+                drawGameBackground(game->backgroundTexture[0]);
+                drawGameBorder();
+
+                drawAllBalls(game->ballList);
+
+                drawBar(*(game->player[0].ptBar), game->player[0].num);
+                drawBar(*(game->player[1].ptBar), game->player[1].num);
+                if (game->player[0].power != OFF)
+                    drawGauge(*(game->player[0].ptBar), game->player[0].gauge, game->player[0].num);
+                if (game->player[1].power != OFF)
+                    drawGauge(*(game->player[1].ptBar), game->player[1].gauge, game->player[1].num);
+
+                drawAllBricks(game->brickList);
+
+                drawAllBonus(game->bonusList);
+
+                drawLife(game->player[0], game->lifeTexture[0]);
+                drawLife(game->player[1], game->lifeTexture[0]);
+
+                glColor3f(1.0, 1.0, 1.0);
+            glPopMatrix();
+            glDisable(GL_TEXTURE_2D);
+        glPopMatrix();
+
+        if (transition == 100)
+        {
+            drawNames(game->player[0].name, game->player[1].name);
+
+            if (timer != '0')
+            {
+                glColor3f(1.0, 0.0, 0.0);
+                drawText(490,485, &timer, 6);
+            }
+        }
+
+        if (game->pause)
+        {
+            drawText(500, 500, "Pause", 6);
+        }
+
+        if(game->end)
+        {
+            drawWinner(game->player[0], game->player[1]);
+            drawRestart(restart);
+        }
+
+        glColor4f(1.0,1.0,1.0,1.0);
+        SDL_GL_SwapBuffers();
+        if (transition < 100)
+            ++transition;
+    } while (transition < 100);
 }
 
 void drawRestart(bool restart)
@@ -515,6 +529,7 @@ bool gameEvent(Game* game, char timer, State* state)
             case SDLK_ESCAPE:
                 *state = MENU;
                 inGame = false;
+                transition = 0.0;
                 break;
             case SDLK_LEFT:
               if (right1 == 2) {
