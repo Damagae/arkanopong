@@ -4,6 +4,7 @@
 #include "textures.h"
 #include "bool.h"
 #include "utilities.h"
+#include "audio.h"
 
 /** STRUCTURES **/
 
@@ -32,7 +33,7 @@ void selectMode(bool RIGHT, Button* selection, int* gameMode);
 void selectButton(bool UP, Button* selection);
 void selectLevel(bool RIGHT, Button* selection, int* lvl, int numLvl);
 void textManager(int gameMode, int lvl, char* mode, char* levelTxt);
-State menuEvent(State state, Button* selection, int* dificulty, int* lvl, int numLvl);
+State menuEvent(State state, Button* selection, int* dificulty, int* lvl, int numLvl, Mix_Chunk* sound);
 State menuManager(State state, unsigned int* AI, int* level);
 
 #endif

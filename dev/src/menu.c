@@ -8,7 +8,6 @@
 #include "menu.h"
 #include "primitives.h"
 #include "level.h"
-#include "audio.h"
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
@@ -278,7 +277,7 @@ void selectLevel(bool RIGHT, Button* selection, int* lvl, int numLvl)
     }
 }
  
-State menuEvent(State state, Button* selection, int* gameMode, int* lvl, int numLvl)
+State menuEvent(State state, Button* selection, int* gameMode, int* lvl, int numLvl, Mix_Chunk* sound)
 {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
@@ -304,10 +303,12 @@ State menuEvent(State state, Button* selection, int* gameMode, int* lvl, int num
                 case SDLK_UP:
                     state = MENU;
                     selectButton(true, selection);
+                    if(state!=SPLASH) playSound(0, sound);
                     break;
                 case SDLK_DOWN:
                     state = MENU;
                     selectButton(false, selection);
+                    if(state!=SPLASH) playSound(0, sound);
                     break;
                 case SDLK_LEFT:
                     state = MENU;
@@ -379,6 +380,7 @@ void textManager(int gameMode, int lvl, char* mode, char* levelTxt)
 State menuManager(State state, unsigned int* AI, int* level)
 {
     TextureList menuTextures = createMenuTextures();
+    Mix_Chunk * sound = createSound("data/audio/select.wav");
 
     int numLvl;
     //free(levelList(&numLvl));
@@ -413,7 +415,7 @@ State menuManager(State state, unsigned int* AI, int* level)
                 selected[i] = true;
         }
 
-        state = menuEvent(state, &selection, &gameMode, &lvl, numLvl);
+        state = menuEvent(state, &selection, &gameMode, &lvl, numLvl, sound);
 
         textManager(gameMode, lvl, mode, levelTxt);
         renderMenu(menuTextures, state, selected, mode, levelTxt, lvl, numLvl, gameMode);
@@ -435,6 +437,7 @@ State menuManager(State state, unsigned int* AI, int* level)
     animate = 0;
 
     freeTexture(&menuTextures);
+    freeSound(sound);
 
     return state;
 }

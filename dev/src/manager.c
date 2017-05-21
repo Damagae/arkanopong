@@ -173,6 +173,7 @@ Game* createGame(int lvl)
     game->sound[4] = createSound("data/audio/start.wav");
     game->sound[5] = createSound("data/audio/barDwn.wav");
     game->sound[6] = createSound("data/audio/public.wav");
+    game->sound[7] = createSound("data/audio/fastTime.wav");
 
     return game;
 }
@@ -315,6 +316,8 @@ void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList
                         playSound(channel, sound[2]);
                     else if (ptBonus->type == BARDWN)
                         playSound(channel, sound[5]);
+                    else if (ptBonus->type == FASTPOW)
+                        playSound(channel, sound[7]);
 
                 }   
                 //deleteBonus(bonusList, &ptBonus);
@@ -861,6 +864,6 @@ void freeGame(Game* game)
     deleteBonusList(&(game->bonusList));
 
     int i;
-    for (i = 0; i < 7; ++i)
+    for (i = 0; i < 8; ++i)
         freeSound(game->sound[i]);
 }
