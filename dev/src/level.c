@@ -29,10 +29,23 @@ int digitOrSpace (char c)
 
 int compatibleType(int nb)
 {
-    if (nb >= 0 && nb <= 11)
+    if (nb >= 0 && nb <= 9)
         return 1;
     else
         return 0;
+}
+
+int compatibleTypeColor(int nb)
+{
+    if (nb >= 0 && nb <= 4)
+        return 1;
+    else
+        return 0;
+}
+
+int randomColor()
+{
+    return rand() % 4 + 1;
 }
 
 int * loadLevel (const char * filepath)
@@ -42,11 +55,13 @@ int * loadLevel (const char * filepath)
     char path[MAX_SIZE];
     char line1[MAX_SIZE] = "";
     char line2[MAX_SIZE] = "";
+    char line3[MAX_SIZE] = "";
     int * lvl;
     int n = 0;
     int i = 0;
     int parity = 0;
     int nbr;
+    int fline = 0;
 
     if (getcwd(cwd, sizeof(cwd)) == NULL) { // Get the program's path
         fprintf(stderr, "Le chemin est erroné.\n");
@@ -129,6 +144,44 @@ int * loadLevel (const char * filepath)
                 return NULL;
             }
         }
+
+        fline = 3 + n;
+        n = 0;
+        i = 0;
+        parity = 0;
+
+        /* Bricks' color - if given */
+        if (fgets(line3, MAX_SIZE, f) != NULL) // get the third line with colors if exits
+        {
+            for(i = 1; i <= ((lvl[0] * lvl[1])*2 - 1); ++i)
+            {
+                if(i%2 == 1 && digitOrSpace(line3[i-1]) == 0) // odd : digit expected
+                {
+                    if (compatibleTypeColor(line3[i-1]) == 0)
+                    {
+                        lvl[fline+n] = atoi(&line3[i-1]); // put it into lvl array
+                        ++n;
+                    } else {
+                        fprintf(stderr, "[%d] Fichier niveau non conforme (couleur de brique)\n", i);
+                        return NULL;
+                    }
+                } else if (i%2 == 0 && digitOrSpace(line3[i-1]) == 1) // even : space expected
+                {
+
+                } else {
+                    fprintf(stderr, "[%d] Fichier niveau non conforme (couleur de brique)\n", i);
+                    return NULL;
+                }
+            }
+        } else { // random colors
+            for(i = 1; i <= ((lvl[0] * lvl[1])*2 - 1); ++i)
+            {
+                lvl[fline+n] = randomColor(); // put it into lvl array
+                ++n;
+            }
+        }
+        
+
         fclose(f);
         return lvl;        
     }
@@ -181,7 +234,7 @@ char ** levelList(int* numFiles)
     return list;
 }
 
-void createLevel(int* level)
+void createLevel(int* level, int* color)
 {
     int numFiles;
     char nbr[MAX_SIZE];
@@ -220,7 +273,11 @@ void createLevel(int* level)
         fputs(bt, f);
         printf("%s\n",bt);
     }
-    sprintf(bt, "%d ", level[12 * 10 - 1]);
+    sprintf(bt, "%d\n", level[12 * 10 - 1]);
+
+    /* Bricks colors */
+
+    
     fputs(bt, f);
 
     fclose(f);
