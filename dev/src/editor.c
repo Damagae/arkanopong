@@ -235,7 +235,7 @@ bool editorEvent(State* state, int* position, int *tab, int* selection, int* col
                     *color = switchColor(*color);
                     break;
                 case SDLK_s:
-                    createLevel(tab);
+                    createLevel(tab, tabColor);
                     return false;
                     break;
                 default :
