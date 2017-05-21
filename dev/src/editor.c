@@ -195,7 +195,7 @@ int putBrick(int selection)
         return ((int) randomNumber(2, 8));
 }
 
-bool editorEvent(State* state, int* position, int *tab, int* selection, int* color, int* tabColor)
+bool editorEvent(State* state, int* position, int *tab, int* selection, int* color, int* tabColor, Mix_Chunk* sound)
 {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
@@ -215,6 +215,7 @@ bool editorEvent(State* state, int* position, int *tab, int* selection, int* col
                     tab[*position] = putBrick(*selection);
                     if (tab[*position]!=0)
                         tabColor[*position] = *color;
+                    playSound(0, sound);
                     break;
                 case SDLK_SPACE:
                     *selection = switchSelection(*selection);
@@ -284,6 +285,8 @@ bool editorManager(State* state)
     addTexture(&editorTextures, "data/img/brick/R_lego_4x2.png");
     addTexture(&editorTextures, "data/img/brick/B_lego_4x2.png");
 
+    Mix_Chunk * sound = createSound("data/audio/confirm.wav");
+
     int tab[120];
     int tabColor[120];
     int position = 0;
@@ -305,7 +308,7 @@ bool editorManager(State* state)
 
         renderEditor(editorTextures, position, tab, tabColor, selection, color);
 
-        inEditor = editorEvent(state, &position, tab, &selection, &color, tabColor);
+        inEditor = editorEvent(state, &position, tab, &selection, &color, tabColor, sound);
 
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
         if (elapsedTime < FRAMERATE_MILLISECONDS)
@@ -315,6 +318,7 @@ bool editorManager(State* state)
     }
 
     freeTexture(&editorTextures);
+    freeSound(sound);
 
     return inEditor;
 }

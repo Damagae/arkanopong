@@ -21,7 +21,7 @@ int changePosition(int direction, int position);
 int switchSelection(int selection);
 int switchColor(int color);
 int putBrick(int selection);
-bool editorEvent(State* state, int* position, int *tab, int* selection, int* color, int* tabColor);
+bool editorEvent(State* state, int* position, int *tab, int* selection, int* color, int* tabColor, Mix_Chunk* sound);
 bool editorManager(State* state);
 
 #endif
