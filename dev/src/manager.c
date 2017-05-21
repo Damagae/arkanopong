@@ -166,7 +166,13 @@ Game* createGame(int lvl)
     game->power[0] = game->power[1] = false;
     game->selection = NONE;
 
-    game->sound[0] = createSound("data/audio/hit.wav");
+    game->sound[0] = createSound("data/audio/hitBrick.wav");
+    game->sound[1] = createSound("data/audio/hitBar.wav");
+    game->sound[2] = createSound("data/audio/barUp.wav");
+    game->sound[3] = createSound("data/audio/end.wav");
+    game->sound[4] = createSound("data/audio/start.wav");
+    game->sound[5] = createSound("data/audio/barDwn.wav");
+    game->sound[6] = createSound("data/audio/public.wav");
 
     return game;
 }
@@ -278,10 +284,11 @@ void drawRestart(bool restart)
     }
 }
 
-void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList)
+void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList, Mix_Chunk ** sound)
 {
     Bonus bonus;
     BonusList ptBonus = (*bonusList);
+    unsigned int channel = 1;
     
     for(; ptBonus != NULL; ptBonus = ptBonus->next)
     {
@@ -298,6 +305,17 @@ void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList
                 {
                     getBonus(bonus, ballList);
                     ptBonus->actif = false;
+
+                    // Bonus Sounds
+                    while(Mix_Playing(channel))
+                    {
+                        ++channel;
+                    }
+                    if (ptBonus->type == BARUP)
+                        playSound(channel, sound[2]);
+                    else if (ptBonus->type == BARDWN)
+                        playSound(channel, sound[5]);
+
                 }   
                 //deleteBonus(bonusList, &ptBonus);
             }
@@ -390,7 +408,7 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
         // If the ball hit something (not a brick), then stop
         if(ballPosition == OUT_UP || ballPosition == OUT_DOWN || ballPosition == BAR_UP ||ballPosition == BAR_DOWN || ballPosition == WALL)
         {
-            //playSound(channel, sound[0]);
+            playSound(channel, sound[1]);
             return ballPosition;
         }
             
@@ -425,7 +443,7 @@ Position runGame(Game* game)
     
     powerManager(game);
     ballPosition = ballManager(game->ballList, &game->bar[0], &game->bar[1], &game->brickList, game->player, game->brickTexture, game->sound);
-    bonusManager(&game->bonusList, &game->bar[0], &game->bar[1], &game->ballList);
+    bonusManager(&game->bonusList, &game->bar[0], &game->bar[1], &game->ballList, game->sound);
 
     return ballPosition;
 }
@@ -644,6 +662,8 @@ bool playGame(Game* game, unsigned int AI, State* state)
     bool inGame = true;
     bool restart = false;
     char timer = '0';
+    unsigned int channel = 1;
+    Mix_VolumeMusic(MIX_MAX_VOLUME/2);
     Uint32 ticks_reset = SDL_GetTicks();
 
     if(AI)
@@ -658,6 +678,8 @@ bool playGame(Game* game, unsigned int AI, State* state)
             game->player[1].name = "Computer HARD";
         }
     }
+
+    playSound(0, game->sound[6]);
     
     /* FOR COLLISION TEST 
         Ball* ball = createBall(PointXY(525,890), VectorXY(0,-1), &game->player[0], game->ballTexture);
@@ -668,15 +690,28 @@ bool playGame(Game* game, unsigned int AI, State* state)
     while(inGame)
     {
         Uint32 startTime = SDL_GetTicks() - ticks_reset;
+        channel = 1;
 
+        // Starting time
+        if (startTime >= 4500 && startTime <= 5000)
+        {
+            while(Mix_Playing(channel))
+                ++channel;
+            playSound(channel, game->sound[4]);
+        }
         if(startTime < 5100)
         {
             moveBarBall(game->player[0].ptBar, game->ballList, game->direction[0]);
             if(!AI) moveBarBall(game->player[1].ptBar, game->ballList->next, game->direction[1]);
             timer = gameLaunch(startTime);
+            Mix_Volume(0, MIX_MAX_VOLUME-startTime/50);
         }
         else if(startTime >= 5100 && startTime <= 5500)
+        {
+            Mix_Volume(0, MIX_MAX_VOLUME/2);
+            Mix_HaltChannel(0);
             game->start = true;
+        }
 
         /* Dessin */
         renderGame(game, timer, restart);
@@ -687,16 +722,25 @@ bool playGame(Game* game, unsigned int AI, State* state)
             // If a player lose a life
             if (game->ballPosition == OUT_UP || game->ballPosition == OUT_DOWN)
             {                
+                // If game ends
                 if (game->player[0].life == 0 || game->player[1].life == 0)
                 {
                     game->start = false;
                     game->end = true;
+
+                    // SOUND
+                    Mix_VolumeMusic(MIX_MAX_VOLUME / 6);
+                    while(Mix_Playing(channel))
+                    {
+                        ++channel;
+                    }
+                    playSound(channel, game->sound[3]);
                 }
             }
             
             moveBar(game->player[0].ptBar, game->direction[0]);
             if (AI) AIcontroller (game->player[1].ptBar, game->ballList);
-            else moveBar(game->player[1].ptBar, game->direction[1]); 
+            else moveBar(game->player[1].ptBar, game->direction[1]);
         }
 
         if (game->end)
@@ -816,5 +860,7 @@ void freeGame(Game* game)
     deleteBrickList(&(game->brickList));
     deleteBonusList(&(game->bonusList));
 
-    freeSound(game->sound[0]);
+    int i;
+    for (i = 0; i < 7; ++i)
+        freeSound(game->sound[i]);
 }

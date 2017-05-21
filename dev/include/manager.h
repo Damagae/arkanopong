@@ -49,7 +49,7 @@ typedef struct
 
     Direction selection;
     
-    Mix_Chunk * sound[2];
+    Mix_Chunk * sound[10];
 
     char* level;
 } Game, *PtGame;
@@ -67,7 +67,7 @@ void drawRestart(bool restart);
 
 void renderGame(Game* game, char timer, bool restart);
 int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick, GLuint* brickTexture);
-void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList);
+void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList, Mix_Chunk ** sound);
 Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtBrick ptBrick, PtPlayer player, GLuint* brickTexture);
 Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, GLuint* brickTexture, Mix_Chunk ** sound);
 Position runGame(Game* game);
