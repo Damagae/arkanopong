@@ -269,13 +269,17 @@ void createLevel(int* level, int* color)
     for(i = 0; i < (12 * 10) - 1; ++i)
     {
         sprintf(bt, "%d ", level[i]);
-        strcat(bt, " ");
         fputs(bt, f);
     }
     sprintf(bt, "%d\n", level[12 * 10 - 1]);
 
     /* Bricks colors */
-
+    for(i = 0; i < (12 * 10) - 1; ++i)
+    {
+        sprintf(bt, "%d ", color[i]);
+        fputs(bt, f);
+    }
+    sprintf(bt, "%d\n", color[12 * 10 - 1]);
     
     fputs(bt, f);
 
