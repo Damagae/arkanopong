@@ -25,7 +25,7 @@ void drawHowToPlay(GLuint texture);
 void drawMenuText();
 void drawMenuSelection(bool* selected, char* mode, char* levelTxt, TextureList menuTextures, int lvl, int numLvl, int numMode);
 void drawMenuButton(GLuint texture, int x, int y, bool selected, char* txt);
-void drawArrow(GLuint texture, int x, int y, bool selected);
+void drawArrow(GLuint texture, int x, int y, bool selected, int left);
 void renderMenu(TextureList menuTextures, State state, bool* selected, char* mode, char* levelTxt, int lvl, int numLvl, int numMode);
 
 void selectMode(bool RIGHT, Button* selection, int* gameMode);

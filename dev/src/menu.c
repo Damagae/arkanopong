@@ -29,7 +29,6 @@ TextureList createMenuTextures()
     addTexture(&menuTextures, "data/img/menu/title.png");
     addTexture(&menuTextures, "data/img/menu/how_to.png");
     addTexture(&menuTextures, "data/img/menu/left.png");
-    addTexture(&menuTextures, "data/img/menu/right.png");
     addTexture(&menuTextures, "data/img/menu/play_c_2p_on.png");
     addTexture(&menuTextures, "data/img/menu/play_c_easy_on.png");
     addTexture(&menuTextures, "data/img/menu/play_c_hard_on.png");
@@ -94,23 +93,23 @@ void drawWindowBackground(GLuint texture)
 void drawMenuSelection(bool* selected, char* mode, char* levelTxt, TextureList menuTextures, int lvl, int numLvl, int numMode)
 {
     /* PLAY */
-    drawMenuButton(menuTextures->texture[6+numMode], 300, 300, selected[0], mode);
+    drawMenuButton(menuTextures->texture[5+numMode], 300, 300, selected[0], mode);
     //if (strcmp(mode,"PLAY : PLAYER VS PLAYER"))
     if (numMode != 0)
-        drawArrow(menuTextures->texture[4], 60, 300, selected[0]);
+        drawArrow(menuTextures->texture[4], 60, 300, selected[0], 1);
     //if (strcmp(mode,"PLAY : COMPUTER HARD"))
     if (numMode != 2)
-        drawArrow(menuTextures->texture[5], 540, 300, selected[0]);
+        drawArrow(menuTextures->texture[4], 540, 300, selected[0], 0);
     /* LEVEL */
-    drawMenuButton(menuTextures->texture[11+lvl], 300, 450, selected[1], levelTxt);
+    drawMenuButton(menuTextures->texture[10+lvl], 300, 450, selected[1], levelTxt);
     if (lvl != 0)
-        drawArrow(menuTextures->texture[4], 60, 450, selected[1]);
+        drawArrow(menuTextures->texture[4], 60, 450, selected[1], 1);
     if (lvl != numLvl-1)
-        drawArrow(menuTextures->texture[5], 540, 450, selected[1]);
+        drawArrow(menuTextures->texture[4], 540, 450, selected[1], 0);
     /* EDITOR */
-    drawMenuButton(menuTextures->texture[9], 300, 600, selected[2], "EDITOR");
+    drawMenuButton(menuTextures->texture[8], 300, 600, selected[2], "EDITOR");
     /* EXIT */
-    drawMenuButton(menuTextures->texture[10], 300, 800, selected[3], "EXIT");
+    drawMenuButton(menuTextures->texture[9], 300, 800, selected[3], "EXIT");
 }
 
 void drawMenuButton(GLuint texture, int x, int y, bool selected, char* txt)
@@ -136,7 +135,7 @@ void drawMenuButton(GLuint texture, int x, int y, bool selected, char* txt)
     glColor4f(1.0,1.0,1.0,1.0);
 }
 
-void drawArrow(GLuint texture, int x, int y, bool selected)
+void drawArrow(GLuint texture, int x, int y, bool selected, int left)
 {
     if (!selected)
         glColor4f(1.0,1.0,1.0,0.5);
@@ -146,7 +145,7 @@ void drawArrow(GLuint texture, int x, int y, bool selected)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
         glTranslatef(x-5*animate, y, 1);
-        glScalef(-60,60,1);
+        glScalef(-60*(-1+2*left),60,1);
         glRotatef(180,0,0,1.0);
         drawSquareTexture();
     glPopMatrix();
