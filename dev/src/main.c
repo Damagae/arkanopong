@@ -11,8 +11,8 @@ unsigned int WINDOW_WIDTH = 1000;
 unsigned int WINDOW_HEIGHT = 1000;
 
 /* Dimensions du jeu */
-int GAME_WIDTH = 800;
-int GAME_HEIGHT = 800;
+int GAME_WIDTH = 804;
+int GAME_HEIGHT = 804;
 
 /* Nombre de vies */
 int LIFE_MAX = 6;

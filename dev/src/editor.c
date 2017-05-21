@@ -16,7 +16,7 @@ extern int GAME_WIDTH;
 extern int GAME_HEIGHT;
 
 #define HEIGHT_DEFAULT 33
-#define WIDTH_DEFAULT 66
+#define WIDTH_DEFAULT 67
 
 /* Drawing Functions */
 
@@ -25,33 +25,40 @@ void drawGrid()
     int i, j;
     float x, y;
     glColor3f(1.0, 0.0, 0.0);
-    glPushMatrix();
-        glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 1);
-        glScalef(GAME_WIDTH, GAME_HEIGHT, 1);
-        //drawSquare();
-        glColor3f(0.0, 0.0, 1.0);
-        for (i = 0; i <= 10; ++i)
-        {
-            y = -0.2+0.04*i;
-            drawLine(-0.48, y, -0.48+(12*0.08), y);
-        }
-        for (j = 0; j <= 12; ++j)
-        {
-            x = -0.48+0.08*j;
-            drawLine(x, -0.2, x, 0.2);
-        }
-    glColor3f(1.0, 1.0, 1.0);
-    glPopMatrix();
+    for (i = 0; i <= 10; i++)
+    {
+        glPushMatrix();
+            x = 98+GAME_WIDTH/2;
+            y = 338+i*HEIGHT_DEFAULT;
+            glTranslatef(x, y, 1);
+            glScalef(GAME_WIDTH, 1, 1);
+            drawLine(-0.5,0,0.5,0);
+        glPopMatrix();
+    }
+
+    for (j = 0; j <= 11; j++)
+    {
+        glPushMatrix();
+            x = WINDOW_WIDTH-GAME_WIDTH-WIDTH_DEFAULT/2+j*WIDTH_DEFAULT;
+            y = 502;
+            glTranslatef(x, y, 1);
+            glScalef(1, 10*HEIGHT_DEFAULT, 1);
+            drawLine(0.0,-0.5,0.0,0.5);
+        glPopMatrix();
+    }
 }
 
 void drawBrickPreview(GLuint texture, int position)
 {
+    float x, y;
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
-        glTranslatef(146+66*(position%12), 355+(33*(position/12)), 1);
+        x = (96+WIDTH_DEFAULT/2)+WIDTH_DEFAULT*(position%12);
+        y = 355+(HEIGHT_DEFAULT*(position/12));
+        glTranslatef(x, y, 1);
         glScalef(WIDTH_DEFAULT, HEIGHT_DEFAULT, 1);
         glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
@@ -64,7 +71,7 @@ void drawBrickPreview(GLuint texture, int position)
 void drawTab(int* tab, TextureList editorTextures)
 {
     int i;
-
+    float x, y;
     glEnable(GL_TEXTURE_2D);
     for (i = 0; i < 120; ++i)
     {
@@ -74,7 +81,9 @@ void drawTab(int* tab, TextureList editorTextures)
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glPushMatrix();
-                glTranslatef(146+66*(i%12), 355+(33*(i/12)), 1);
+                x = (96+WIDTH_DEFAULT/2)+WIDTH_DEFAULT*(i%12);
+                y = 355+(HEIGHT_DEFAULT*(i/12));
+                glTranslatef(x, y, 1);
                 glScalef(WIDTH_DEFAULT, HEIGHT_DEFAULT, 1);
                 glRotatef(180, 0.0, 0.0, 1.0);
                 drawSquareTexture();
