@@ -4,7 +4,6 @@
 #include <GL/gl.h>
 
 #include "brick.h"
-#include "primitives.h"
 #include "geometry.h"
 #include "bonus.h"
 #include "textures.h"
@@ -13,7 +12,7 @@
 #define WIDTH_DEFAULT 67
 #define LIFE_DEFAULT 3
 
-Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, GLuint brickTexture, GLuint* bonusTexture)
+Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, GLuint brickTexture, GLuint* bonusTexture, int color)
 {
     PtBrick ptBrick = malloc(sizeof(Brick));
     if (ptBrick == NULL)
@@ -25,15 +24,10 @@ Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, GLui
     ptBrick->position = position;
     ptBrick->width = WIDTH_DEFAULT;
     ptBrick->height = HEIGHT_DEFAULT;
-    ptBrick->color = 1;
+    ptBrick->color = createColor(color);
     ptBrick->texture = brickTexture;
     ptBrick->type = type;
-    if (ptBrick->type == DISAP)
-    {
-        ptBrick->life = 1;
-        ptBrick->bonus = NULL;
-    }
-    else if (ptBrick->type == INDES) 
+    if (ptBrick->type == INDES) 
     {
         ptBrick->life = -1;
         ptBrick->bonus = NULL;
@@ -72,7 +66,7 @@ void drawBrick(Brick brick)
 {
     if (brick.life != 0)
     {
-        //glColor3f(1.0,0.0,0.0);
+        glColor3f(brick.color.r, brick.color.g, brick.color.b);
         glBindTexture(GL_TEXTURE_2D, brick.texture);
         glPushMatrix();
             glTranslatef(brick.position.x, brick.position.y, 1);
@@ -181,13 +175,11 @@ BrickType getType(int t) {
             return SLOWPOW;
         case 6:
             return FASTPOW;
-        case 8:
+        case 7:
             return ADDBALL;
-        case 9:
+        case 8:
             return ADDLIFE;
-        case 10:
-            return DISAP;
-        case 11:
+        case 9:
             return INDES;
         default :
             return NORMAL;
@@ -203,6 +195,7 @@ void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, Bo
     float firstColumn;
     BrickType type;
     int texture = 2;
+    int color = 5;
 
     if (hauteur%2 == 0)
     {
@@ -231,7 +224,7 @@ void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, Bo
                     texture = 1;
                 else
                     texture = 2;
-                addBrick(brickList, createBrick(PointXY(firstColumn + j * WIDTH_DEFAULT, firstLine + i * HEIGHT_DEFAULT), type, bonusList, brickTexture[texture], bonusTexture));
+                addBrick(brickList, createBrick(PointXY(firstColumn + j * WIDTH_DEFAULT, firstLine + i * HEIGHT_DEFAULT), type, bonusList, brickTexture[texture], bonusTexture, color));
             }
             
         }   

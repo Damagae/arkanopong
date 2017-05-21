@@ -1,6 +1,8 @@
 #ifndef __LEVEL__H
 #define __LEVEL__H
 
+/* FUNCTIONS */
+
 int * loadLevel (char *filepath);
 int digitOrSpace(char c);
 int compatibleType(int nb);

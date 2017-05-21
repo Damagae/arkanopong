@@ -65,15 +65,15 @@ int selectBonus(BrickType type)
         case BARDWN:
             return 1;
         case BARSPDUP:
-            return 1;
+            return 2;
         case SLOWPOW:
-            return 1;
+            return 3;
         case FASTPOW:
-            return 1;
+            return 4;
         case ADDBALL:
-            return 1;
+            return 5;
         case ADDLIFE:
-            return 1;
+            return 6;
         default :
             return 0;
     }

@@ -4,6 +4,7 @@
 #include "GL/glu.h"
 
 #include "geometry.h"
+#include "primitives.h"
 #include "ball.h"
 #include "bool.h"
 #define __BONUS__FORWARD__DECLARATION
@@ -23,8 +24,7 @@ typedef enum BrickType
     FASTPOW = 6,
     ADDBALL = 7,
     ADDLIFE = 8,
-    DISAP = 9,
-    INDES = 10
+    INDES = 9
 } BrickType;
 
 typedef struct brick
@@ -33,7 +33,7 @@ typedef struct brick
     float width;
     float height;
     int life;
-    int color;
+    Color color;
     GLuint texture;
     BrickType type;
     Bonus* bonus;
@@ -42,7 +42,7 @@ typedef struct brick
 
 /** FUNCTIONS **/
 
-Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, GLuint brickTexture, GLuint* bonusTexture);
+Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, GLuint brickTexture, GLuint* bonusTexture, int color);
 void addBrick(PtBrick* brickList, Brick* brick);
 void drawBrick(Brick brick);
 void drawAllBricks(PtBrick brickList);

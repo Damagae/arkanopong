@@ -16,9 +16,9 @@ Brick Types :
 1 - Normal
 2 - Bar Up
 3 - Bar Down
-4 - Bar speed up
+4 - Bar Speed Up
 5 - Slow Power
 6 - Accelerate Power
-7 - Add ball
+7 - Add Ball
 8 - Add Life
 9 - Brick Indescrutible

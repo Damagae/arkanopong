@@ -129,6 +129,11 @@ Game* createGame(int lvl)
     game->lifeTexture[0] = generateTexture(&(game->lifeTexture[0]), game->lifeTextureFile[0]);
     game->bonusTexture[0] = generateTexture(&(game->bonusTexture[0]), game->bonusTextureFile[0]);
     game->bonusTexture[1] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
+    game->bonusTexture[2] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
+    game->bonusTexture[3] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
+    game->bonusTexture[4] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
+    game->bonusTexture[5] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
+    game->bonusTexture[6] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
 
     /* Création des barres */
     Point2D posDWN = PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50);

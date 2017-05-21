@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "bool.h"
+#include "primitives.h"
 
 #define SEGMENTS 32
 
@@ -165,4 +166,39 @@ void drawButton(int x, int y, char* txt, bool select)
         drawText(x,y,txt, 1);
     glPopMatrix();
     glColor3f(1.0, 1.0, 1.0);
+}
+
+// Create color to change brick texture color */
+Color createColor(int code)
+{
+  Color color;
+  switch (code)
+  {
+    case 1 :
+      color.r = 204/255;
+      color.g = 0.0;
+      color.b = 0.0;
+      break;
+    case 2 :
+      color.r = 0.0;
+      color.g = 204/255;
+      color.b = 0.0;
+      break;
+    case 3 :
+      color.r = 0.0;
+      color.g = 0.0;
+      color.b = 204/255;
+      break;
+    case 4 :
+      color.r = 102/255;
+      color.g = 0.0;
+      color.b = 204/255;
+      break;
+    default :
+        color.r = 1.0;
+        color.g = 1.0;
+        color.b = 1.0;
+        break;
+  }
+  return color;
 }

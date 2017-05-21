@@ -6,7 +6,7 @@
 
 #define MAX_TEXTURE 30
 
-Texture * createTexture(char* filename, int num)
+Texture* createTexture(char* filename, int num)
 {
   Texture* textures = malloc(sizeof (Texture));
   if (textures == NULL)
@@ -102,7 +102,6 @@ Texture* addTexture(TextureList* textures, char* filename)
 
   return (*textures);
 }
-
 
 void freeTexture(TextureList* textureList)
 {

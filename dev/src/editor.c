@@ -258,7 +258,7 @@ bool editorEvent(State* state, int* position, int *tab, int* selection, int* col
 bool editorManager(State* state)
 {
     TextureList editorTextures = NULL;
-    editorTextures = addTexture(&editorTextures, "data/img/background/greyBackground.jpg");
+    editorTextures = addTexture(&editorTextures, "data/img/menu/fond_menu.jpg");
     addTexture(&editorTextures, "data/img/background/fond.jpg");
     addTexture(&editorTextures, "data/img/delete.png");
     addTexture(&editorTextures, "data/img/brick/bob.jpg");

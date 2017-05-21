@@ -86,8 +86,8 @@ void drawWindowBackground(GLuint texture)
 
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
-    
     glDisable(GL_TEXTURE_2D);
+    glColor3f(1.0, 1.0, 1.0);
 }
 
 void drawMenuSelection(bool* selected, char* mode, char* levelTxt, TextureList menuTextures, int lvl, int numLvl, int numMode)

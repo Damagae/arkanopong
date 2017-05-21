@@ -10,8 +10,6 @@
 
 /** STRUCTURES **/
 
-
-
 /** FUNCTIONS **/
 
 void drawGrid();
