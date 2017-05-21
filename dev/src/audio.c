@@ -9,7 +9,7 @@ void initAudio()
     else
     {
         Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
-        Mix_AllocateChannels(10);
+        Mix_AllocateChannels(12);
     }
 }
 
