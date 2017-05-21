@@ -22,6 +22,7 @@ int left2;
 int right2;
 
 float transition = 0;
+static bool mute = false;
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
@@ -109,7 +110,7 @@ Game* createGame(int lvl)
     game->ballTextureFile[0] = "data/img/ball/B_lego_rond.png";
     game->ballTextureFile[1] = "data/img/ball/R_lego_rond.png";
     game->backgroundTextureFile[0] = "data/img/background/fond.jpg";
-    game->backgroundTextureFile[1] = "data/img/background/greyBackground.jpg";
+    game->backgroundTextureFile[1] = "data/img/menu/fond_menu.jpg";
     game->lifeTextureFile[0] = "data/img/life.png";
     game->lifeTextureFile[1] = "data/img/life_empty.png";
     game->bonusTextureFile[0] = "data/img/bonus/barUP.png";
@@ -583,6 +584,18 @@ bool gameEvent(Game* game, char timer, State* state)
                 break;
             case SDLK_SPACE:
               break;
+            case SDLK_m:
+                if (!mute)
+                {
+                    Mix_PauseMusic();
+                    mute = true;
+                }
+                else
+                {
+                    Mix_ResumeMusic();
+                    mute = false;
+                }
+                break;
             default:
               break;
           }

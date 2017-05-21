@@ -4,7 +4,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 
-#define MAX_TEXTURE 10
+#define MAX_TEXTURE 30
 
 Texture * createTexture(char* filename, int num)
 {

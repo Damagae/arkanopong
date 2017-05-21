@@ -8,6 +8,7 @@
 #include "menu.h"
 #include "primitives.h"
 #include "level.h"
+#include "audio.h"
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
@@ -16,6 +17,7 @@ extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 
 int animate = 0;
+static bool mute = false;
 
 /* DRAWING FUNCTIONS */
 
@@ -23,11 +25,31 @@ TextureList createMenuTextures()
 {
     TextureList menuTextures = NULL;
     menuTextures = addTexture(&menuTextures, "data/img/menu/splashscreen.jpg");
-    addTexture(&menuTextures, "data/img/background/greyBackground.jpg");
-    addTexture(&menuTextures, "data/img/menu/ARKANOPONG.png");
-    addTexture(&menuTextures, "data/img/menu/howTo.png");
-    addTexture(&menuTextures, "data/img/menu/button.jpg");
-    addTexture(&menuTextures, "data/img/menu/arrow.png");
+    addTexture(&menuTextures, "data/img/menu/fond_menu.jpg");
+    addTexture(&menuTextures, "data/img/menu/title.png");
+    addTexture(&menuTextures, "data/img/menu/how_to.png");
+    addTexture(&menuTextures, "data/img/menu/left.png");
+    addTexture(&menuTextures, "data/img/menu/right.png");
+    addTexture(&menuTextures, "data/img/menu/play_c_2p_on.png");
+    addTexture(&menuTextures, "data/img/menu/play_c_easy_on.png");
+    addTexture(&menuTextures, "data/img/menu/play_c_hard_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_editor_on.png");
+    addTexture(&menuTextures, "data/img/menu/exit_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_1_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_2_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_3_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_4_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_5_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_6_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_7_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_8_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_9_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_10_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_11_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_12_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_13_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_14_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_15_on.png");
 
     return menuTextures;
 }
@@ -69,24 +91,26 @@ void drawWindowBackground(GLuint texture)
     glDisable(GL_TEXTURE_2D);
 }
 
-void drawMenuSelection(bool* selected, char* mode, char* levelTxt, TextureList menuTextures, int lvl, int numLvl)
+void drawMenuSelection(bool* selected, char* mode, char* levelTxt, TextureList menuTextures, int lvl, int numLvl, int numMode)
 {
     /* PLAY */
-    drawMenuButton(menuTextures->texture[4], 250, 300, selected[0], mode);
-    if (strcmp(mode,"PLAY : PLAYER VS PLAYER"))
-        drawArrow(menuTextures->texture[5], 60, 300, 90, selected[0]);
-    if (strcmp(mode,"PLAY : COMPUTER HARD"))
-        drawArrow(menuTextures->texture[5], 440, 300, -90, selected[0]);
+    drawMenuButton(menuTextures->texture[6+numMode], 300, 300, selected[0], mode);
+    //if (strcmp(mode,"PLAY : PLAYER VS PLAYER"))
+    if (numMode != 0)
+        drawArrow(menuTextures->texture[4], 60, 300, selected[0]);
+    //if (strcmp(mode,"PLAY : COMPUTER HARD"))
+    if (numMode != 2)
+        drawArrow(menuTextures->texture[5], 540, 300, selected[0]);
     /* LEVEL */
-    drawMenuButton(menuTextures->texture[4], 250, 450, selected[1], levelTxt);
+    drawMenuButton(menuTextures->texture[11+lvl], 300, 450, selected[1], levelTxt);
     if (lvl != 0)
-        drawArrow(menuTextures->texture[5], 60, 450, 90, selected[1]);
+        drawArrow(menuTextures->texture[4], 60, 450, selected[1]);
     if (lvl != numLvl-1)
-        drawArrow(menuTextures->texture[5], 440, 450, -90, selected[1]);
+        drawArrow(menuTextures->texture[5], 540, 450, selected[1]);
     /* EDITOR */
-    drawMenuButton(menuTextures->texture[4], 250, 600, selected[2], "EDITOR");
+    drawMenuButton(menuTextures->texture[9], 300, 600, selected[2], "EDITOR");
     /* EXIT */
-    drawMenuButton(menuTextures->texture[4], 250, 800, selected[3], "EXIT");
+    drawMenuButton(menuTextures->texture[10], 300, 800, selected[3], "EXIT");
 }
 
 void drawMenuButton(GLuint texture, int x, int y, bool selected, char* txt)
@@ -99,18 +123,20 @@ void drawMenuButton(GLuint texture, int x, int y, bool selected, char* txt)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
         glTranslatef(x-5*animate, y, 1);
-        glScalef(280,100,1);
+        glScalef(-400,75,1);
+        glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 
-    drawText(x-15-5*animate, y, txt, 6);
+    
+    //drawText(x-15-5*animate, y, txt, 6);
     glColor4f(1.0,1.0,1.0,1.0);
 }
 
-void drawArrow(GLuint texture, int x, int y, int orientation, bool selected)
+void drawArrow(GLuint texture, int x, int y, bool selected)
 {
     if (!selected)
         glColor4f(1.0,1.0,1.0,0.5);
@@ -120,8 +146,8 @@ void drawArrow(GLuint texture, int x, int y, int orientation, bool selected)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
         glTranslatef(x-5*animate, y, 1);
-        glScalef(60,60,1);
-        glRotatef(orientation, 0.0, 0.0, 1.0);
+        glScalef(-60,60,1);
+        glRotatef(180,0,0,1.0);
         drawSquareTexture();
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -158,19 +184,21 @@ void drawHowToPlay(GLuint texture)
     glEnable(GL_TEXTURE_2D);
 
     glBindTexture(GL_TEXTURE_2D, texture);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
-        glTranslatef(WINDOW_WIDTH-300+5*animate, 500, 1);
+        glTranslatef(WINDOW_WIDTH-200+5*animate, 550, 1);
         glScalef(-300,600,1);
         glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
 
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
-    
+    glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 }
 
-void renderMenu(TextureList menuTextures, State state, bool* selected, char* mode, char* levelTxt, int lvl, int numLvl)
+void renderMenu(TextureList menuTextures, State state, bool* selected, char* mode, char* levelTxt, int lvl, int numLvl, int numMode)
 {
     do
     {
@@ -186,7 +214,7 @@ void renderMenu(TextureList menuTextures, State state, bool* selected, char* mod
                 drawWindowBackground(menuTextures->texture[1]);
                 drawLogo(menuTextures->texture[2]);
                 drawHowToPlay(menuTextures->texture[3]);
-                drawMenuSelection(selected, mode, levelTxt, menuTextures, lvl, numLvl);
+                drawMenuSelection(selected, mode, levelTxt, menuTextures, lvl, numLvl, numMode);
                 drawMenuText();
             }
         glPopMatrix();
@@ -304,6 +332,18 @@ State menuEvent(State state, Button* selection, int* gameMode, int* lvl, int num
                 case SDLK_ESCAPE:
                     state = QUIT;
                     break;
+                case SDLK_m:
+                    if (!mute)
+                    {
+                        Mix_PauseMusic();
+                        mute = true;
+                    }
+                    else
+                    {
+                        Mix_ResumeMusic();
+                        mute = false;
+                    }
+                    break;
                 default :
                     break;
             }
@@ -370,7 +410,7 @@ State menuManager(State state, unsigned int* AI, int* level)
         state = menuEvent(state, &selection, &gameMode, &lvl, numLvl);
 
         textManager(gameMode, lvl, mode, levelTxt);
-        renderMenu(menuTextures, state, selected, mode, levelTxt, lvl, numLvl);
+        renderMenu(menuTextures, state, selected, mode, levelTxt, lvl, numLvl, gameMode);
 
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
         if (elapsedTime < FRAMERATE_MILLISECONDS)
