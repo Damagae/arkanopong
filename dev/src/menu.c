@@ -21,6 +21,11 @@ TextureList createMenuTextures()
 {
     TextureList menuTextures = NULL;
     menuTextures = addTexture(&menuTextures, "data/img/menu/splashscreen.jpg");
+    addTexture(&menuTextures, "data/img/menu/menuBackground.jpg");
+    addTexture(&menuTextures, "data/img/menu/ARKANOPONG.png");
+    addTexture(&menuTextures, "data/img/menu/howTo.png");
+    addTexture(&menuTextures, "data/img/menu/button.jpg");
+    addTexture(&menuTextures, "data/img/menu/arrow.png");
 
     return menuTextures;
 }
@@ -62,12 +67,65 @@ void drawWindowBackground(GLuint texture)
     glDisable(GL_TEXTURE_2D);
 }
 
-void drawMenuButton(bool* selected, char* mode, char* levelTxt)
+void drawMenuSelection(bool* selected, char* mode, char* levelTxt, TextureList menuTextures, int lvl, int numLvl)
 {
-    drawButton(250, 300, mode, selected[0]);
-    drawButton(250, 450, levelTxt, selected[1]);
-    drawButton(250, 600, "EDITOR", selected[2]);
-    drawButton(250, 800, "EXIT", selected[3]);
+    /* PLAY */
+    drawMenuButton(menuTextures->texture[4], 250, 300, selected[0], mode);
+    if (strcmp(mode,"PLAY : PLAYER VS PLAYER"))
+        drawArrow(menuTextures->texture[5], 60, 300, 90, selected[0]);
+    if (strcmp(mode,"PLAY : COMPUTER HARD"))
+        drawArrow(menuTextures->texture[5], 440, 300, -90, selected[0]);
+    /* LEVEL */
+    drawMenuButton(menuTextures->texture[4], 250, 450, selected[1], levelTxt);
+    if (lvl != 0)
+        drawArrow(menuTextures->texture[5], 60, 450, 90, selected[1]);
+    if (lvl != numLvl-1)
+        drawArrow(menuTextures->texture[5], 440, 450, -90, selected[1]);
+    /* EDITOR */
+    drawMenuButton(menuTextures->texture[4], 250, 600, selected[2], "EDITOR");
+    /* EXIT */
+    drawMenuButton(menuTextures->texture[4], 250, 800, selected[3], "EXIT");
+}
+
+void drawMenuButton(GLuint texture, int x, int y, bool selected, char* txt)
+{
+    if (!selected)
+        glColor4f(1.0,1.0,1.0,0.5);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPushMatrix();
+        glTranslatef(x, y, 1);
+        glScalef(280,100,1);
+        drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+
+    drawText(x-15, y, txt, 6);
+    glColor4f(1.0,1.0,1.0,1.0);
+}
+
+void drawArrow(GLuint texture, int x, int y, int orientation, bool selected)
+{
+    if (!selected)
+        glColor4f(1.0,1.0,1.0,0.5);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPushMatrix();
+        glTranslatef(x, y, 1);
+        glScalef(60,60,1);
+        glRotatef(orientation, 0.0, 0.0, 1.0);
+        drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+    glColor4f(1.0,1.0,1.0,1.0);
 }
 
 void drawMenuText()
@@ -110,7 +168,7 @@ void drawHowToPlay(GLuint texture)
     glDisable(GL_TEXTURE_2D);
 }
 
-void renderMenu(TextureList menuTextures, State state, bool* selected, char* mode, char* levelTxt)
+void renderMenu(TextureList menuTextures, State state, bool* selected, char* mode, char* levelTxt, int lvl, int numLvl)
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -124,7 +182,7 @@ void renderMenu(TextureList menuTextures, State state, bool* selected, char* mod
             drawWindowBackground(menuTextures->texture[1]);
             drawLogo(menuTextures->texture[2]);
             drawHowToPlay(menuTextures->texture[3]);
-            drawMenuButton(selected, mode, levelTxt);
+            drawMenuSelection(selected, mode, levelTxt, menuTextures, lvl, numLvl);
             drawMenuText();
         }
     glPopMatrix();
@@ -274,11 +332,7 @@ void textManager(int gameMode, int lvl, char* mode, char* levelTxt)
 
 State menuManager(State state, unsigned int* AI, int* level)
 {
-    TextureList menuTextures = NULL;
-    menuTextures = addTexture(&menuTextures, "data/img/menu/splashscreen.jpg");
-    addTexture(&menuTextures, "data/img/menu/menuBackground.jpg");
-    addTexture(&menuTextures, "data/img/menu/ARKANOPONG.png");
-    addTexture(&menuTextures, "data/img/menu/howTo.png");
+    TextureList menuTextures = createMenuTextures();
 
     int numLvl;
     free(levelList(&numLvl));
@@ -307,7 +361,7 @@ State menuManager(State state, unsigned int* AI, int* level)
         }
 
         textManager(gameMode, lvl, mode, levelTxt);
-        renderMenu(menuTextures, state, selected, mode, levelTxt);
+        renderMenu(menuTextures, state, selected, mode, levelTxt, lvl, numLvl);
 
         state = menuEvent(state, &selection, &gameMode, &lvl, numLvl);
 

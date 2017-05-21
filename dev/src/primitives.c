@@ -119,6 +119,7 @@ int textLength(char * text)
     return length;
 }
 
+/* Size correspond à la police (de 0 à 6) */
 void drawText(int x, int y, char* txt, unsigned int size)
 {
     if(txt!=NULL)
