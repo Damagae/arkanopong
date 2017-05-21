@@ -5,6 +5,7 @@
 
 #include "editor.h"
 #include "primitives.h"
+#include "audio.h"
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
@@ -14,6 +15,8 @@ extern int WINDOW_HEIGHT;
 
 extern int GAME_WIDTH;
 extern int GAME_HEIGHT;
+
+static bool mute = false;
 
 #define HEIGHT_DEFAULT 33
 #define WIDTH_DEFAULT 67
@@ -198,6 +201,18 @@ bool editorEvent(State* state, int* position, int *tab, int* selection)
             {
                 case SDLK_ESCAPE:
                     return false;
+                    break;
+                case SDLK_m:
+                    if (!mute)
+                    {
+                        Mix_PauseMusic();
+                        mute = true;
+                    }
+                    else
+                    {
+                        Mix_ResumeMusic();
+                        mute = false;
+                    }
                     break;
                 default :
                     break;
