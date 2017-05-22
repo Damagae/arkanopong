@@ -129,7 +129,7 @@ int * loadLevel (const char * filepath)
                         ++n;
                         ++parity; // We add a difference due to a 2 digits number - It is %2 so the result is either 0 or 1
                     } else {
-                        fprintf(stderr, "[%d] Fichier niveau non conforme (type de brique)\n", i);
+                        fprintf(stderr, "[%d] Fichier niveau non conforme (type de brique 2nbr)\n", i);
                         return NULL;
                     }             
                 } else {
