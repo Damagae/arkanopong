@@ -10,5 +10,6 @@ int compatibleTypeColor(int nb);
 int randomColor();
 char ** levelList(int* numFiles);
 void createLevel(int* level, int* color);
+void deleteLevelFile(int level);
 
 #endif

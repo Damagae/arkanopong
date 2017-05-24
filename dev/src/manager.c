@@ -753,10 +753,10 @@ bool playGame(Game* game, unsigned int AI, State* state)
 
     playSound(0, game->sound[6]);
     
-    /* FOR COLLISION TEST */
+    /* FOR COLLISION TEST 
         Ball* ball = createBall(PointXY(500,890), VectorXY(0,1), &game->player[0], game->ballTexture);
         addBall(&game->ballList, ball);
-    
+    */
 
     /** Boucle d'affichage et de gestion du jeu **/
     while(inGame)

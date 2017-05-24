@@ -320,6 +320,10 @@ State menuEvent(State state, Button* selection, int* gameMode, int* lvl, int num
                     selectMode(true, selection, gameMode);
                     selectLevel(true, selection, lvl, numLvl);
                     break;
+                case SDLK_DELETE:
+                    //deleteLevel(*lvl);
+                    --(*lvl);
+                    break;
                 default :
                     state = MENU;
                     break;

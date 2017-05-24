@@ -115,9 +115,11 @@ void drawBonus(Bonus bonus)
         glBindTexture(GL_TEXTURE_2D, bonus.texture);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
-            //if (bonus.type)
             glTranslatef(bonus.position.x, bonus.position.y, 1);
-            glScalef(bonus.radius*2, -bonus.radius*2, 1);
+            if (bonus.type !=  2)
+                glScalef(bonus.radius*2, -bonus.radius*2, 1);
+            else
+                glScalef(bonus.radius*4, -bonus.radius*2, 1);
             if (bonus.direction.y <= 0)
                 glRotatef(180, 0.0, 0.0, 1.0);
             drawSquareTexture();

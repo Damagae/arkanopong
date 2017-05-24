@@ -316,3 +316,8 @@ void createLevel(int* level, int* color)
     fclose(f);
 }
 
+// Parameter : the number of the level
+void deleteLevelFile(int level)
+{
+
+}
