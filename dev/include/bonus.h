@@ -40,8 +40,8 @@ void drawAllBonus(BonusList bonusList);
 
 int selectBonus(BrickType type);
 
-void barSizeUp (PtBar ptBar);
-void barSizeDown (PtBar ptBar);
+void barSizeUp (PtBar ptBar, GLuint* texture, int numPlayer);
+void barSizeDown (PtBar ptBar, GLuint* texture, int numPlayer);
 void barSpeedUp (PtBar ptBar);
 void ballSpeedUp (PtBall ptBall);
 void ballSpeedDown (PtBall ptBall);
@@ -51,7 +51,7 @@ void addLife (Player* player);
 void slowPower(Player* player);
 void fastPower(Player* player);
 
-void getBonus(Bonus bonus, PtBall* ballList);
+void getBonus(Bonus bonus, PtBall* ballList, GLuint* barTexture);
 
 float bonusBottomPosition (Bonus bonus);
 float bonusTopPosition (Bonus bonus);

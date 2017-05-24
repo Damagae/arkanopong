@@ -201,14 +201,26 @@ void deleteBonusList(BonusList* bonusList)
 
 /** BONUS EFFECT FUNCTIONS **/
 
-void barSizeUp (PtBar ptBar)
+void barSizeUp (PtBar ptBar, GLuint* texture, int numPlayer)
 {
     ptBar->width += BAR_SIZE_CHANGE;
+    int i;
+    for (i = -2; i <=2; i++)
+    {
+        if (ptBar->width == 200+BAR_SIZE_CHANGE*i)
+            ptBar->texture = texture[4+numPlayer+2*i];
+    }
 }
 
-void barSizeDown (PtBar ptBar)
+void barSizeDown (PtBar ptBar, GLuint* texture, int numPlayer)
 {
     ptBar->width -= BAR_SIZE_CHANGE;
+    int i;
+    for (i = -2; i <=2; i++)
+    {
+        if (ptBar->width == 200+BAR_SIZE_CHANGE*i)
+            ptBar->texture = texture[4+numPlayer+2*i];
+    }
 }
 
 void barSpeedUp (PtBar ptBar)
@@ -266,15 +278,15 @@ void fastPower(Player* player)
     player->gauge = 100;
 }
 
-void getBonus(Bonus bonus, PtBall* ballList)
+void getBonus(Bonus bonus, PtBall* ballList, GLuint* barTexture)
 {
     if (bonus.type == BARUP)
     {
-        barSizeUp(bonus.ptPlayer->ptBar);
+        barSizeUp(bonus.ptPlayer->ptBar, barTexture, bonus.ptPlayer->num);
     }
     else if (bonus.type == BARDWN)
     {
-        barSizeDown(bonus.ptPlayer->ptBar);
+        barSizeDown(bonus.ptPlayer->ptBar, barTexture, bonus.ptPlayer->num);
     }
     else if (bonus.type == BARSPDUP)
     {

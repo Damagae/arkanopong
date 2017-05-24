@@ -9,7 +9,7 @@ void initAudio()
     else
     {
         Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
-        Mix_AllocateChannels(12);
+        Mix_AllocateChannels(14);
     }
 }
 
@@ -45,6 +45,8 @@ Mix_Chunk * createSound(const char* filename)
 
 void playSound(unsigned int channel, Mix_Chunk * sound)
 {
+    while(Mix_Playing(channel))
+        ++channel;
     Mix_PlayChannel(channel, sound, 0);
 }
 

@@ -23,19 +23,19 @@ typedef struct
     bool pause;
     bool end;
     
-    GLuint brickTexture[MAX_TEXTURES];
-    GLuint barTexture[2];
-    GLuint ballTexture[2];
     GLuint backgroundTexture[MAX_TEXTURES];
+    GLuint barTexture[10];
+    GLuint ballTexture[2];
     GLuint lifeTexture[2];
+    GLuint brickTexture[MAX_TEXTURES];
     GLuint bonusTexture[MAX_TEXTURES];
     GLuint uiTexture[5];
 
     char* backgroundTextureFile[MAX_TEXTURES];
-    char* brickTextureFile[MAX_TEXTURES];
+    char* barTextureFile[10];
     char* ballTextureFile[2];
-    char* barTextureFile[2];
     char* lifeTextureFile[2];
+    char* brickTextureFile[MAX_TEXTURES];
     char* bonusTextureFile[MAX_TEXTURES];
     char* uiTextureFile[5];
 
@@ -65,12 +65,12 @@ Game* createGame(int lvl);
 
 void drawGameBorder();
 void drawGameBackground(GLuint backgroundTexture);
-void drawRestart(bool restart);
+void drawRestart(bool restart, GLuint* texture);
 void drawPause(GLuint uiTexture);
 
 void renderGame(Game* game, char timer, bool restart);
 int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick, GLuint* brickTexture);
-void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList, Mix_Chunk ** sound);
+void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList, Mix_Chunk ** sound, GLuint* barTexture);
 Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtBrick ptBrick, PtPlayer player, GLuint* brickTexture);
 Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, GLuint* brickTexture, Mix_Chunk ** sound);
 Position runGame(Game* game);

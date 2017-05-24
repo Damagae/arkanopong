@@ -29,6 +29,9 @@ static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
 #define AI_HARD 10 //Speed of the bar if AI is hard
 
+
+/* INITIALISATION */
+
 void setVideoMode(unsigned int width, unsigned int height)
 {
   if(NULL == SDL_SetVideoMode(width, height, BIT_PER_PIXEL, SDL_OPENGL)) {
@@ -101,33 +104,53 @@ Game* createGame(int lvl)
     }
 
     /* Création des textures */
+    game->backgroundTextureFile[0] = "data/img/background/fond.jpg";
+    game->backgroundTextureFile[1] = "data/img/menu/fond_menu.jpg";
+    game->barTextureFile[0] = "data/img/bar/B_lego_2x1.png";
+    game->barTextureFile[1] = "data/img/bar/R_lego_2x1.png";
+    game->barTextureFile[2] = "data/img/bar/B_lego_4x1.png";
+    game->barTextureFile[3] = "data/img/bar/R_lego_4x1.png";
+    game->barTextureFile[4] = "data/img/bar/B_lego_6x1.png";
+    game->barTextureFile[5] = "data/img/bar/R_lego_6x1.png";
+    game->barTextureFile[6] = "data/img/bar/B_lego_8x1.png";
+    game->barTextureFile[7] = "data/img/bar/R_lego_8x1.png";
+    game->barTextureFile[8] = "data/img/bar/B_lego_10x1.png";
+    game->barTextureFile[9] = "data/img/bar/R_lego_10x1.png";
+    game->ballTextureFile[0] = "data/img/ball/B_lego_rond.png";
+    game->ballTextureFile[1] = "data/img/ball/R_lego_rond.png";
+    game->lifeTextureFile[0] = "data/img/life.png";
+    game->lifeTextureFile[1] = "data/img/life_empty.png";
     game->brickTextureFile[0] = "data/img/brick/S_indes_brick.png";
     game->brickTextureFile[1] = "data/img/brick/W_brick_0.png";
     game->brickTextureFile[2] = "data/img/brick/W_brick_1.png";
     game->brickTextureFile[3] = "data/img/brick/W_brick_2.png";
-    game->barTextureFile[0] = "data/img/bar/B_lego_6x1.png";
-    game->barTextureFile[1] = "data/img/bar/R_lego_4x1.png";
-    game->ballTextureFile[0] = "data/img/ball/B_lego_rond.png";
-    game->ballTextureFile[1] = "data/img/ball/R_lego_rond.png";
-    game->backgroundTextureFile[0] = "data/img/background/fond.jpg";
-    game->backgroundTextureFile[1] = "data/img/menu/fond_menu.jpg";
-    game->lifeTextureFile[0] = "data/img/life.png";
-    game->lifeTextureFile[1] = "data/img/life_empty.png";
     game->bonusTextureFile[0] = "data/img/bonus/barUP.png";
     game->bonusTextureFile[1] = "data/img/bonus/barDWN.png";
     game->uiTextureFile[0] = "data/img/menu/pause.png";
+    game->uiTextureFile[1] = "data/img/menu/play_again_on.png";
+    game->uiTextureFile[2] = "data/img/menu/play_again_off.png";
+    game->uiTextureFile[3] = "data/img/menu/exit_on.png";
+    game->uiTextureFile[4] = "data/img/menu/exit_off.png";
 
+    game->backgroundTexture[0] = generateTexture(&(game->backgroundTexture[0]), game->backgroundTextureFile[0]);
+    game->backgroundTexture[1] = generateTexture(&(game->backgroundTexture[1]), game->backgroundTextureFile[1]);
+    game->barTexture[0] = generateTexture(&(game->barTexture[0]), game->barTextureFile[0]);
+    game->barTexture[1] = generateTexture(&(game->barTexture[1]), game->barTextureFile[1]);
+    game->barTexture[2] = generateTexture(&(game->barTexture[2]), game->barTextureFile[2]);
+    game->barTexture[3] = generateTexture(&(game->barTexture[3]), game->barTextureFile[3]);
+    game->barTexture[4] = generateTexture(&(game->barTexture[4]), game->barTextureFile[4]);
+    game->barTexture[5] = generateTexture(&(game->barTexture[5]), game->barTextureFile[5]);
+    game->barTexture[6] = generateTexture(&(game->barTexture[6]), game->barTextureFile[6]);
+    game->barTexture[7] = generateTexture(&(game->barTexture[7]), game->barTextureFile[7]);
+    game->barTexture[8] = generateTexture(&(game->barTexture[8]), game->barTextureFile[8]);
+    game->barTexture[9] = generateTexture(&(game->barTexture[9]), game->barTextureFile[9]);
+    game->ballTexture[0] = generateTexture(&(game->ballTexture[0]), game->ballTextureFile[0]);
+    game->ballTexture[1] = generateTexture(&(game->ballTexture[1]), game->ballTextureFile[1]);
+    game->lifeTexture[0] = generateTexture(&(game->lifeTexture[0]), game->lifeTextureFile[0]);
     game->brickTexture[0] = generateTexture(&(game->brickTexture[0]), game->brickTextureFile[0]);
     game->brickTexture[1] = generateTexture(&(game->brickTexture[1]), game->brickTextureFile[1]);
     game->brickTexture[2] = generateTexture(&(game->brickTexture[2]), game->brickTextureFile[2]);
     game->brickTexture[3] = generateTexture(&(game->brickTexture[3]), game->brickTextureFile[3]);
-    game->barTexture[0] = generateTexture(&(game->barTexture[0]), game->barTextureFile[0]);
-    game->barTexture[1] = generateTexture(&(game->barTexture[1]), game->barTextureFile[1]);
-    game->ballTexture[0] = generateTexture(&(game->ballTexture[0]), game->ballTextureFile[0]);
-    game->ballTexture[1] = generateTexture(&(game->ballTexture[1]), game->ballTextureFile[1]);
-    game->backgroundTexture[0] = generateTexture(&(game->backgroundTexture[0]), game->backgroundTextureFile[0]);
-    game->backgroundTexture[1] = generateTexture(&(game->backgroundTexture[1]), game->backgroundTextureFile[1]);
-    game->lifeTexture[0] = generateTexture(&(game->lifeTexture[0]), game->lifeTextureFile[0]);
     game->bonusTexture[0] = generateTexture(&(game->bonusTexture[0]), game->bonusTextureFile[0]);
     game->bonusTexture[1] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
     game->bonusTexture[2] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
@@ -136,12 +159,16 @@ Game* createGame(int lvl)
     game->bonusTexture[5] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
     game->bonusTexture[6] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
     game->uiTexture[0] = generateTexture(&(game->uiTexture[0]), game->uiTextureFile[0]);
+    game->uiTexture[1] = generateTexture(&(game->uiTexture[1]), game->uiTextureFile[1]);
+    game->uiTexture[2] = generateTexture(&(game->uiTexture[2]), game->uiTextureFile[2]);
+    game->uiTexture[3] = generateTexture(&(game->uiTexture[3]), game->uiTextureFile[3]);
+    game->uiTexture[4] = generateTexture(&(game->uiTexture[4]), game->uiTextureFile[4]);
 
     /* Création des barres */
     Point2D posDWN = PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50);
     Point2D posUP = PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50);
-    game->bar[0] = createBar(posDWN, game->barTexture[0]);
-    game->bar[1] = createBar(posUP, game->barTexture[1]);
+    game->bar[0] = createBar(posDWN, game->barTexture[4]);
+    game->bar[1] = createBar(posUP, game->barTexture[5]);
     
     /* Création des joueurs */
     game->player[0] = createPlayer(0, "Player 1", &(game->bar[0]));
@@ -176,9 +203,13 @@ Game* createGame(int lvl)
     game->sound[5] = createSound("data/audio/barDwn.wav");
     game->sound[6] = createSound("data/audio/public.wav");
     game->sound[7] = createSound("data/audio/fastTime.wav");
+    game->sound[8] = createSound("data/audio/beep.wav");
+    game->sound[9] = createSound("data/audio/bip.wav");
 
     return game;
 }
+
+/* RENDER FUNCTIONS */
 
 void drawGameBorder()
 {
@@ -210,9 +241,9 @@ void drawPause(GLuint uiTexture)
     Point2D GAME_TOP_LEFT = PointXY((WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2);
 
     //glColor4f(1.0,1.0,1.0,1.0);
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, uiTexture);
     glEnable(GL_BLEND);
+
+    glBindTexture(GL_TEXTURE_2D, uiTexture);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
         glTranslatef(GAME_TOP_LEFT.x + GAME_WIDTH/2, GAME_TOP_LEFT.y + GAME_HEIGHT/2, 1);
@@ -220,8 +251,38 @@ void drawPause(GLuint uiTexture)
         drawSquareTexture();
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
+    
     glDisable(GL_BLEND);
     //glColor4f(1.0,1.0,1.0,1.0);
+}
+
+void drawRestart(bool restart, GLuint* texture)
+{
+    Point2D GAME_TOP_LEFT = PointXY((WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2);
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    
+    glBindTexture(GL_TEXTURE_2D, texture[2-restart]);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPushMatrix();
+        glTranslatef(GAME_TOP_LEFT.x + GAME_WIDTH/3, GAME_TOP_LEFT.y + 2*(GAME_HEIGHT/4), 1);
+        glScalef(200, -125, 1);
+        drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    glBindTexture(GL_TEXTURE_2D, texture[3+restart]);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPushMatrix();
+        glTranslatef(GAME_TOP_LEFT.x + 2*(GAME_WIDTH/3), GAME_TOP_LEFT.y + 2*(GAME_HEIGHT/4), 1);
+        glScalef(200, -125, 1);
+        drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
 }
 
 void renderGame(Game* game, char timer, bool restart)
@@ -279,16 +340,11 @@ void renderGame(Game* game, char timer, bool restart)
                 drawText(490,485, &timer, 6);
             }
         }
-/*
-        if (game->pause)
-        {
-            drawText(500, 500, "Pause", 6);
-        }
-*/
+
         if(game->end)
         {
             drawWinner(game->player[0], game->player[1]);
-            drawRestart(restart);
+            drawRestart(restart, game->uiTexture);
         }
 
         glColor4f(1.0,1.0,1.0,1.0);
@@ -298,20 +354,7 @@ void renderGame(Game* game, char timer, bool restart)
     } while (transition < 100);
 }
 
-void drawRestart(bool restart)
-{
-    drawButton(350, 550, "RESTART", restart);
-    if (restart)
-    {
-        drawButton(650, 550, "EXIT", false);
-    }
-    else
-    {
-        drawButton(650, 550, "EXIT", true);
-    }
-}
-
-void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList, Mix_Chunk ** sound)
+void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList, Mix_Chunk ** sound, GLuint* barTexture)
 {
     Bonus bonus;
     BonusList ptBonus = (*bonusList);
@@ -330,14 +373,10 @@ void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList
             {
                 if (bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
                 {
-                    getBonus(bonus, ballList);
+                    getBonus(bonus, ballList, barTexture);
                     ptBonus->actif = false;
 
                     // Bonus Sounds
-                    while(Mix_Playing(channel))
-                    {
-                        ++channel;
-                    }
                     if (ptBonus->type == BARUP)
                         playSound(channel, sound[2]);
                     else if (ptBonus->type == BARDWN)
@@ -425,16 +464,17 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
     for(; ballList != NULL; ballList = ballList->next)
     {
         moveBall(ballList);
-        while(Mix_Playing(channel))
-        {
-            ++channel;
-        }
         
         ballPosition = positionDetection(ballList, bar1, bar2, brickList, NULL, player, brickTexture);
         // If the ball hit something (not a brick), then stop
-        if(ballPosition == OUT_UP || ballPosition == OUT_DOWN || ballPosition == BAR_UP ||ballPosition == BAR_DOWN || ballPosition == WALL)
+        if(ballPosition == BAR_UP ||ballPosition == BAR_DOWN || ballPosition == WALL)
         {
             playSound(channel, sound[1]);
+            return ballPosition;
+        }
+        else if(ballPosition == OUT_UP || ballPosition == OUT_DOWN)
+        {
+            playSound(channel, sound[9]);
             return ballPosition;
         }
             
@@ -469,7 +509,7 @@ Position runGame(Game* game)
     
     powerManager(game);
     ballPosition = ballManager(game->ballList, &game->bar[0], &game->bar[1], &game->brickList, game->player, game->brickTexture, game->sound);
-    bonusManager(&game->bonusList, &game->bar[0], &game->bar[1], &game->ballList, game->sound);
+    bonusManager(&game->bonusList, &game->bar[0], &game->bar[1], &game->ballList, game->sound, game->barTexture);
 
     return ballPosition;
 }
@@ -720,11 +760,7 @@ bool playGame(Game* game, unsigned int AI, State* state)
 
         // Starting time
         if (startTime >= 4500 && startTime <= 5000)
-        {
-            while(Mix_Playing(channel))
-                ++channel;
             playSound(channel, game->sound[4]);
-        }
         if(startTime < 5100)
         {
             moveBarBall(game->player[0].ptBar, game->ballList, game->direction[0]);
@@ -739,7 +775,7 @@ bool playGame(Game* game, unsigned int AI, State* state)
             game->start = true;
         }
 
-        /* Dessin */
+        /* Drawing */
         renderGame(game, timer, restart);
 
         if (game->start && !game->pause)
@@ -756,10 +792,6 @@ bool playGame(Game* game, unsigned int AI, State* state)
 
                     // SOUND
                     Mix_VolumeMusic(MIX_MAX_VOLUME / 6);
-                    while(Mix_Playing(channel))
-                    {
-                        ++channel;
-                    }
                     playSound(channel, game->sound[3]);
                 }
             }
@@ -871,7 +903,7 @@ void powerManager(Game* game)
 void freeGameTextures(Game* game)
 {
     glDeleteTextures(MAX_TEXTURES, game->brickTexture);
-    glDeleteTextures(2, game->barTexture);
+    glDeleteTextures(10, game->barTexture);
     glDeleteTextures(2, game->ballTexture);
     glDeleteTextures(2, game->lifeTexture);
     glDeleteTextures(MAX_TEXTURES, game->backgroundTexture);
@@ -888,6 +920,6 @@ void freeGame(Game* game)
     deleteBonusList(&(game->bonusList));
 
     int i;
-    for (i = 0; i < 8; ++i)
+    for (i = 0; i < 10; ++i)
         freeSound(game->sound[i]);
 }
