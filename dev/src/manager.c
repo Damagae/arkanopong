@@ -106,7 +106,7 @@ Game* createGame(int lvl)
     game->brickTextureFile[2] = "data/img/brick/P_lego_4x2.png";
     game->brickTextureFile[3] = "data/img/brick/B_lego_4x2_2.png";
     game->barTextureFile[0] = "data/img/bar/B_lego_6x1.png";
-    game->barTextureFile[1] = "data/img/bar/R_lego_4x1.png";
+    game->barTextureFile[1] = "data/img/bar/R_lego_6x1.png";
     game->ballTextureFile[0] = "data/img/ball/B_lego_rond.png";
     game->ballTextureFile[1] = "data/img/ball/R_lego_rond.png";
     game->backgroundTextureFile[0] = "data/img/background/fond.jpg";
