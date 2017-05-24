@@ -13,8 +13,6 @@
 #include "audio.h"
 #include "utilities.h"
 
-#define MAX_TEXTURES 10
-
 /** STRUCTURES **/
 
 typedef struct
@@ -23,20 +21,20 @@ typedef struct
     bool pause;
     bool end;
     
-    GLuint backgroundTexture[MAX_TEXTURES];
+    GLuint backgroundTexture[2];
     GLuint barTexture[10];
     GLuint ballTexture[2];
     GLuint lifeTexture[2];
-    GLuint brickTexture[MAX_TEXTURES];
-    GLuint bonusTexture[MAX_TEXTURES];
+    GLuint brickTexture[4];
+    GLuint bonusTexture[14];
     GLuint uiTexture[5];
 
-    char* backgroundTextureFile[MAX_TEXTURES];
+    char* backgroundTextureFile[2];
     char* barTextureFile[10];
     char* ballTextureFile[2];
     char* lifeTextureFile[2];
-    char* brickTextureFile[MAX_TEXTURES];
-    char* bonusTextureFile[MAX_TEXTURES];
+    char* brickTextureFile[4];
+    char* bonusTextureFile[14];
     char* uiTextureFile[5];
 
     Bar bar[2];

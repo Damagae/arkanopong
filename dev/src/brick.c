@@ -67,7 +67,9 @@ void drawBrick(Brick brick)
     if (brick.life != 0)
     {
         if (brick.type != INDES) glColor3f(brick.color.r, brick.color.g, brick.color.b);
+        glEnable(GL_BLEND);
         glBindTexture(GL_TEXTURE_2D, brick.texture);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
             glTranslatef(brick.position.x, brick.position.y, 1);
             glScalef(brick.width, brick.height, 1);
@@ -76,6 +78,7 @@ void drawBrick(Brick brick)
             drawSquareTexture();
         glPopMatrix();
         glBindTexture(GL_TEXTURE_2D, 0);
+        glDisable(GL_BLEND);
         glColor3f(1.0, 1.0, 1.0);
     }
 }

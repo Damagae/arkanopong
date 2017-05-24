@@ -36,7 +36,7 @@ GLuint generateTexture(GLuint * texture, char* filename)
   surface = IMG_Load(filename);
   if (surface == NULL)
   {
-      fprintf(stderr, "L'allocation de l'image ne marche pas :/\n");
+      fprintf(stderr, "L'allocation de l'image '%s' ne marche pas :/\n", filename);
   }
 
   glGenTextures(1, texture);

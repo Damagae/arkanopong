@@ -8,8 +8,6 @@
 #include "primitives.h"
 #include "menu.h"
 
-#define MAX_TEXTURES 10
-
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 
@@ -127,51 +125,50 @@ Game* createGame(int lvl)
     game->barTextureFile[9] = "data/img/bar/R_lego_10x1.png";
     game->ballTextureFile[0] = "data/img/ball/B_lego_rond.png";
     game->ballTextureFile[1] = "data/img/ball/R_lego_rond.png";
-    game->lifeTextureFile[0] = "data/img/life.png";
-    game->lifeTextureFile[1] = "data/img/life_empty.png";
+    game->lifeTextureFile[0] = "data/img/gameUI/life.png";
+    game->lifeTextureFile[1] = "data/img/gameUI/life_empty.png";
     game->brickTextureFile[0] = "data/img/brick/S_indes_brick.png";
     game->brickTextureFile[1] = "data/img/brick/W_brick_0.png";
     game->brickTextureFile[2] = "data/img/brick/W_brick_1.png";
     game->brickTextureFile[3] = "data/img/brick/W_brick_2.png";
-    game->bonusTextureFile[0] = "data/img/bonus/barUP.png";
-    game->bonusTextureFile[1] = "data/img/bonus/barDWN.png";
-    game->uiTextureFile[0] = "data/img/menu/pause.png";
-    game->uiTextureFile[1] = "data/img/menu/play_again_on.png";
-    game->uiTextureFile[2] = "data/img/menu/play_again_off.png";
-    game->uiTextureFile[3] = "data/img/menu/exit_on.png";
-    game->uiTextureFile[4] = "data/img/menu/exit_off.png";
+    game->bonusTextureFile[0] = "data/img/bonus/bar_up_img.png";
+    game->bonusTextureFile[1] = "data/img/bonus/bar_up_txt.png";
+    game->bonusTextureFile[2] = "data/img/bonus/bar_down_img.png";
+    game->bonusTextureFile[3] = "data/img/bonus/bar_down_txt.png";
+    game->bonusTextureFile[4] = "data/img/bonus/bar_speed_up_img.png";
+    game->bonusTextureFile[5] = "data/img/bonus/bar_speed_up_txt.png";
+    game->bonusTextureFile[6] = "data/img/bonus/slow_time_img.png";
+    game->bonusTextureFile[7] = "data/img/bonus/slow_time_txt.png";
+    game->bonusTextureFile[8] = "data/img/bonus/accelerate_time_img.png";
+    game->bonusTextureFile[9] = "data/img/bonus/accelerate_time_txt.png";
+    game->bonusTextureFile[10] = "data/img/bonus/add_life_img.png";
+    game->bonusTextureFile[11] = "data/img/bonus/add_life_txt.png";
+    game->bonusTextureFile[12] = "data/img/bonus/add_ball_img.png";
+    game->bonusTextureFile[13] = "data/img/bonus/add_ball_txt.png";
+    game->uiTextureFile[0] = "data/img/gameUI/pause.png";
+    game->uiTextureFile[1] = "data/img/gameUI/play_again_on.png";
+    game->uiTextureFile[2] = "data/img/gameUI/play_again_off.png";
+    game->uiTextureFile[3] = "data/img/gameUI/exit_on.png";
+    game->uiTextureFile[4] = "data/img/gameUI/exit_off.png";
 
-    game->backgroundTexture[0] = generateTexture(&(game->backgroundTexture[0]), game->backgroundTextureFile[0]);
-    game->backgroundTexture[1] = generateTexture(&(game->backgroundTexture[1]), game->backgroundTextureFile[1]);
-    game->barTexture[0] = generateTexture(&(game->barTexture[0]), game->barTextureFile[0]);
-    game->barTexture[1] = generateTexture(&(game->barTexture[1]), game->barTextureFile[1]);
-    game->barTexture[2] = generateTexture(&(game->barTexture[2]), game->barTextureFile[2]);
-    game->barTexture[3] = generateTexture(&(game->barTexture[3]), game->barTextureFile[3]);
-    game->barTexture[4] = generateTexture(&(game->barTexture[4]), game->barTextureFile[4]);
-    game->barTexture[5] = generateTexture(&(game->barTexture[5]), game->barTextureFile[5]);
-    game->barTexture[6] = generateTexture(&(game->barTexture[6]), game->barTextureFile[6]);
-    game->barTexture[7] = generateTexture(&(game->barTexture[7]), game->barTextureFile[7]);
-    game->barTexture[8] = generateTexture(&(game->barTexture[8]), game->barTextureFile[8]);
-    game->barTexture[9] = generateTexture(&(game->barTexture[9]), game->barTextureFile[9]);
-    game->ballTexture[0] = generateTexture(&(game->ballTexture[0]), game->ballTextureFile[0]);
-    game->ballTexture[1] = generateTexture(&(game->ballTexture[1]), game->ballTextureFile[1]);
-    game->lifeTexture[0] = generateTexture(&(game->lifeTexture[0]), game->lifeTextureFile[0]);
-    game->brickTexture[0] = generateTexture(&(game->brickTexture[0]), game->brickTextureFile[0]);
-    game->brickTexture[1] = generateTexture(&(game->brickTexture[1]), game->brickTextureFile[1]);
-    game->brickTexture[2] = generateTexture(&(game->brickTexture[2]), game->brickTextureFile[2]);
-    game->brickTexture[3] = generateTexture(&(game->brickTexture[3]), game->brickTextureFile[3]);
-    game->bonusTexture[0] = generateTexture(&(game->bonusTexture[0]), game->bonusTextureFile[0]);
-    game->bonusTexture[1] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
-    game->bonusTexture[2] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
-    game->bonusTexture[3] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
-    game->bonusTexture[4] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
-    game->bonusTexture[5] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
-    game->bonusTexture[6] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
-    game->uiTexture[0] = generateTexture(&(game->uiTexture[0]), game->uiTextureFile[0]);
-    game->uiTexture[1] = generateTexture(&(game->uiTexture[1]), game->uiTextureFile[1]);
-    game->uiTexture[2] = generateTexture(&(game->uiTexture[2]), game->uiTextureFile[2]);
-    game->uiTexture[3] = generateTexture(&(game->uiTexture[3]), game->uiTextureFile[3]);
-    game->uiTexture[4] = generateTexture(&(game->uiTexture[4]), game->uiTextureFile[4]);
+    int i;
+    for (i = 0; i < 14; ++i)
+    {
+        if (i < 2)
+        {
+            game->backgroundTexture[i] = generateTexture(&(game->backgroundTexture[i]), game->backgroundTextureFile[i]);
+            game->ballTexture[i] = generateTexture(&(game->ballTexture[i]), game->ballTextureFile[i]);
+            game->lifeTexture[i] = generateTexture(&(game->lifeTexture[i]), game->lifeTextureFile[i]);
+        }
+        if (i < 4)
+            game->brickTexture[i] = generateTexture(&(game->brickTexture[i]), game->brickTextureFile[i]);
+        if (i < 5)
+            game->uiTexture[i] = generateTexture(&(game->uiTexture[i]), game->uiTextureFile[i]);
+        if (i < 10)
+            game->barTexture[i] = generateTexture(&(game->barTexture[i]), game->barTextureFile[i]);
+
+        game->bonusTexture[i] = generateTexture(&(game->bonusTexture[i]), game->bonusTextureFile[i]);
+    }
 
     /* Création des barres */
     Point2D posDWN = PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50);
@@ -756,10 +753,10 @@ bool playGame(Game* game, unsigned int AI, State* state)
 
     playSound(0, game->sound[6]);
     
-    /* FOR COLLISION TEST 
-        Ball* ball = createBall(PointXY(525,890), VectorXY(0,-1), &game->player[0], game->ballTexture);
+    /* FOR COLLISION TEST */
+        Ball* ball = createBall(PointXY(500,890), VectorXY(0,1), &game->player[0], game->ballTexture);
         addBall(&game->ballList, ball);
-    */
+    
 
     /** Boucle d'affichage et de gestion du jeu **/
     while(inGame)
@@ -875,7 +872,7 @@ void slowGame(Game* game)
     Ball* tmp = game->ballList;
     while (tmp != NULL)
     {
-        tmp->speed = tmp->speed - 5;
+        tmp->speed = tmp->speed - 4;
         tmp = tmp->next;
     }
 }
@@ -885,7 +882,7 @@ void accelerateGame(Game* game)
     Ball* tmp = game->ballList;
     while (tmp != NULL)
     {
-        tmp->speed = tmp->speed + 5;
+        tmp->speed = tmp->speed + 4;
         tmp = tmp->next;
     }
 }
@@ -911,12 +908,12 @@ void powerManager(Game* game)
 
 void freeGameTextures(Game* game)
 {
-    glDeleteTextures(MAX_TEXTURES, game->brickTexture);
+    glDeleteTextures(4, game->brickTexture);
     glDeleteTextures(10, game->barTexture);
     glDeleteTextures(2, game->ballTexture);
     glDeleteTextures(2, game->lifeTexture);
-    glDeleteTextures(MAX_TEXTURES, game->backgroundTexture);
-    glDeleteTextures(MAX_TEXTURES, game->bonusTexture);
+    glDeleteTextures(2, game->backgroundTexture);
+    glDeleteTextures(14, game->bonusTexture);
     glDeleteTextures(5, game->uiTexture);
 }
 

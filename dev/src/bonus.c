@@ -115,8 +115,9 @@ void drawBonus(Bonus bonus)
         glBindTexture(GL_TEXTURE_2D, bonus.texture);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
+            //if (bonus.type)
             glTranslatef(bonus.position.x, bonus.position.y, 1);
-            glScalef(bonus.radius*2, bonus.radius*2, 1);
+            glScalef(bonus.radius*2, -bonus.radius*2, 1);
             if (bonus.direction.y <= 0)
                 glRotatef(180, 0.0, 0.0, 1.0);
             drawSquareTexture();
@@ -203,23 +204,29 @@ void deleteBonusList(BonusList* bonusList)
 
 void barSizeUp (PtBar ptBar, GLuint* texture, int numPlayer)
 {
-    ptBar->width += BAR_SIZE_CHANGE;
-    int i;
-    for (i = -2; i <=2; i++)
+    if (ptBar->width < 200+2*BAR_SIZE_CHANGE)
     {
-        if (ptBar->width == 200+BAR_SIZE_CHANGE*i)
-            ptBar->texture = texture[4+numPlayer+2*i];
+        ptBar->width += BAR_SIZE_CHANGE;
+        int i;
+        for (i = -2; i <=2; i++)
+        {
+            if (ptBar->width == 200+BAR_SIZE_CHANGE*i)
+                ptBar->texture = texture[4+numPlayer+2*i];
+        }
     }
 }
 
 void barSizeDown (PtBar ptBar, GLuint* texture, int numPlayer)
 {
-    ptBar->width -= BAR_SIZE_CHANGE;
-    int i;
-    for (i = -2; i <=2; i++)
+    if (ptBar->width > 200-2*BAR_SIZE_CHANGE)
     {
-        if (ptBar->width == 200+BAR_SIZE_CHANGE*i)
-            ptBar->texture = texture[4+numPlayer+2*i];
+        ptBar->width -= BAR_SIZE_CHANGE;
+        int i;
+        for (i = -2; i <=2; i++)
+        {
+            if (ptBar->width == 200+BAR_SIZE_CHANGE*i)
+                ptBar->texture = texture[4+numPlayer+2*i];
+        }
     }
 }
 

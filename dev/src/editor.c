@@ -2,6 +2,7 @@
 #include <SDL/SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <time.h>
 
 #include "editor.h"
 #include "primitives.h"
@@ -110,6 +111,22 @@ void drawTab(int* tab, int* tabColor, TextureList editorTextures)
     glDisable(GL_TEXTURE_2D);
 }
 
+void drawHowToEdit(GLuint texture)
+{
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPushMatrix();
+        glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT - WINDOW_HEIGHT/5, 1);
+        glScalef(WINDOW_WIDTH, -WINDOW_HEIGHT/5, 1);
+        drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+}
+
 void renderEditor(TextureList editorTextures, int position, int* tab, int* tabColor, int selection, int color)
 {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -124,14 +141,22 @@ void renderEditor(TextureList editorTextures, int position, int* tab, int* tabCo
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
         drawGameBackground(editorTextures->texture[1]);
+        drawHowToEdit(editorTextures->texture[5]);
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 
     drawTab(tab, tabColor, editorTextures);
     if (selection == 2)
+    {
         drawBrickPreview(editorTextures->texture[selection+2], position, color);
+        drawText(WINDOW_WIDTH/2, GAME_HEIGHT/3+50, "RANDOM BRICK", 6);
+    }
     else
+    {
         drawBrickPreview(editorTextures->texture[selection+2], position, 0);
+        if (selection == 1) drawText(WINDOW_WIDTH/2, GAME_HEIGHT/3+50, "UNBREAKABLE BRICK", 6);
+        else drawText(WINDOW_WIDTH/2, GAME_HEIGHT/3+50, "EMPTY SLOT", 6);
+    }
 
     drawGrid();
 
@@ -200,7 +225,13 @@ int putBrick(int selection)
     else if (selection == 1)
         return 9;
     else
-        return ((int) randomNumber(2, 8));
+    {
+        srand(time(NULL));   // should only be called once
+        // Return a number between 2 and 8
+        int r = 2 + (rand() % 7);
+        return r;
+    }
+        
 }
 
 bool editorEvent(State* state, int* position, int *tab, int* selection, int* color, int* tabColor, Mix_Chunk* sound)
@@ -287,9 +318,10 @@ bool editorManager(State* state)
     TextureList editorTextures = NULL;
     editorTextures = addTexture(&editorTextures, "data/img/menu/fond_menu.jpg");
     addTexture(&editorTextures, "data/img/background/fond.jpg");
-    addTexture(&editorTextures, "data/img/delete.png");
+    addTexture(&editorTextures, "data/img/editor/cross.png");
     addTexture(&editorTextures, "data/img/brick/S_indes_brick.png");
     addTexture(&editorTextures, "data/img/brick/W_brick_0.png");
+    addTexture(&editorTextures, "data/img/editor/How_to_edit_level.png");
 
     Mix_Chunk * sound = createSound("data/audio/confirm.wav");
 
