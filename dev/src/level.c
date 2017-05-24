@@ -6,6 +6,8 @@
 #include <errno.h>
 #include <dirent.h>
 
+#include "bool.h"
+
 #ifndef WIN32
     #include <sys/types.h>
 #endif
@@ -48,13 +50,37 @@ int randomColor()
     return rand() % 4 + 1;
 }
 
+void sort(char ** tab, int * numFiles)
+{
+    int i;
+    char * temp[MAX_SIZE];
+    bool order = false;
+    int length = *numFiles;
+    while(!order)
+    {
+        order = true;
+
+        for(i = 0 ; i < length - 1 ; i++)
+        {
+
+            if(tab[i][5] > tab[i+1][5])
+            {
+                strcpy(temp, tab[i]);
+                strcpy(tab[i], tab[i+1]);
+                strcpy(tab[i+1], temp);
+                order = false;
+            }
+        }
+    }
+}
+
 int * loadLevel (const char * filepath)
 {
     FILE *f = NULL;
     char cwd[MAX_SIZE];
     char path[MAX_SIZE];
     char line1[MAX_SIZE] = "";
-    char line2[MAX_SIZE] = "";
+    char line2[3*MAX_SIZE] = "";
     char line3[MAX_SIZE] = "";
     int * lvl;
     int n = 0;
@@ -72,7 +98,7 @@ int * loadLevel (const char * filepath)
     strcat(path, "/data/level/");
     strcat(path, filepath);
 
-    lvl = malloc(sizeof(int) * MAX_SIZE);
+    lvl = malloc(sizeof(int) * 3 * MAX_SIZE);
     if (lvl == NULL)
     {
         fprintf(stderr, "Echec de l'allocation du tableau niveau\n");
@@ -113,7 +139,7 @@ int * loadLevel (const char * filepath)
         parity = 0;
 
         /* Bricks' type */
-        fgets(line2, MAX_SIZE, f); // get the second line with types
+        fgets(line2, 3 * MAX_SIZE, f); // get the second line with types
         for(i = 1; i <= ((lvl[0] * lvl[1])*2 - 1 + parity); ++i)
         {
             if(i%2 == (1 - parity%2) && digitOrSpace(line2[i-1]) == 0) // odd : digit expected
@@ -231,6 +257,10 @@ char ** levelList(int* numFiles)
     }
 
     *numFiles = i;
+
+    /* sort the list */
+    sort(list, numFiles);
+
     return list;
 }
 
@@ -272,6 +302,7 @@ void createLevel(int* level, int* color)
         fputs(bt, f);
     }
     sprintf(bt, "%d\n", level[12 * 10 - 1]);
+    fputs(bt, f);
 
     /* Bricks colors */
     for(i = 0; i < (12 * 10) - 1; ++i)
@@ -279,10 +310,9 @@ void createLevel(int* level, int* color)
         sprintf(bt, "%d ", color[i]);
         fputs(bt, f);
     }
-    sprintf(bt, "%d\n", color[12 * 10 - 1]);
-    
+    sprintf(bt, "%d\n", color[12 * 10 - 1]);    
     fputs(bt, f);
-
+    
     fclose(f);
 }
 

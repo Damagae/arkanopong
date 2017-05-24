@@ -385,6 +385,7 @@ State menuManager(State state, unsigned int* AI, int* level)
     int numLvl;
     //free(levelList(&numLvl));
     char** txt = levelList(&numLvl);
+    //txt[numLvl - 1] = txt[numLvl];
     int t;
     for (t = 0; t < numLvl; t++)
     {

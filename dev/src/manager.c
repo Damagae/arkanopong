@@ -104,6 +104,15 @@ Game* createGame(int lvl)
     }
 
     /* Création des textures */
+
+    game->brickTextureFile[0] = "data/img/brick/S_indes_brick.png";
+    game->brickTextureFile[1] = "data/img/brick/W_brick_0.png";
+    game->brickTextureFile[2] = "data/img/brick/W_brick_1.png";
+    game->brickTextureFile[3] = "data/img/brick/W_brick_2.png";
+    game->barTextureFile[0] = "data/img/bar/B_lego_6x1.png";
+    game->barTextureFile[1] = "data/img/bar/R_lego_6x1.png";
+    game->ballTextureFile[0] = "data/img/ball/B_lego_rond.png";
+    game->ballTextureFile[1] = "data/img/ball/R_lego_rond.png";
     game->backgroundTextureFile[0] = "data/img/background/fond.jpg";
     game->backgroundTextureFile[1] = "data/img/menu/fond_menu.jpg";
     game->barTextureFile[0] = "data/img/bar/B_lego_2x1.png";
