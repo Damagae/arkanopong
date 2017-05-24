@@ -898,6 +898,13 @@ void moveBarBall(PtBar bar, PtBall ball, Direction direction)
             ball->position.x -= bar->speed;
         }
     }
+
+    /* Ghost take the previous positions */
+    ball->ghost[4] = ball->position;
+    ball->ghost[3] = ball->position;
+    ball->ghost[2] = ball->position;
+    ball->ghost[1] = ball->position;
+    ball->ghost[0] = ball->position;
 }
 
 bool restartGame(Direction direction)

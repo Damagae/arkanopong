@@ -83,7 +83,7 @@ void drawGauge(Bar bar, int gauge, int numPlayer)
 
     glPushMatrix();
         glTranslatef(bar.position.x, bar.position.y+yPos, 1);
-        glScalef(bar.width, bar.height/2, 1);
+        glScalef(100, bar.height/2, 1);
         glColor3f(1.0, 0.0, 0.0);
         drawSquareBorder();
     glPopMatrix();

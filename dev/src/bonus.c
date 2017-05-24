@@ -146,9 +146,9 @@ void drawBonusText(Bonus* bonus)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
             if (bonus->ptPlayer->num ==  0)
-                glTranslatef(WINDOW_WIDTH/2, GAME_HEIGHT, 1);
+                glTranslatef(WINDOW_WIDTH/2, GAME_HEIGHT-200+bonus->animateTxt, 1);
             else
-                glTranslatef(WINDOW_WIDTH/2, 200, 1);
+                glTranslatef(WINDOW_WIDTH/2, 200+200-bonus->animateTxt, 1);
             if (bonus->type != FASTPOW)
                 glScalef(100, -30, 1);
             else

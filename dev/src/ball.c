@@ -26,6 +26,7 @@ Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer, GLuin
     ball->ptPlayer = ptPlayer;
     ball->next = NULL;
     ball->texture = ballTexture;
+    ball->ghost[0] = ball->ghost[1] = ball->ghost[2] = ball->ghost[3] = ball->ghost[4] = position;
 
     return ball;
 }
@@ -58,10 +59,39 @@ void drawBall(Ball ball)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void drawGhosts(Ball ball)
+{
+    int i;
+    float color;
+    if (ball.ptPlayer->num == 0)
+        color = 0.80;
+    else
+        color = 0.0;
+    for (i = 0; i<5; i++)
+    {
+        glColor4f(1.0-color, 0.2, 0.2+color, 0.80-0.10*(float)i);
+        glEnable(GL_BLEND);
+        //glBindTexture(GL_TEXTURE_2D, ball.texture[ball.ptPlayer->num]);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glPushMatrix();
+            glTranslatef(ball.ghost[i].x, ball.ghost[i].y, 1);
+            glScalef(ball.radius-2-2*i, ball.radius-2-2*i, 1);
+            if (ball.ptPlayer->num == 0)
+                glRotatef(180, 0.0, 0.0, 1.0);
+            //drawSquareTexture();
+            drawCircle();
+        glPopMatrix();
+        glDisable(GL_BLEND);
+        //glBindTexture(GL_TEXTURE_2D, 0); 
+        glColor4f(1.0, 1.0, 1.0, 1.0);
+    }
+}
+
 void drawAllBalls(PtBall ballList)
 {
     for (; ballList != NULL; ballList = ballList->next)
     {
+        drawGhosts(*ballList);
         drawBall(*ballList);
     }
 }
@@ -71,6 +101,13 @@ void drawAllBalls(PtBall ballList)
 // Change ball position
 void moveBall (PtBall ptBall)
 {
+    /* Ghost take the previous positions */
+    ptBall->ghost[4] = ptBall->ghost[3];
+    ptBall->ghost[3] = ptBall->ghost[2];
+    ptBall->ghost[2] = ptBall->ghost[1];
+    ptBall->ghost[1] = ptBall->ghost[0];
+    ptBall->ghost[0] = ptBall->position;
+
     Vector2D deplacement = MultVector(ptBall->direction, ptBall->speed);
     ptBall->position = PointPlusVector(ptBall->position, deplacement);
 }

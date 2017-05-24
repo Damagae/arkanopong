@@ -17,6 +17,7 @@ typedef struct ball
   GLuint* texture;
   PtPlayer ptPlayer;
   struct ball* next;
+  Point2D ghost[5];
 } Ball, *PtBall;
 
 typedef enum Orientation
@@ -30,6 +31,7 @@ Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer, GLuin
 void addBall(PtBall* ballList, Ball* ball);
 void moveBall (PtBall ptBall);
 void drawBall (Ball ball);
+void drawGhosts(Ball ball);
 void drawAllBalls(PtBall ballList);
 
 float ballBottomPosition (PtBall ptBall);
