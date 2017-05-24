@@ -52,9 +52,11 @@ void drawGrid()
     }
 }
 
-void drawBrickPreview(GLuint texture, int position)
+void drawBrickPreview(GLuint texture, int position, int color)
 {
     float x, y;
+    Color c = createColor(color);
+    glColor3f(c.r, c.g, c.b);
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
     glEnable(GL_BLEND);
@@ -70,6 +72,7 @@ void drawBrickPreview(GLuint texture, int position)
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
+    glColor3f(1.0, 1.0, 1.0);
 }
 
 void drawTab(int* tab, int* tabColor, TextureList editorTextures)
@@ -81,10 +84,14 @@ void drawTab(int* tab, int* tabColor, TextureList editorTextures)
     {
         if (tab[i] != 0)
         {
-            if (tab[i] == 9)
+            if (tab[i] == 9) // INDES
                 glBindTexture(GL_TEXTURE_2D, editorTextures->texture[3]);
             else
-                glBindTexture(GL_TEXTURE_2D, editorTextures->texture[3+tabColor[i]]);
+            {
+                Color color = createColor(tabColor[i]);
+                glColor3f(color.r, color.g, color.b);
+                glBindTexture(GL_TEXTURE_2D, editorTextures->texture[4]);
+            }
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glPushMatrix();
@@ -97,6 +104,7 @@ void drawTab(int* tab, int* tabColor, TextureList editorTextures)
             glPopMatrix();
             glBindTexture(GL_TEXTURE_2D, 0);
             glDisable(GL_BLEND);
+            glColor3f(1.0, 1.0, 1.0);
         }
     }
     glDisable(GL_TEXTURE_2D);
@@ -120,10 +128,10 @@ void renderEditor(TextureList editorTextures, int position, int* tab, int* tabCo
     glDisable(GL_TEXTURE_2D);
 
     drawTab(tab, tabColor, editorTextures);
-    if (selection != 2)
-        drawBrickPreview(editorTextures->texture[selection+2], position);
+    if (selection == 2)
+        drawBrickPreview(editorTextures->texture[selection+2], position, color);
     else
-        drawBrickPreview(editorTextures->texture[selection+1+color], position);
+        drawBrickPreview(editorTextures->texture[selection+2], position, 0);
 
     drawGrid();
 
@@ -280,10 +288,8 @@ bool editorManager(State* state)
     editorTextures = addTexture(&editorTextures, "data/img/menu/fond_menu.jpg");
     addTexture(&editorTextures, "data/img/background/fond.jpg");
     addTexture(&editorTextures, "data/img/delete.png");
-    addTexture(&editorTextures, "data/img/brick/bob.jpg");
-    addTexture(&editorTextures, "data/img/brick/P_lego_4x2.png");
-    addTexture(&editorTextures, "data/img/brick/R_lego_4x2.png");
-    addTexture(&editorTextures, "data/img/brick/B_lego_4x2.png");
+    addTexture(&editorTextures, "data/img/brick/S_indes_brick.png");
+    addTexture(&editorTextures, "data/img/brick/W_brick_0.png");
 
     Mix_Chunk * sound = createSound("data/audio/confirm.wav");
 

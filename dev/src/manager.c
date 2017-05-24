@@ -101,10 +101,10 @@ Game* createGame(int lvl)
     }
 
     /* Création des textures */
-    game->brickTextureFile[0] = "data/img/brick/B_lego_4x2.png";
-    game->brickTextureFile[1] = "data/img/brick/R_lego_4x2.png";
-    game->brickTextureFile[2] = "data/img/brick/P_lego_4x2.png";
-    game->brickTextureFile[3] = "data/img/brick/B_lego_4x2_2.png";
+    game->brickTextureFile[0] = "data/img/brick/S_indes_brick.png";
+    game->brickTextureFile[1] = "data/img/brick/W_brick_0.png";
+    game->brickTextureFile[2] = "data/img/brick/W_brick_1.png";
+    game->brickTextureFile[3] = "data/img/brick/W_brick_2.png";
     game->barTextureFile[0] = "data/img/bar/B_lego_6x1.png";
     game->barTextureFile[1] = "data/img/bar/R_lego_6x1.png";
     game->ballTextureFile[0] = "data/img/ball/B_lego_rond.png";
@@ -115,6 +115,7 @@ Game* createGame(int lvl)
     game->lifeTextureFile[1] = "data/img/life_empty.png";
     game->bonusTextureFile[0] = "data/img/bonus/barUP.png";
     game->bonusTextureFile[1] = "data/img/bonus/barDWN.png";
+    game->uiTextureFile[0] = "data/img/menu/pause.png";
 
     game->brickTexture[0] = generateTexture(&(game->brickTexture[0]), game->brickTextureFile[0]);
     game->brickTexture[1] = generateTexture(&(game->brickTexture[1]), game->brickTextureFile[1]);
@@ -134,6 +135,7 @@ Game* createGame(int lvl)
     game->bonusTexture[4] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
     game->bonusTexture[5] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
     game->bonusTexture[6] = generateTexture(&(game->bonusTexture[1]), game->bonusTextureFile[1]);
+    game->uiTexture[0] = generateTexture(&(game->uiTexture[0]), game->uiTextureFile[0]);
 
     /* Création des barres */
     Point2D posDWN = PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50);
@@ -203,6 +205,25 @@ void drawGameBackground(GLuint backgroundTexture)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void drawPause(GLuint uiTexture)
+{
+    Point2D GAME_TOP_LEFT = PointXY((WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2);
+
+    //glColor4f(1.0,1.0,1.0,1.0);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, uiTexture);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPushMatrix();
+        glTranslatef(GAME_TOP_LEFT.x + GAME_WIDTH/2, GAME_TOP_LEFT.y + GAME_HEIGHT/2, 1);
+        glScalef((GAME_WIDTH-1), -(GAME_HEIGHT-1), 1);
+        drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_BLEND);
+    //glColor4f(1.0,1.0,1.0,1.0);
+}
+
 void renderGame(Game* game, char timer, bool restart)
 {    
     do
@@ -238,6 +259,11 @@ void renderGame(Game* game, char timer, bool restart)
                 drawLife(game->player[0], game->lifeTexture[0]);
                 drawLife(game->player[1], game->lifeTexture[0]);
 
+                if (game->pause)
+                {
+                    drawPause(game->uiTexture[0]);
+                }
+
                 glColor3f(1.0, 1.0, 1.0);
             glPopMatrix();
             glDisable(GL_TEXTURE_2D);
@@ -253,12 +279,12 @@ void renderGame(Game* game, char timer, bool restart)
                 drawText(490,485, &timer, 6);
             }
         }
-
+/*
         if (game->pause)
         {
             drawText(500, 500, "Pause", 6);
         }
-
+*/
         if(game->end)
         {
             drawWinner(game->player[0], game->player[1]);
@@ -343,13 +369,10 @@ int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick, GLuint* bri
     }
     else
     {
-        if (ptBrick->type != ADDLIFE)
-        {
-            if (ptBrick->life == 2)
+        if (ptBrick->life == 2)
+                ptBrick->texture = brickTexture[2];
+        else if (ptBrick->life == 1)
                 ptBrick->texture = brickTexture[3];
-            else if (ptBrick->life == 1)
-                ptBrick->texture = brickTexture[0];
-        }
         return ptBrick->life;
     }
 }
@@ -853,6 +876,7 @@ void freeGameTextures(Game* game)
     glDeleteTextures(2, game->lifeTexture);
     glDeleteTextures(MAX_TEXTURES, game->backgroundTexture);
     glDeleteTextures(MAX_TEXTURES, game->bonusTexture);
+    glDeleteTextures(5, game->uiTexture);
 }
 
 void freeGame(Game* game)
