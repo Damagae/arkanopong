@@ -6,6 +6,8 @@
 #include <errno.h>
 #include <dirent.h>
 
+#include "bool.h"
+
 #ifndef WIN32
     #include <sys/types.h>
 #endif
@@ -46,6 +48,30 @@ int compatibleTypeColor(int nb)
 int randomColor()
 {
     return rand() % 4 + 1;
+}
+
+void sort(char ** tab, int * numFiles)
+{
+    int i;
+    char * temp[MAX_SIZE];
+    bool order = false;
+    int length = *numFiles;
+    while(!order)
+    {
+        order = true;
+
+        for(i = 0 ; i < length - 1 ; i++)
+        {
+
+            if(tab[i][5] > tab[i+1][5])
+            {
+                strcpy(temp, tab[i]);
+                strcpy(tab[i], tab[i+1]);
+                strcpy(tab[i+1], temp);
+                order = false;
+            }
+        }
+    }
 }
 
 int * loadLevel (const char * filepath)
@@ -231,6 +257,10 @@ char ** levelList(int* numFiles)
     }
 
     *numFiles = i;
+
+    /* sort the list */
+    sort(list, numFiles);
+
     return list;
 }
 
