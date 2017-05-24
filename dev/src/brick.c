@@ -66,7 +66,7 @@ void drawBrick(Brick brick)
 {
     if (brick.life != 0)
     {
-        glColor3f(brick.color.r, brick.color.g, brick.color.b);
+        if (brick.type != INDES) glColor3f(brick.color.r, brick.color.g, brick.color.b);
         glBindTexture(GL_TEXTURE_2D, brick.texture);
         glPushMatrix();
             glTranslatef(brick.position.x, brick.position.y, 1);
@@ -76,6 +76,7 @@ void drawBrick(Brick brick)
             drawSquareTexture();
         glPopMatrix();
         glBindTexture(GL_TEXTURE_2D, 0);
+        glColor3f(1.0, 1.0, 1.0);
     }
 }
 
@@ -221,10 +222,11 @@ void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, Bo
             {
                 type = getType(lvl[3 + i * largeur + j]);
                 if (type == INDES)
-                    texture = 1;
+                    texture = 0;
                 else
-                    texture = 2;
-                color = lvl[3 + i * largeur * 2 + j];
+                    texture = 1;
+                //color = lvl[3 + i * largeur * 2 + j];
+                color = 2;
                 addBrick(brickList, createBrick(PointXY(firstColumn + j * WIDTH_DEFAULT, firstLine + i * HEIGHT_DEFAULT), type, bonusList, brickTexture[texture], bonusTexture, color));
             }
             

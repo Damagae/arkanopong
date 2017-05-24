@@ -29,6 +29,7 @@ typedef struct
     GLuint backgroundTexture[MAX_TEXTURES];
     GLuint lifeTexture[2];
     GLuint bonusTexture[MAX_TEXTURES];
+    GLuint uiTexture[5];
 
     char* backgroundTextureFile[MAX_TEXTURES];
     char* brickTextureFile[MAX_TEXTURES];
@@ -36,6 +37,7 @@ typedef struct
     char* barTextureFile[2];
     char* lifeTextureFile[2];
     char* bonusTextureFile[MAX_TEXTURES];
+    char* uiTextureFile[5];
 
     Bar bar[2];
     Player player[2];
@@ -64,6 +66,7 @@ Game* createGame(int lvl);
 void drawGameBorder();
 void drawGameBackground(GLuint backgroundTexture);
 void drawRestart(bool restart);
+void drawPause(GLuint uiTexture);
 
 void renderGame(Game* game, char timer, bool restart);
 int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick, GLuint* brickTexture);

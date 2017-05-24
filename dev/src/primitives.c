@@ -175,24 +175,24 @@ Color createColor(int code)
   switch (code)
   {
     case 1 :
-      color.r = 204/255;
+      color.r = 204.0/255.0;
       color.g = 0.0;
       color.b = 0.0;
       break;
     case 2 :
       color.r = 0.0;
-      color.g = 204/255;
+      color.g = 204.0/255.0;
       color.b = 0.0;
       break;
     case 3 :
       color.r = 0.0;
       color.g = 0.0;
-      color.b = 204/255;
+      color.b = 204.0/255.0;
       break;
     case 4 :
-      color.r = 102/255;
+      color.r = 102.0/255.0;
       color.g = 0.0;
-      color.b = 204/255;
+      color.b = 204.0/255.0;
       break;
     default :
         color.r = 1.0;
