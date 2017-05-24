@@ -22,11 +22,13 @@ typedef struct bonus
   float radius;
   float speed;
   GLuint texture;
+  GLuint textureTxt;
   PtBrick ptBrick;
   BrickType type;
   PtPlayer ptPlayer;
   bool actif;
   struct bonus* next;
+  int animateTxt;
 } Bonus, *BonusList;
 
 /** FUNCTIONS **/
@@ -36,6 +38,7 @@ void addBonus(BonusList* bonusList, Bonus* bonus);
 void bonusOrientation(Bonus* bonus, Player player);
 void moveBonus (Bonus* bonus);
 void drawBonus(Bonus bonus);
+void drawBonusText(Bonus* bonus);
 void drawAllBonus(BonusList bonusList);
 
 int selectBonus(BrickType type);

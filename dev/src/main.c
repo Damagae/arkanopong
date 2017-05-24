@@ -15,7 +15,7 @@ int GAME_WIDTH = 804;
 int GAME_HEIGHT = 804;
 
 /* Nombre de vies */
-int LIFE_MAX = 6;
+int LIFE_MAX = 10;
 
 int main(int argc, char** argv)
 {

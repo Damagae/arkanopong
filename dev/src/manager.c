@@ -141,10 +141,10 @@ Game* createGame(int lvl)
     game->bonusTextureFile[7] = "data/img/bonus/slow_time_txt.png";
     game->bonusTextureFile[8] = "data/img/bonus/accelerate_time_img.png";
     game->bonusTextureFile[9] = "data/img/bonus/accelerate_time_txt.png";
-    game->bonusTextureFile[10] = "data/img/bonus/add_life_img.png";
-    game->bonusTextureFile[11] = "data/img/bonus/add_life_txt.png";
-    game->bonusTextureFile[12] = "data/img/bonus/add_ball_img.png";
-    game->bonusTextureFile[13] = "data/img/bonus/add_ball_txt.png";
+    game->bonusTextureFile[10] = "data/img/bonus/add_ball_img.png";
+    game->bonusTextureFile[11] = "data/img/bonus/add_ball_txt.png";
+    game->bonusTextureFile[12] = "data/img/bonus/add_life_img.png";
+    game->bonusTextureFile[13] = "data/img/bonus/add_life_txt.png";
     game->uiTextureFile[0] = "data/img/gameUI/pause.png";
     game->uiTextureFile[1] = "data/img/gameUI/play_again_on.png";
     game->uiTextureFile[2] = "data/img/gameUI/play_again_off.png";
@@ -201,6 +201,8 @@ Game* createGame(int lvl)
     game->power[0] = game->power[1] = false;
     game->selection = NONE;
 
+    /* Création des sons */
+
     game->sound[0] = createSound("data/audio/hitBrick.wav");
     game->sound[1] = createSound("data/audio/hitBar.wav");
     game->sound[2] = createSound("data/audio/barUp.wav");
@@ -211,6 +213,10 @@ Game* createGame(int lvl)
     game->sound[7] = createSound("data/audio/fastTime.wav");
     game->sound[8] = createSound("data/audio/beep.wav");
     game->sound[9] = createSound("data/audio/bip.wav");
+    game->sound[10] = createSound("data/audio/slowPower.wav");
+    game->sound[11] = createSound("data/audio/barSpdUp.wav");
+    game->sound[12] = createSound("data/audio/barSpdUp.wav");
+    game->sound[13] = createSound("data/audio/barSpdUp.wav");
 
     return game;
 }
@@ -377,10 +383,11 @@ void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList
 
             if (bonusPosition == OUT_UP || bonusPosition == OUT_DOWN || bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
             {
+                ptBonus->actif = false;
                 if (bonusPosition == BAR_UP || bonusPosition == BAR_DOWN)
                 {
                     getBonus(bonus, ballList, barTexture);
-                    ptBonus->actif = false;
+                    ptBonus->animateTxt = 200;
 
                     // Bonus Sounds
                     if (ptBonus->type == BARUP)
@@ -389,8 +396,16 @@ void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList
                         playSound(channel, sound[5]);
                     else if (ptBonus->type == FASTPOW)
                         playSound(channel, sound[7]);
+                    else if (ptBonus->type == SLOWPOW)
+                        playSound(channel, sound[10]);
+                    else if (ptBonus->type == BARSPDUP)
+                        playSound(channel, sound[11]);
+                    else if (ptBonus->type == ADDBALL)
+                        playSound(channel, sound[12]);
+                    else if (ptBonus->type == ADDLIFE)
+                        playSound(channel, sound[13]);
 
-                }   
+                }
                 //deleteBonus(bonusList, &ptBonus);
             }
         }
@@ -926,6 +941,6 @@ void freeGame(Game* game)
     deleteBonusList(&(game->bonusList));
 
     int i;
-    for (i = 0; i < 10; ++i)
+    for (i = 0; i < 14; ++i)
         freeSound(game->sound[i]);
 }

@@ -9,12 +9,16 @@
 #define BONUS_RADIUS 10
 #define BONUS_SPEED 2
 
-#define GAME_WIDTH 200
-#define GAME_HEIGHT 400
-#define BAR_SIZE_CHANGE 50
+#define BAR_SIZE_CHANGE 25
 #define BALL_SIZE_CHANGE 1
 
 #define LIFE_MAX 3
+
+extern int WINDOW_WIDTH;
+extern int WINDOW_HEIGHT;
+
+extern int GAME_WIDTH;
+extern int GAME_HEIGHT;
 
 /** CREATE FUNCTIONS **/
 
@@ -34,13 +38,15 @@ Bonus* createBonus(PtBrick ptBrick, GLuint* bonusTexture)
     bonus->ptBrick = ptBrick;
     bonus->type = ptBrick->type;
 
-    int numBonus = selectBonus(bonus->type);
+    int numBonus = 2*selectBonus(bonus->type);
     bonus->texture = bonusTexture[numBonus];
+    bonus->textureTxt = bonusTexture[numBonus+1];
     // We don't need this, but if we delete it, it bugs, don't know why
 
     bonus->ptPlayer = NULL;
     bonus->actif = false;
     bonus->next = NULL;
+    bonus->animateTxt = 0;
 
     return bonus;
 }
@@ -116,16 +122,43 @@ void drawBonus(Bonus bonus)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
             glTranslatef(bonus.position.x, bonus.position.y, 1);
-            if (bonus.type !=  2)
-                glScalef(bonus.radius*2, -bonus.radius*2, 1);
-            else
+            if (bonus.type ==  BARSPDUP)
+                glScalef(bonus.radius*6, -bonus.radius*2, 1);
+            else if (bonus.type == BARUP || bonus.type == BARDWN)
                 glScalef(bonus.radius*4, -bonus.radius*2, 1);
-            if (bonus.direction.y <= 0)
-                glRotatef(180, 0.0, 0.0, 1.0);
+            else
+                glScalef(bonus.radius*3, -bonus.radius*3, 1);
             drawSquareTexture();
         glPopMatrix();
         glDisable(GL_BLEND);
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
+}
+
+void drawBonusText(Bonus* bonus)
+{
+    if (bonus->animateTxt > 0)
+    {
+        float animate = (float)(bonus->animateTxt/200.0);
+        glColor4f(1.0, 1.0, 1.0, animate);
+        glEnable(GL_BLEND);
+        glBindTexture(GL_TEXTURE_2D, bonus->textureTxt);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glPushMatrix();
+            if (bonus->ptPlayer->num ==  0)
+                glTranslatef(WINDOW_WIDTH/2, GAME_HEIGHT, 1);
+            else
+                glTranslatef(WINDOW_WIDTH/2, 200, 1);
+            if (bonus->type != FASTPOW)
+                glScalef(100, -30, 1);
+            else
+                glScalef(130, -30, 1);
+            drawSquareTexture();
+        glPopMatrix();
+        glDisable(GL_BLEND);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glColor4f(1.0, 1.0, 1.0, 1.0);
+        --(bonus->animateTxt);
     }
 }
 
@@ -139,6 +172,7 @@ void drawAllBonus(BonusList bonusList)
     for (; bonusList != NULL; bonusList = bonusList->next)
     {
         drawBonus(*bonusList);
+        drawBonusText(bonusList);
     }
 }
 
@@ -206,13 +240,13 @@ void deleteBonusList(BonusList* bonusList)
 
 void barSizeUp (PtBar ptBar, GLuint* texture, int numPlayer)
 {
-    if (ptBar->width < 200+2*BAR_SIZE_CHANGE)
+    if (ptBar->width < 100+2*BAR_SIZE_CHANGE)
     {
         ptBar->width += BAR_SIZE_CHANGE;
         int i;
         for (i = -2; i <=2; i++)
         {
-            if (ptBar->width == 200+BAR_SIZE_CHANGE*i)
+            if (ptBar->width == 100+(BAR_SIZE_CHANGE*i))
                 ptBar->texture = texture[4+numPlayer+2*i];
         }
     }
@@ -220,13 +254,13 @@ void barSizeUp (PtBar ptBar, GLuint* texture, int numPlayer)
 
 void barSizeDown (PtBar ptBar, GLuint* texture, int numPlayer)
 {
-    if (ptBar->width > 200-2*BAR_SIZE_CHANGE)
+    if (ptBar->width > (100-2*BAR_SIZE_CHANGE))
     {
         ptBar->width -= BAR_SIZE_CHANGE;
         int i;
         for (i = -2; i <=2; i++)
         {
-            if (ptBar->width == 200+BAR_SIZE_CHANGE*i)
+            if (ptBar->width == 100+BAR_SIZE_CHANGE*i)
                 ptBar->texture = texture[4+numPlayer+2*i];
         }
     }

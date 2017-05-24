@@ -49,7 +49,7 @@ typedef struct
 
     Direction selection;
     
-    Mix_Chunk * sound[10];
+    Mix_Chunk * sound[14];
 
     char* level;
 } Game, *PtGame;
