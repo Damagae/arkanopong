@@ -54,7 +54,7 @@ int * loadLevel (const char * filepath)
     char cwd[MAX_SIZE];
     char path[MAX_SIZE];
     char line1[MAX_SIZE] = "";
-    char line2[MAX_SIZE] = "";
+    char line2[3*MAX_SIZE] = "";
     char line3[MAX_SIZE] = "";
     int * lvl;
     int n = 0;
@@ -72,7 +72,7 @@ int * loadLevel (const char * filepath)
     strcat(path, "/data/level/");
     strcat(path, filepath);
 
-    lvl = malloc(sizeof(int) * MAX_SIZE);
+    lvl = malloc(sizeof(int) * 3 * MAX_SIZE);
     if (lvl == NULL)
     {
         fprintf(stderr, "Echec de l'allocation du tableau niveau\n");
@@ -113,7 +113,7 @@ int * loadLevel (const char * filepath)
         parity = 0;
 
         /* Bricks' type */
-        fgets(line2, MAX_SIZE, f); // get the second line with types
+        fgets(line2, 3 * MAX_SIZE, f); // get the second line with types
         for(i = 1; i <= ((lvl[0] * lvl[1])*2 - 1 + parity); ++i)
         {
             if(i%2 == (1 - parity%2) && digitOrSpace(line2[i-1]) == 0) // odd : digit expected
@@ -129,7 +129,7 @@ int * loadLevel (const char * filepath)
                         ++n;
                         ++parity; // We add a difference due to a 2 digits number - It is %2 so the result is either 0 or 1
                     } else {
-                        fprintf(stderr, "[%d] Fichier niveau non conforme (type de brique 2nbr)\n", i);
+                        fprintf(stderr, "[%d] Fichier niveau non conforme (type de brique)\n", i);
                         return NULL;
                     }             
                 } else {
