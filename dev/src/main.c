@@ -15,7 +15,7 @@ int GAME_WIDTH = 804;
 int GAME_HEIGHT = 804;
 
 /* Nombre de vies */
-int LIFE_MAX = 10;
+int LIFE_MAX = 6;
 
 int main(int argc, char** argv)
 {
@@ -40,9 +40,9 @@ int main(int argc, char** argv)
       {
         do
         {
-          Game* game = createGame(level);
+          Game* game = createGame(level, AI);
           if (game != NULL)
-            play = playGame(game, AI, &state);
+            play = playGame(game, &state);
           freeGame(game);
         } while (play);
       }

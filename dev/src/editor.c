@@ -25,6 +25,23 @@ static bool mute = false;
 
 /* Drawing Functions */
 
+void drawTitle(GLuint texture)
+{
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPushMatrix();
+        glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT-GAME_HEIGHT, 1);
+        glScalef(-GAME_WIDTH, 100, 1);
+        glRotatef(180, 0.0, 0.0, 1.0);
+        drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+}
+
 void drawGrid()
 {
     int i, j;
@@ -141,6 +158,7 @@ void renderEditor(TextureList editorTextures, int position, int* tab, int* tabCo
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
         drawGameBackground(editorTextures->texture[1]);
+        drawTitle(editorTextures->texture[6]);
         drawHowToEdit(editorTextures->texture[5]);
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
@@ -322,6 +340,7 @@ bool editorManager(State* state)
     addTexture(&editorTextures, "data/img/brick/S_indes_brick.png");
     addTexture(&editorTextures, "data/img/brick/W_brick_0.png");
     addTexture(&editorTextures, "data/img/editor/How_to_edit_level.png");
+    addTexture(&editorTextures, "data/img/menu/title.png");
 
     Mix_Chunk * sound = createSound("data/audio/confirm.wav");
 

@@ -12,6 +12,7 @@
 
 /** FUNCTIONS **/
 
+void drawTitle(GLuint texture);
 void drawGrid();
 void drawBrickPreview(GLuint texture, int position, int color);
 void drawTab(int* tab, int* tabColor, TextureList editorTextures);

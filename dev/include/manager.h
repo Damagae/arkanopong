@@ -20,6 +20,8 @@ typedef struct
     bool start;
     bool pause;
     bool end;
+
+    unsigned int AI;
     
     GLuint backgroundTexture[2];
     GLuint barTexture[10];
@@ -35,7 +37,7 @@ typedef struct
     char* lifeTextureFile[2];
     char* brickTextureFile[4];
     char* bonusTextureFile[14];
-    char* uiTextureFile[5];
+    char* uiTextureFile[8];
 
     Bar bar[2];
     Player player[2];
@@ -59,10 +61,11 @@ typedef struct
 void setVideoMode(unsigned int width, unsigned int height);
 void initSDL();
 float randomNumber(float min, float max);
-Game* createGame(int lvl);
+Game* createGame(int lvl, unsigned int AI);
 
 void drawGameBorder();
 void drawGameBackground(GLuint backgroundTexture);
+void drawWinner(Player player1, unsigned int AI, GLuint* uiTexture);
 void drawRestart(bool restart, GLuint* texture);
 void drawPause(GLuint uiTexture);
 
@@ -73,7 +76,7 @@ Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* bri
 Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList, PtPlayer player, GLuint* brickTexture, Mix_Chunk ** sound);
 Position runGame(Game* game);
 bool gameEvent(Game* game, char timer, State* state);
-bool playGame(Game* game, unsigned int AI, State* state);
+bool playGame(Game* game, State* state);
 char gameLaunch(Uint32 startTime);
 void moveBarBall(PtBar bar, PtBall ball, Direction direction);
 bool restartGame(Direction direction);

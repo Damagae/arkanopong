@@ -48,28 +48,37 @@ TextureList createMenuTextures()
     addTexture(&menuTextures, "data/img/menu/map_select_13_on.png");
     addTexture(&menuTextures, "data/img/menu/map_select_14_on.png");
     addTexture(&menuTextures, "data/img/menu/map_select_15_on.png");
+    addTexture(&menuTextures, "data/img/menu/map_select_15_on.png");
 
     return menuTextures;
 }
 
-void drawSplashScreen(GLuint texture)
+void drawSplashScreen(GLuint splashScreen, GLuint text)
 {
     glEnable(GL_TEXTURE_2D);
 
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, splashScreen);
     glPushMatrix();
         glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 1);
         glScalef(WINDOW_WIDTH,WINDOW_HEIGHT,1);
         glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
 
+    glBindTexture(GL_TEXTURE_2D, text);
+    glPushMatrix();
+        glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 1);
+        glScalef(-200,100,1);
+        glRotatef(180, 0.0, 0.0, 1.0);
+        drawSquareTexture();
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
     
     glDisable(GL_TEXTURE_2D);
-
+/*
     glColor3f(0.0, 0.0, 0.0);
-    drawText(500,500,"PRESS ANY KEY TO CONTINUE", 6);
+    drawText(500,500,"PRESS ANY KEY TO CONTINUE", 6);*/
 }
 
 void drawWindowBackground(GLuint texture)
@@ -206,7 +215,7 @@ void renderMenu(TextureList menuTextures, State state, bool* selected, char* mod
         glColor3f(1.0, 1.0, 1.0);
         glPushMatrix();
             if(state == SPLASH)
-                drawSplashScreen(menuTextures->texture[0]);
+                drawSplashScreen(menuTextures->texture[0], menuTextures->texture[24]);
             else if(state == MENU || state == GAME || state == EDITOR)
             {
                 drawWindowBackground(menuTextures->texture[1]);

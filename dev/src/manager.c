@@ -76,7 +76,7 @@ float randomNumber(float min, float max)
     return fresult;
 }
 
-Game* createGame(int lvl)
+Game* createGame(int lvl, unsigned int AI)
 {
     int numFiles;
     char ** levelFiles = levelList(&numFiles);
@@ -88,6 +88,8 @@ Game* createGame(int lvl)
     game->start = false;
     game->pause = false;
     game->end = false;
+
+    game->AI = AI;
 
     /* Lecture du level */
     game->level = levelFiles[lvl];
@@ -150,6 +152,9 @@ Game* createGame(int lvl)
     game->uiTextureFile[2] = "data/img/gameUI/play_again_off.png";
     game->uiTextureFile[3] = "data/img/gameUI/exit_on.png";
     game->uiTextureFile[4] = "data/img/gameUI/exit_off.png";
+    game->uiTextureFile[5] = "data/img/gameUI/exit_off.png";
+    game->uiTextureFile[6] = "data/img/gameUI/exit_off.png";
+    game->uiTextureFile[7] = "data/img/gameUI/exit_off.png";
 
     int i;
     for (i = 0; i < 14; ++i)
@@ -162,7 +167,7 @@ Game* createGame(int lvl)
         }
         if (i < 4)
             game->brickTexture[i] = generateTexture(&(game->brickTexture[i]), game->brickTextureFile[i]);
-        if (i < 5)
+        if (i < 8)
             game->uiTexture[i] = generateTexture(&(game->uiTexture[i]), game->uiTextureFile[i]);
         if (i < 10)
             game->barTexture[i] = generateTexture(&(game->barTexture[i]), game->barTextureFile[i]);
@@ -268,6 +273,29 @@ void drawPause(GLuint uiTexture)
     //glColor4f(1.0,1.0,1.0,1.0);
 }
 
+void drawWinner(Player player1, unsigned int AI, GLuint* uiTexture)
+{
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    
+    if (player1.life != 0)
+        glBindTexture(GL_TEXTURE_2D, uiTexture[5]);
+    else if (AI != 0)
+        glBindTexture(GL_TEXTURE_2D, uiTexture[7]);
+    else
+        glBindTexture(GL_TEXTURE_2D, uiTexture[6]);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPushMatrix();
+        glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/2 - (GAME_HEIGHT/4), 1);
+        glScalef(150, -100, 1);
+        drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+}
+
 void drawRestart(bool restart, GLuint* texture)
 {
     Point2D GAME_TOP_LEFT = PointXY((WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2);
@@ -355,7 +383,7 @@ void renderGame(Game* game, char timer, bool restart)
 
         if(game->end)
         {
-            drawWinner(game->player[0], game->player[1]);
+            drawWinner(game->player[0], game->AI, game->uiTexture);
             drawRestart(restart, game->uiTexture);
         }
 
@@ -744,7 +772,7 @@ bool gameEvent(Game* game, char timer, State* state)
     return inGame;
 }
 
-bool playGame(Game* game, unsigned int AI, State* state)
+bool playGame(Game* game, State* state)
 {
     bool inGame = true;
     bool restart = false;
@@ -753,13 +781,13 @@ bool playGame(Game* game, unsigned int AI, State* state)
     Mix_VolumeMusic(MIX_MAX_VOLUME/2);
     Uint32 ticks_reset = SDL_GetTicks();
 
-    if(AI)
+    if(game->AI)
     {
-        if(AI == 1)
+        if(game->AI == 1)
         {
             game->player[1].name = "Computer NORMAL";
         }
-        if(AI == 2)
+        if(game->AI == 2)
         {
             game->player[1].ptBar->speed = AI_HARD;
             game->player[1].name = "Computer HARD";
@@ -785,7 +813,7 @@ bool playGame(Game* game, unsigned int AI, State* state)
         if(startTime < 5100)
         {
             moveBarBall(game->player[0].ptBar, game->ballList, game->direction[0]);
-            if(!AI) moveBarBall(game->player[1].ptBar, game->ballList->next, game->direction[1]);
+            if(!game->AI) moveBarBall(game->player[1].ptBar, game->ballList->next, game->direction[1]);
             timer = gameLaunch(startTime);
             Mix_Volume(0, MIX_MAX_VOLUME-startTime/50);
         }
@@ -818,7 +846,7 @@ bool playGame(Game* game, unsigned int AI, State* state)
             }
             
             moveBar(game->player[0].ptBar, game->direction[0]);
-            if (AI) AIcontroller (game->player[1].ptBar, game->ballList);
+            if (game->AI) AIcontroller (game->player[1].ptBar, game->ballList);
             else moveBar(game->player[1].ptBar, game->direction[1]);
         }
 
@@ -929,7 +957,7 @@ void freeGameTextures(Game* game)
     glDeleteTextures(2, game->lifeTexture);
     glDeleteTextures(2, game->backgroundTexture);
     glDeleteTextures(14, game->bonusTexture);
-    glDeleteTextures(5, game->uiTexture);
+    glDeleteTextures(8, game->uiTexture);
 }
 
 void freeGame(Game* game)

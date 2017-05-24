@@ -81,6 +81,7 @@ void drawNames(char* name1, char* name2)
     glColor3f(1.0, 1.0, 1.0);
 }
 
+/*
 void drawWinner(Player player1, Player player2)
 {
     char winner[80];
@@ -90,4 +91,4 @@ void drawWinner(Player player1, Player player2)
         strcat(winner, player1.name);
     strcat(winner, " won !");
     drawText(480, 400, winner, 6);
-}
+}*/
