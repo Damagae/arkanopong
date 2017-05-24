@@ -235,8 +235,15 @@ void drawGameBorder()
     glPushMatrix();
         glTranslatef(GAME_TOP_LEFT.x + GAME_WIDTH/2, GAME_TOP_LEFT.y + GAME_HEIGHT/2, 1);
         glScalef(GAME_WIDTH-1, GAME_HEIGHT-1, 1);
-        glColor3f(0.0,0.0,0.0);
-        drawSquareBorder();
+        glBegin(GL_LINE_LOOP);
+            glColor3f(0.0, 0.0, 1.0);
+            glVertex2f(-0.5, 0.5);
+            glVertex2f(0.5, 0.5);
+
+            glColor3f(1.0, 0.0, 0.0);
+            glVertex2f(0.5, -0.5);
+            glVertex2f(-0.5, -0.5);
+        glEnd();
     glPopMatrix();
 }
 
