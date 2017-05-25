@@ -23,7 +23,7 @@ static bool mute = false;
 TextureList createMenuTextures()
 {
     TextureList menuTextures = NULL;
-    menuTextures = addTexture(&menuTextures, "data/img/menu/splashscreen.jpg");
+    menuTextures = addTexture(&menuTextures, "data/img/menu/splashscreen.png");
     addTexture(&menuTextures, "data/img/menu/fond_menu.jpg");
     addTexture(&menuTextures, "data/img/menu/title.png");
     addTexture(&menuTextures, "data/img/menu/how_to.png");
@@ -153,7 +153,7 @@ void drawArrow(GLuint texture, int x, int y, bool selected, int left)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
         glTranslatef(x-7*animate, y, 1);
-        glScalef(-60*(-1+2*left),60,1);
+        glScalef(-30*(-1+2*left),75,1);
         glRotatef(180,0,0,1.0);
         drawSquareTexture();
     glPopMatrix();

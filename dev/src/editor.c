@@ -33,7 +33,7 @@ void drawTitle(GLuint texture)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
         glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT-GAME_HEIGHT, 1);
-        glScalef(-GAME_WIDTH, 100, 1);
+        glScalef(-GAME_WIDTH*2/5, 100, 1);
         glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
     glPopMatrix();
@@ -46,7 +46,7 @@ void drawGrid()
 {
     int i, j;
     float x, y;
-    glColor3f(1.0, 0.0, 0.0);
+    glColor3f(1.0, 1.0, 1.0);
     for (i = 0; i <= 10; i++)
     {
         glPushMatrix();
@@ -93,6 +93,19 @@ void drawBrickPreview(GLuint texture, int position, int color)
     glColor3f(1.0, 1.0, 1.0);
 }
 
+void drawEditorBackground(GLuint backgroundTexture)
+{
+    Point2D GAME_TOP_LEFT = PointXY((WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2);
+
+    glBindTexture(GL_TEXTURE_2D, backgroundTexture);
+    glPushMatrix();
+        glTranslatef(GAME_TOP_LEFT.x + GAME_WIDTH/2 - 3, GAME_TOP_LEFT.y + GAME_HEIGHT/2 + 2, 1);
+        glScalef(GAME_WIDTH, GAME_HEIGHT/2 - 72, 1);
+        drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void drawTab(int* tab, int* tabColor, TextureList editorTextures)
 {
     int i;
@@ -136,7 +149,7 @@ void drawHowToEdit(GLuint texture)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
         glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT - WINDOW_HEIGHT/5, 1);
-        glScalef(WINDOW_WIDTH, -WINDOW_HEIGHT/5, 1);
+        glScalef(GAME_WIDTH, -WINDOW_HEIGHT/6, 1);
         drawSquareTexture();
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -157,7 +170,7 @@ void renderEditor(TextureList editorTextures, int position, int* tab, int* tabCo
 
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
-        drawGameBackground(editorTextures->texture[1]);
+        drawEditorBackground(editorTextures->texture[1]);
         drawTitle(editorTextures->texture[6]);
         drawHowToEdit(editorTextures->texture[5]);
     glPopMatrix();
@@ -167,11 +180,13 @@ void renderEditor(TextureList editorTextures, int position, int* tab, int* tabCo
     if (selection == 2)
     {
         drawBrickPreview(editorTextures->texture[selection+2], position, color);
+        glColor3f(0.8,0.15,0.2);
         drawText(WINDOW_WIDTH/2, GAME_HEIGHT/3+50, "RANDOM BRICK", 6);
     }
     else
     {
         drawBrickPreview(editorTextures->texture[selection+2], position, 0);
+        glColor3f(0.8,0.15,0.2);
         if (selection == 1) drawText(WINDOW_WIDTH/2, GAME_HEIGHT/3+50, "UNBREAKABLE BRICK", 6);
         else drawText(WINDOW_WIDTH/2, GAME_HEIGHT/3+50, "EMPTY SLOT", 6);
     }
@@ -335,12 +350,12 @@ bool editorManager(State* state)
 {
     TextureList editorTextures = NULL;
     editorTextures = addTexture(&editorTextures, "data/img/menu/fond_menu.jpg");
-    addTexture(&editorTextures, "data/img/background/fond.jpg");
+    addTexture(&editorTextures, "data/img/editor/background_editor.png");
     addTexture(&editorTextures, "data/img/editor/cross.png");
     addTexture(&editorTextures, "data/img/brick/S_indes_brick.png");
     addTexture(&editorTextures, "data/img/brick/W_brick_0.png");
     addTexture(&editorTextures, "data/img/editor/How_to_edit_level.png");
-    addTexture(&editorTextures, "data/img/menu/title.png");
+    addTexture(&editorTextures, "data/img/editor/editor_title.png");
 
     Mix_Chunk * sound = createSound("data/audio/confirm.wav");
 
