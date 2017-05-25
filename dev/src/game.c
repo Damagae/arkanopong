@@ -154,7 +154,15 @@ Game* createGame(int lvl, unsigned int AI)
     game->uiTextureFile[4] = "data/img/gameUI/exit_off.png";
     game->uiTextureFile[5] = "data/img/gameUI/exit_off.png";
     game->uiTextureFile[6] = "data/img/gameUI/exit_off.png";
-    game->uiTextureFile[7] = "data/img/gameUI/exit_off.png";
+    game->uiTextureFile[7] = "data/img/gameUI/0.png";
+    game->uiTextureFile[8] = "data/img/gameUI/1.png";
+    game->uiTextureFile[9] = "data/img/gameUI/2.png";
+    game->uiTextureFile[10] = "data/img/gameUI/3.png";
+    game->uiTextureFile[11] = "data/img/gameUI/3.png";
+    game->uiTextureFile[12] = "data/img/gameUI/youwin.png";
+    game->uiTextureFile[13] = "data/img/gameUI/youlose.png";
+    game->uiTextureFile[14] = "data/img/gameUI/player1wins.png";
+    game->uiTextureFile[15] = "data/img/gameUI/player2wins.png";
 
     int i;
     for (i = 0; i < 14; ++i)
@@ -168,12 +176,14 @@ Game* createGame(int lvl, unsigned int AI)
         if (i < 4)
             game->brickTexture[i] = generateTexture(&(game->brickTexture[i]), game->brickTextureFile[i]);
         if (i < 8)
-            game->uiTexture[i] = generateTexture(&(game->uiTexture[i]), game->uiTextureFile[i]);
+            //game->uiTexture[i] = generateTexture(&(game->uiTexture[i]), game->uiTextureFile[i]);
         if (i < 10)
             game->barTexture[i] = generateTexture(&(game->barTexture[i]), game->barTextureFile[i]);
 
         game->bonusTexture[i] = generateTexture(&(game->bonusTexture[i]), game->bonusTextureFile[i]);
     }
+    for (i=0; i<16; ++i)
+        game->uiTexture[i] = generateTexture(&(game->uiTexture[i]), game->uiTextureFile[i]);
 
     /* Création des barres */
     Point2D posDWN = PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50);
@@ -286,15 +296,34 @@ void drawWinner(Player player1, unsigned int AI, GLuint* uiTexture)
     glEnable(GL_BLEND);
     
     if (player1.life != 0)
-        glBindTexture(GL_TEXTURE_2D, uiTexture[5]);
+        glBindTexture(GL_TEXTURE_2D, uiTexture[12]);
     else if (AI != 0)
-        glBindTexture(GL_TEXTURE_2D, uiTexture[7]);
+        glBindTexture(GL_TEXTURE_2D, uiTexture[13]);
     else
-        glBindTexture(GL_TEXTURE_2D, uiTexture[6]);
+        glBindTexture(GL_TEXTURE_2D, uiTexture[14]);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
         glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/2 - (GAME_HEIGHT/4), 1);
-        glScalef(150, -100, 1);
+        glScalef(500, -100, 1);
+        drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+}
+
+void drawTimer(char *timer, GLuint* texture)
+{
+    int t = atoi(timer);
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    
+    glBindTexture(GL_TEXTURE_2D, texture[7+t]);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPushMatrix();
+        glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 1);
+        glScalef(100, -120, 1);
         drawSquareTexture();
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -383,8 +412,9 @@ void renderGame(Game* game, char timer, bool restart)
 
             if (timer != '0')
             {
-                glColor3f(1.0, 0.0, 0.0);
-                drawText(490,485, &timer, 6);
+                drawTimer(&timer, game->uiTexture);
+                /* glColor3f(1.0, 0.0, 0.0);
+                drawText(490,485, &timer, 6); */
             }
         }
 

@@ -29,7 +29,7 @@ typedef struct
     GLuint lifeTexture[2];
     GLuint brickTexture[4];
     GLuint bonusTexture[14];
-    GLuint uiTexture[5];
+    GLuint uiTexture[16];
 
     char* backgroundTextureFile[2];
     char* barTextureFile[10];
@@ -37,7 +37,7 @@ typedef struct
     char* lifeTextureFile[2];
     char* brickTextureFile[4];
     char* bonusTextureFile[14];
-    char* uiTextureFile[8];
+    char* uiTextureFile[16];
 
     Bar bar[2];
     Player player[2];
