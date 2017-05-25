@@ -269,6 +269,8 @@ void barSizeDown (PtBar ptBar, GLuint* texture, int numPlayer)
 void barSpeedUp (PtBar ptBar)
 {
     ptBar->speed += 5;
+    if (ptBar->speed > 15)
+        ptBar->speed = 15;
 }
 
 void ballSpeedUp (PtBall ptBall)
