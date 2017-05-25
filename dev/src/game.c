@@ -291,12 +291,14 @@ void drawWinner(Player player1, unsigned int AI, GLuint* uiTexture)
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     
-    if (player1.life != 0)
+    if (player1.life != 0 && AI != 0)
         glBindTexture(GL_TEXTURE_2D, uiTexture[12]);
     else if (AI != 0)
         glBindTexture(GL_TEXTURE_2D, uiTexture[13]);
-    else
+    else if (player1.life != 0)
         glBindTexture(GL_TEXTURE_2D, uiTexture[14]);
+    else
+        glBindTexture(GL_TEXTURE_2D, uiTexture[15]);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
         glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/2 - (GAME_HEIGHT/4), 1);
