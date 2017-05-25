@@ -267,7 +267,7 @@ int putBrick(int selection)
         
 }
 
-bool editorEvent(State* state, int* position, int *tab, int* selection, int* color, int* tabColor, Mix_Chunk* sound)
+bool editorEvent(State* state, int* position, int *tab, int* selection, int* color, int* tabColor, Mix_Chunk* confirmSound, Mix_Chunk* saveSound)
 {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
@@ -287,7 +287,7 @@ bool editorEvent(State* state, int* position, int *tab, int* selection, int* col
                     tab[*position] = putBrick(*selection);
                     if (tab[*position]!=0)
                         tabColor[*position] = *color;
-                    playSound(0, sound);
+                    playSound(0, confirmSound);
                     break;
                 case SDLK_SPACE:
                     *selection = switchSelection(*selection);
@@ -309,6 +309,7 @@ bool editorEvent(State* state, int* position, int *tab, int* selection, int* col
                     break;
                 case SDLK_s:
                     createLevel(tab, tabColor);
+                    playSound(0, saveSound);
                     return false;
                     break;
                 default :
@@ -357,7 +358,8 @@ bool editorManager(State* state)
     addTexture(&editorTextures, "data/img/editor/How_to_edit_level.png");
     addTexture(&editorTextures, "data/img/editor/editor_title.png");
 
-    Mix_Chunk * sound = createSound("data/audio/confirm.wav");
+    Mix_Chunk * confirmSound = createSound("data/audio/confirm.wav");
+    Mix_Chunk * saveSound = createSound("data/audio/confirm.wav");
 
     int tab[120];
     int tabColor[120];
@@ -380,7 +382,7 @@ bool editorManager(State* state)
 
         renderEditor(editorTextures, position, tab, tabColor, selection, color);
 
-        inEditor = editorEvent(state, &position, tab, &selection, &color, tabColor, sound);
+        inEditor = editorEvent(state, &position, tab, &selection, &color, tabColor, confirmSound, saveSound);
 
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
         if (elapsedTime < FRAMERATE_MILLISECONDS)
@@ -390,7 +392,8 @@ bool editorManager(State* state)
     }
 
     freeTexture(&editorTextures);
-    freeSound(sound);
+    freeSound(confirmSound);
+    freeSound(saveSound);
 
     return inEditor;
 }

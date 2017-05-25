@@ -232,6 +232,7 @@ Game* createGame(int lvl, unsigned int AI)
     game->sound[11] = createSound("data/audio/barSpdUp.wav");
     game->sound[12] = createSound("data/audio/barSpdUp.wav");
     game->sound[13] = createSound("data/audio/barSpdUp.wav");
+    game->sound[14] = createSound("data/audio/barSpdUp.wav");
 
     return game;
 }
@@ -469,7 +470,6 @@ void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList
                         playSound(channel, sound[12]);
                     else if (ptBonus->type == ADDLIFE)
                         playSound(channel, sound[13]);
-
                 }
                 //deleteBonus(bonusList, &ptBonus);
             }
@@ -573,7 +573,10 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
                 ballPosition = positionDetection(ballList, bar1, bar2, brickList, ptBrick, player, brickTexture);
                 if(ballPosition == BRICK)
                 {
-                    playSound(channel, sound[0]);
+                    if (ptBrick->type != INDES)
+                        playSound(channel, sound[0]);
+                    else
+                        playSound(channel, sound[14]);
                     return ballPosition;
                 }
             }
@@ -1013,6 +1016,6 @@ void freeGame(Game* game)
     deleteBonusList(&(game->bonusList));
 
     int i;
-    for (i = 0; i < 14; ++i)
+    for (i = 0; i < 15; ++i)
         freeSound(game->sound[i]);
 }
