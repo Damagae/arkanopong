@@ -319,5 +319,49 @@ void createLevel(int* level, int* color)
 // Parameter : the number of the level
 void deleteLevelFile(int level)
 {
+    int numFiles;
+    char oldname[MAX_SIZE];
+    char newname[MAX_SIZE];
+    char nbr[MAX_SIZE];
+    char filepath[MAX_SIZE];
+    char path[MAX_SIZE];
+    char cwd[MAX_SIZE];
+    int i;
+
+    if (getcwd(cwd, sizeof(cwd)) == NULL) { // Get the program's path
+        fprintf(stderr, "Le chemin est erroné.\n");
+    }
+
+    ++level;
+    strcpy(filepath, cwd);
+    strcat(filepath, "/data/level/level");
+    strcpy(path, filepath);
+    sprintf(nbr, "%d", level);
+    strcat(filepath, nbr);
+    strcat(filepath, ".txt");
+
+    /* Delete file */
+    remove(filepath);
+
+    /* Rename files */
+
+    free(levelList(&numFiles));
+
+        for (i = level ; i <= numFiles; ++i)
+        {
+            strcpy(oldname, path);
+            sprintf(nbr, "%d", i+1);
+            strcat(oldname, nbr);
+            strcat(oldname, ".txt");
+
+            strcpy(newname, path);
+            sprintf(nbr, "%d", i);
+            strcat(newname, nbr);
+            strcat(newname, ".txt");
+
+            rename(oldname, newname);
+        }
+    
+
 
 }

@@ -286,7 +286,7 @@ void selectLevel(bool RIGHT, Button* selection, int* lvl, int numLvl)
     }
 }
  
-State menuEvent(State state, Button* selection, int* gameMode, int* lvl, int numLvl, Mix_Chunk* sound)
+State menuEvent(State state, Button* selection, int* gameMode, int* lvl, int* numLvl, Mix_Chunk* sound)
 {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
@@ -322,15 +322,16 @@ State menuEvent(State state, Button* selection, int* gameMode, int* lvl, int num
                 case SDLK_LEFT:
                     state = MENU;
                     selectMode(false, selection, gameMode);
-                    selectLevel(false, selection, lvl, numLvl);
+                    selectLevel(false, selection, lvl, *numLvl);
                     break;
                 case SDLK_RIGHT:
                     state = MENU;
                     selectMode(true, selection, gameMode);
-                    selectLevel(true, selection, lvl, numLvl);
+                    selectLevel(true, selection, lvl, *numLvl);
                     break;
                 case SDLK_DELETE:
-                    //deleteLevel(*lvl);
+                    --(*numLvl);
+                    deleteLevelFile(*lvl);
                     --(*lvl);
                     break;
                 default :
@@ -400,10 +401,6 @@ State menuManager(State state, unsigned int* AI, int* level)
     char** txt = levelList(&numLvl);
     //txt[numLvl - 1] = txt[numLvl];
     int t;
-    for (t = 0; t < numLvl; t++)
-    {
-        printf("%s\n", txt[t]);
-    }
     free(txt);
     
     Button selection = PLAY_GAME;
@@ -429,7 +426,7 @@ State menuManager(State state, unsigned int* AI, int* level)
                 selected[i] = true;
         }
 
-        state = menuEvent(state, &selection, &gameMode, &lvl, numLvl, sound);
+        state = menuEvent(state, &selection, &gameMode, &lvl, &numLvl, sound);
 
         textManager(gameMode, lvl, mode, levelTxt);
         renderMenu(menuTextures, state, selected, mode, levelTxt, lvl, numLvl, gameMode);
