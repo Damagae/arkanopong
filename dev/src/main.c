@@ -1,7 +1,7 @@
 #include <SDL/SDL.h>
 #include <GL/glut.h>
 #include "menu.h"
-#include "manager.h"
+#include "game.h"
 #include "audio.h"
 #include "editor.h"
 #include "utilities.h"

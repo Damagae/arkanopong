@@ -4,7 +4,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "manager.h"
+#include "game.h"
 #include "bool.h"
 #include "menu.h"
 

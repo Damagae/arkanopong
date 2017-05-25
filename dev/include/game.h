@@ -1,5 +1,5 @@
-#ifndef __MANAGER__H
-#define __MANAGER__H
+#ifndef __GAME__H
+#define __GAME__H
 
 #include "player.h"
 #include "ball.h"

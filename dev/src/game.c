@@ -4,7 +4,7 @@
 #include <GL/glu.h>
 #include <time.h>
 
-#include "manager.h"
+#include "game.h"
 #include "primitives.h"
 #include "menu.h"
 
