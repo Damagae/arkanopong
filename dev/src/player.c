@@ -75,9 +75,9 @@ int loseLife(PtPlayer player)
 
 void drawNames(char* name1, char* name2)
 {
-    glColor3f(0.0, 0.0, 0.0);
-    drawText(470,940, name1, 6);
-    drawText(470,70, name2, 6);
+    glColor3f(0.0, 0.5, 0.5);
+    drawText(GAME_WIDTH - 30,940, name1, 6);
+    drawText(GAME_WIDTH - 30,70, name2, 6);
     glColor3f(1.0, 1.0, 1.0);
 }
 
