@@ -228,8 +228,8 @@ void createLevelBricks(int * lvl, int GAME_W, int GAME_H, PtBrick* brickList, Bo
                     texture = 0;
                 else
                     texture = 1;
-                //color = lvl[3 + i * largeur * 2 + j];
-                color = 2;
+                color = lvl[largeur * hauteur + 3 + i * largeur + j];
+                //color = 2;
                 addBrick(brickList, createBrick(PointXY(firstColumn + j * WIDTH_DEFAULT, firstLine + i * HEIGHT_DEFAULT), type, bonusList, brickTexture[texture], bonusTexture, color));
             }
             

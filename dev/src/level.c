@@ -81,7 +81,7 @@ int * loadLevel (const char * filepath)
     char path[MAX_SIZE];
     char line1[MAX_SIZE] = "";
     char line2[3*MAX_SIZE] = "";
-    char line3[MAX_SIZE] = "";
+    char line3[3*MAX_SIZE] = "";
     int * lvl;
     int n = 0;
     int i = 0;
@@ -98,7 +98,7 @@ int * loadLevel (const char * filepath)
     strcat(path, "/data/level/");
     strcat(path, filepath);
 
-    lvl = malloc(sizeof(int) * 3 * MAX_SIZE);
+    lvl = malloc(sizeof(int) * 6 * MAX_SIZE);
     if (lvl == NULL)
     {
         fprintf(stderr, "Echec de l'allocation du tableau niveau\n");
@@ -177,7 +177,7 @@ int * loadLevel (const char * filepath)
         parity = 0;
 
         /* Bricks' color - if given */
-        if (fgets(line3, MAX_SIZE, f) != NULL) // get the third line with colors if exits
+        if (fgets(line3, 3 * MAX_SIZE, f) != NULL) // get the third line with colors if exits
         {
             for(i = 1; i <= ((lvl[0] * lvl[1])*2 - 1); ++i)
             {
