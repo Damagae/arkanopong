@@ -322,12 +322,22 @@ State menuEvent(State state, Button* selection, int* gameMode, int* lvl, int* nu
                 case SDLK_LEFT:
                     state = MENU;
                     selectMode(false, selection, gameMode);
+<<<<<<< HEAD
                     selectLevel(false, selection, lvl, *numLvl);
+=======
+                    selectLevel(false, selection, lvl, numLvl);
+                    if(state!=SPLASH) playSound(0, sound);
+>>>>>>> 8d875cfd53897bf8f4b17aa7087284007609f004
                     break;
                 case SDLK_RIGHT:
                     state = MENU;
                     selectMode(true, selection, gameMode);
+<<<<<<< HEAD
                     selectLevel(true, selection, lvl, *numLvl);
+=======
+                    selectLevel(true, selection, lvl, numLvl);
+                    if(state!=SPLASH) playSound(0, sound);
+>>>>>>> 8d875cfd53897bf8f4b17aa7087284007609f004
                     break;
                 case SDLK_DELETE:
                     --(*numLvl);

@@ -12,7 +12,7 @@
 #define BAR_SIZE_CHANGE 25
 #define BALL_SIZE_CHANGE 1
 
-#define LIFE_MAX 3
+extern int LIFE_MAX;
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
@@ -269,6 +269,8 @@ void barSizeDown (PtBar ptBar, GLuint* texture, int numPlayer)
 void barSpeedUp (PtBar ptBar)
 {
     ptBar->speed += 5;
+    if (ptBar->speed > 15)
+        ptBar->speed = 15;
 }
 
 void ballSpeedUp (PtBall ptBall)
