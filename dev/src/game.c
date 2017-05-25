@@ -165,24 +165,19 @@ Game* createGame(int lvl, unsigned int AI)
     game->uiTextureFile[15] = "data/img/gameUI/player2wins.png";
 
     int i;
-    for (i = 0; i < 14; ++i)
+    for (i = 0; i < 2; ++i)
     {
-        if (i < 2)
-        {
-            game->backgroundTexture[i] = generateTexture(&(game->backgroundTexture[i]), game->backgroundTextureFile[i]);
-            game->ballTexture[i] = generateTexture(&(game->ballTexture[i]), game->ballTextureFile[i]);
-            game->lifeTexture[i] = generateTexture(&(game->lifeTexture[i]), game->lifeTextureFile[i]);
-        }
-        if (i < 4)
-            game->brickTexture[i] = generateTexture(&(game->brickTexture[i]), game->brickTextureFile[i]);
-        if (i < 8)
-            //game->uiTexture[i] = generateTexture(&(game->uiTexture[i]), game->uiTextureFile[i]);
-        if (i < 10)
-            game->barTexture[i] = generateTexture(&(game->barTexture[i]), game->barTextureFile[i]);
-
-        game->bonusTexture[i] = generateTexture(&(game->bonusTexture[i]), game->bonusTextureFile[i]);
+        game->backgroundTexture[i] = generateTexture(&(game->backgroundTexture[i]), game->backgroundTextureFile[i]);
+        game->ballTexture[i] = generateTexture(&(game->ballTexture[i]), game->ballTextureFile[i]);
+        game->lifeTexture[i] = generateTexture(&(game->lifeTexture[i]), game->lifeTextureFile[i]);
     }
-    for (i=0; i<16; ++i)
+    for (i = 0; i < 4; ++i)
+        game->brickTexture[i] = generateTexture(&(game->brickTexture[i]), game->brickTextureFile[i]);
+    for (i = 0; i < 10; ++i)
+        game->barTexture[i] = generateTexture(&(game->barTexture[i]), game->barTextureFile[i]);
+    for (i = 0; i < 14; ++i)
+        game->bonusTexture[i] = generateTexture(&(game->bonusTexture[i]), game->bonusTextureFile[i]);
+    for (i = 0; i < 16; ++i)
         game->uiTexture[i] = generateTexture(&(game->uiTexture[i]), game->uiTextureFile[i]);
 
     /* Création des barres */
@@ -230,9 +225,9 @@ Game* createGame(int lvl, unsigned int AI)
     game->sound[9] = createSound("data/audio/bip.wav");
     game->sound[10] = createSound("data/audio/slowPower.wav");
     game->sound[11] = createSound("data/audio/barSpdUp.wav");
-    game->sound[12] = createSound("data/audio/barSpdUp.wav");
-    game->sound[13] = createSound("data/audio/barSpdUp.wav");
-    game->sound[14] = createSound("data/audio/barSpdUp.wav");
+    game->sound[12] = createSound("data/audio/addBall.wav");
+    game->sound[13] = createSound("data/audio/addLife.wav");
+    game->sound[14] = createSound("data/audio/incassable.wav");
 
     return game;
 }
@@ -320,7 +315,7 @@ void drawTimer(char *timer, GLuint* texture)
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     
-    glBindTexture(GL_TEXTURE_2D, texture[7+t]);
+    glBindTexture(GL_TEXTURE_2D, texture[6+t]);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
         glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 1);
@@ -820,6 +815,7 @@ bool playGame(Game* game, State* state)
     unsigned int channel = 1;
     Mix_VolumeMusic(MIX_MAX_VOLUME/2);
     Uint32 ticks_reset = SDL_GetTicks();
+    game->end = false;
 
     if(game->AI)
     {
@@ -1004,7 +1000,7 @@ void freeGameTextures(Game* game)
     glDeleteTextures(2, game->lifeTexture);
     glDeleteTextures(2, game->backgroundTexture);
     glDeleteTextures(14, game->bonusTexture);
-    glDeleteTextures(8, game->uiTexture);
+    glDeleteTextures(16, game->uiTexture);
 }
 
 void freeGame(Game* game)

@@ -25,17 +25,23 @@ int main(int argc, char** argv)
   int level = 0;
   State state = SPLASH;
 
+  /* Initialisation des bibliothéques */
   initSDL();
   initAudio();
   glutInit( &argc, argv );
 
+  /* Lancement de la musique principale */
   Mix_Music * backgroundMusic = createMusic("data/audio/lego.mp3");
   playMusic(backgroundMusic);
+
+  /* Boucle qui gère les différents états du jeu */
   while (state == SPLASH || state == MENU)
   {
+  /* MENU */
     state = menuManager(state, &AI, &level);
     if (state != QUIT)
     {
+  /* JEU */
       if (state == GAME)
       {
         do
@@ -46,6 +52,7 @@ int main(int argc, char** argv)
           freeGame(game);
         } while (play);
       }
+  /* EDITEUR */
       else if (state == EDITOR)
       {
         if (editorManager(&state) == false)
@@ -53,8 +60,10 @@ int main(int argc, char** argv)
             state = MENU;
       }
     }
+  /* FERMETURE DE L'APPLICATION */
   }
 
+  /* Liberation et fermeture des bibliothéques */
   freeMusic(backgroundMusic);
   closeAudio();
   SDL_Quit();

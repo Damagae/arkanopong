@@ -309,7 +309,8 @@ bool editorEvent(State* state, int* position, int *tab, int* selection, int* col
                     break;
                 case SDLK_s:
                     createLevel(tab, tabColor);
-                    playSound(0, saveSound);
+                    playSound(1, saveSound);
+                    SDL_Delay(1500);
                     return false;
                     break;
                 default :
@@ -359,7 +360,7 @@ bool editorManager(State* state)
     addTexture(&editorTextures, "data/img/editor/editor_title.png");
 
     Mix_Chunk * confirmSound = createSound("data/audio/confirm.wav");
-    Mix_Chunk * saveSound = createSound("data/audio/confirm.wav");
+    Mix_Chunk * saveSound = createSound("data/audio/save.wav");
 
     int tab[120];
     int tabColor[120];

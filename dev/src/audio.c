@@ -47,7 +47,7 @@ void playSound(unsigned int channel, Mix_Chunk * sound)
 {
     while(Mix_Playing(channel))
         ++channel;
-    Mix_Volume(channel, 100);
+    Mix_Volume(channel, MIX_MAX_VOLUME);
     Mix_PlayChannel(channel, sound, 0);
 }
 
