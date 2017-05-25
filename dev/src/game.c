@@ -26,7 +26,7 @@ static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
 #define AI_HARD 10 //Speed of the bar if AI is hard
-
+#define AI_EASY 6 //Speed of the bar if AI is easy
 
 /* INITIALISATION */
 
@@ -823,7 +823,8 @@ bool playGame(Game* game, State* state)
     {
         if(game->AI == 1)
         {
-            game->player[1].name = "Computer NORMAL";
+            game->player[1].ptBar->speed = AI_EASY;
+            game->player[1].name = "Computer EASY";
         }
         if(game->AI == 2)
         {
