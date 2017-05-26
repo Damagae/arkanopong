@@ -32,7 +32,6 @@ GLuint generateTexture(GLuint * texture, char* filename)
   SDL_Surface* surface = NULL;
 
   /** Charge la texture et teste si ca fonctionne **/
-  SDL_WM_SetCaption("Texture", NULL);
   surface = IMG_Load(filename);
   if (surface == NULL)
   {

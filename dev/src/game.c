@@ -53,6 +53,7 @@ void initSDL()
         return;
     }
     setVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
+    SDL_WM_SetCaption("Arkanopong", NULL);
 }
 
 float randomNumber(float min, float max)
