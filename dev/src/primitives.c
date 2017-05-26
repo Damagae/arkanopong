@@ -174,25 +174,25 @@ Color createColor(int code)
   Color color;
   switch (code)
   {
-    case 1 :
-      color.r = 204.0/255.0;
-      color.g = 0.0;
-      color.b = 0.0;
+    case 1 :    // RED
+      color.r = 255.0/255.0;
+      color.g = 51.0/255.0;
+      color.b = 51.0/255.0;
       break;
-    case 2 :
+    case 2 :    // GREEN
       color.r = 0.0;
       color.g = 204.0/255.0;
       color.b = 0.0;
       break;
-    case 3 :
+    case 3 :    // BLUE
       color.r = 0.0;
-      color.g = 0.0;
+      color.g = 102.0/255.0;
       color.b = 204.0/255.0;
       break;
-    case 4 :
-      color.r = 102.0/255.0;
+    case 4 :    // PURPLE
+      color.r = 127.0/255.0;
       color.g = 0.0;
-      color.b = 204.0/255.0;
+      color.b = 255.0/255.0;
       break;
     default :
         color.r = 1.0;

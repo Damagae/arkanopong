@@ -13,6 +13,7 @@ typedef struct
     float height;
     float speed;
     GLuint texture;
+    Point2D ghost[10];
 } Bar, *PtBar;
 
 typedef enum Direction
@@ -24,6 +25,7 @@ typedef enum Direction
 
 Bar createBar (Point2D position, GLuint texture);
 void moveBar(PtBar ptBar, Direction direction);
+void drawBarGhosts(Bar bar, int numPlayer);
 void drawBar(Bar bar, int numPlayer);
 void drawGauge(Bar bar, int gauge, int numPlayer);
 

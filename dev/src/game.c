@@ -371,6 +371,7 @@ void renderGame(Game* game, char timer, bool restart)
         drawWindowBackground(game->backgroundTexture[1]);
 
         glPushMatrix();
+        
             glScalef(transition/100,transition/100,1.0);
 
             glEnable(GL_TEXTURE_2D);
@@ -944,6 +945,11 @@ void moveBarBall(PtBar bar, PtBall ball, Direction direction)
     ball->ghost[2] = ball->position;
     ball->ghost[1] = ball->position;
     ball->ghost[0] = ball->position;
+
+    int i;
+    for (i = 9; i > 0; --i)
+        bar->ghost[i] = bar->ghost[i-1];
+    bar->ghost[0] = bar->position;
 }
 
 bool restartGame(Direction direction)

@@ -23,7 +23,7 @@ void drawSplashScreen(GLuint splashScreen, GLuint text);
 void drawWindowBackground(GLuint texture);
 void drawLogo(GLuint texture);
 void drawHowToPlay(GLuint texture);
-void drawMenuText();
+void drawMenuText(GLuint texture);
 void drawMenuSelection(bool* selected, char* mode, char* levelTxt, TextureList menuTextures, int lvl, int numLvl, int numMode);
 void drawMenuButton(GLuint texture, int x, int y, bool selected, char* txt);
 void drawArrow(GLuint texture, int x, int y, bool selected, int left);

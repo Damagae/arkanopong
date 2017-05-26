@@ -48,7 +48,7 @@ TextureList createMenuTextures()
     addTexture(&menuTextures, "data/img/menu/map_select_13_on.png");
     addTexture(&menuTextures, "data/img/menu/map_select_14_on.png");
     addTexture(&menuTextures, "data/img/menu/map_select_15_on.png");
-    addTexture(&menuTextures, "data/img/menu/map_select_15_on.png");
+    addTexture(&menuTextures, "data/img/menu/btn_splashscreen.png");
 
     return menuTextures;
 }
@@ -68,17 +68,17 @@ void drawSplashScreen(GLuint splashScreen, GLuint text)
 
     glBindTexture(GL_TEXTURE_2D, text);
     glPushMatrix();
-        glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 1);
-        glScalef(-200,100,1);
+        glTranslatef(WINDOW_WIDTH/2+25, WINDOW_HEIGHT/2, 1);
+        glScalef(-300,80,1);
         glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
     
     glDisable(GL_TEXTURE_2D);
-/*
+
     glColor3f(0.0, 0.0, 0.0);
-    drawText(500,500,"PRESS ANY KEY TO CONTINUE", 6);*/
+    drawText(WINDOW_WIDTH/2, WINDOW_HEIGHT/2,"PRESS ANY KEY TO CONTINUE", 6);
 }
 
 void drawWindowBackground(GLuint texture)
@@ -163,10 +163,19 @@ void drawArrow(GLuint texture, int x, int y, bool selected, int left)
     glColor4f(1.0,1.0,1.0,1.0);
 }
 
-void drawMenuText()
+void drawMenuText(GLuint texture)
 {
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glPushMatrix();
+        glTranslatef(WINDOW_WIDTH/2,900+10*animate, 1);
+        glScalef(-450,80,1);
+        glRotatef(180, 0.0, 0.0, 1.0);
+        drawSquareTexture();
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+
     glColor3f(0.0, 0.0, 0.0);
-    drawText(300-7*animate,900,"PRESS ENTER TO CONTINUE", 6);
+    drawText(WINDOW_WIDTH/2,900+10*animate,"PRESS ENTER TO CONTINUE", 6);
 }
 
 void drawLogo(GLuint texture)
@@ -215,14 +224,14 @@ void renderMenu(TextureList menuTextures, State state, bool* selected, char* mod
         glColor3f(1.0, 1.0, 1.0);
         glPushMatrix();
             if(state == SPLASH)
-                drawSplashScreen(menuTextures->texture[0], menuTextures->texture[24]);
+                drawSplashScreen(menuTextures->texture[0], menuTextures->texture[25]);
             else if(state == MENU || state == GAME || state == EDITOR)
             {
                 drawWindowBackground(menuTextures->texture[1]);
                 drawLogo(menuTextures->texture[2]);
                 drawHowToPlay(menuTextures->texture[3]);
                 drawMenuSelection(selected, mode, levelTxt, menuTextures, lvl, numLvl, numMode);
-                drawMenuText();
+                drawMenuText(menuTextures->texture[25]);
             }
         glPopMatrix();
             
@@ -402,7 +411,7 @@ State menuManager(State state, unsigned int* AI, int* level)
     //free(levelList(&numLvl));
     char** txt = levelList(&numLvl);
     //txt[numLvl - 1] = txt[numLvl];
-    int t;
+
     free(txt);
     
     Button selection = PLAY_GAME;
@@ -445,7 +454,7 @@ State menuManager(State state, unsigned int* AI, int* level)
     {
         *AI = gameMode;
     }
-       
+    
     *level = lvl;
     animate = 0;
 

@@ -62,14 +62,10 @@ void drawBall(Ball ball)
 void drawGhosts(Ball ball)
 {
     int i;
-    float color;
-    if (ball.ptPlayer->num == 0)
-        color = 0.80;
-    else
-        color = 0.0;
     for (i = 0; i<5; i++)
     {
-        glColor4f(1.0-color, 0.2, 0.2+color, 0.80-0.10*(float)i);
+        if (ball.ptPlayer->num == 0) glColor4f(0.0/255, 204.0/255.0, 204.0/255.0, 0.60-0.10*(float)i);
+        else glColor4f(1.0, 51.0/255.0, 51.0/255.0, 0.60-0.10*(float)i);
         glEnable(GL_BLEND);
         //glBindTexture(GL_TEXTURE_2D, ball.texture[ball.ptPlayer->num]);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
