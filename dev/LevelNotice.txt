@@ -32,6 +32,7 @@ Brick Color :
 2 - Green
 3 - Blue
 4 - Purple
+5 - Yellow
 Other - White
 
 You can't change Indescrutible Brick color
@@ -74,6 +75,7 @@ Couleur des briques :
 2 - Vert
 3 - Bleu
 4 - Violet
+5 - Jaune
 Autre - Blanc
 
 Vous ne pouvez pas changer la couleur d'une brique indestructible
