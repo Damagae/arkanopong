@@ -36,7 +36,7 @@ Other - White
 
 You can't change Indescrutible Brick color
 
-By default if you don't give any color information, the color will be green
+By default if you don't give any color information, the color will be random
 
 ----------------------------------------------------------------------------------------------------
 
@@ -78,4 +78,4 @@ Autre - Blanc
 
 Vous ne pouvez pas changer la couleur d'une brique indestructible
 
-Par défaut, si vous ne renseignez pas de couleur la brique sera verte
+Par défaut, si vous ne renseignez pas de couleur, la couleur sera aléatoire

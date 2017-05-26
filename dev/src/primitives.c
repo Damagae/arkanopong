@@ -208,6 +208,11 @@ Color createColor(int code)
       color.g = 0.0;
       color.b = 255.0/255.0;
       break;
+    case 5 :    // YELLOW
+      color.r = 255.0/255.0;
+      color.g = 255.0/255.0;
+      color.b = 0.0/255.0;
+      break;
     default :
         color.r = 1.0;
         color.g = 1.0;

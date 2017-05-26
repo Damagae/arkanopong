@@ -244,6 +244,9 @@ int switchColor(int color)
             return 4;
             break;
         case 4 :
+            return 5;
+            break;
+        case 5 :
             return 1;
             break;
         default :

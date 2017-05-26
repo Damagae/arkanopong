@@ -39,7 +39,7 @@ int compatibleType(int nb)
 
 int compatibleTypeColor(int nb)
 {
-    if (nb >= 0 && nb <= 4)
+    if (nb >= 0 && nb <= 5)
         return 1;
     else
         return 0;
@@ -47,7 +47,7 @@ int compatibleTypeColor(int nb)
 
 int randomColor()
 {
-    return rand() % 4 + 1;
+    return rand() % 5 + 1;
 }
 
 void sort(char ** tab, int * numFiles)
