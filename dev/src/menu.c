@@ -167,7 +167,7 @@ void drawMenuText(GLuint texture)
 {
     glBindTexture(GL_TEXTURE_2D, texture);
     glPushMatrix();
-        glTranslatef(WINDOW_WIDTH/2,900+10*animate, 1);
+        glTranslatef(WINDOW_WIDTH/2,920+10*animate, 1);
         glScalef(-450,80,1);
         glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
@@ -175,7 +175,7 @@ void drawMenuText(GLuint texture)
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glColor3f(0.0, 0.0, 0.0);
-    drawText(WINDOW_WIDTH/2,900+10*animate,"PRESS ENTER TO CONTINUE", 6);
+    drawText(WINDOW_WIDTH/2,920+5*animate,"PRESS ENTER TO CONTINUE", 6);
 }
 
 void drawLogo(GLuint texture)

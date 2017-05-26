@@ -60,7 +60,7 @@ void moveBar(PtBar ptBar, Direction direction)
     }
 }
 
-void drawBarGhosts(Bar bar, int numPlayer)
+void drawBarGhosts(Bar* bar, int numPlayer)
 {
     int i;
     for (i = 0; i<5; i++)
@@ -70,8 +70,8 @@ void drawBarGhosts(Bar bar, int numPlayer)
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
-            glTranslatef(bar.ghost[i].x, bar.ghost[i].y, 1);
-            glScalef(bar.width, bar.height, 1);
+            glTranslatef(bar->ghost[i].x, bar->ghost[i].y, 1);
+            glScalef(bar->width, bar->height, 1);
                 glRotatef(180, 0.0, 0.0, 1.0);
             drawSquare();
         glPopMatrix();
@@ -80,16 +80,16 @@ void drawBarGhosts(Bar bar, int numPlayer)
     }
 }
 
-void drawBar(Bar bar, int numPlayer)
+void drawBar(Bar* bar, int numPlayer)
 {
     drawBarGhosts(bar, numPlayer);
 
     glEnable(GL_BLEND);
-    glBindTexture(GL_TEXTURE_2D, bar.texture);
+    glBindTexture(GL_TEXTURE_2D, bar->texture);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
-        glTranslatef(bar.position.x, bar.position.y, 1);
-        glScalef(bar.width, bar.height, 1);
+        glTranslatef(bar->position.x, bar->position.y, 1);
+        glScalef(bar->width, bar->height, 1);
         // if (numPlayer == 1)
             glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
@@ -99,22 +99,22 @@ void drawBar(Bar bar, int numPlayer)
 }
 
 /* For Power */
-void drawGauge(Bar bar, int gauge, int numPlayer)
+void drawGauge(Bar* bar, int gauge, int numPlayer)
 {
     int yPos = 20;
     if (numPlayer == 1)
         yPos = -20;
 
     glPushMatrix();
-        glTranslatef(bar.position.x, bar.position.y+yPos, 1);
-        glScalef(gauge, bar.height/2, 1);
+        glTranslatef(bar->position.x, bar->position.y+yPos, 1);
+        glScalef(gauge, bar->height/2, 1);
         glColor3f(1.0, 0.5, 0.0);
         drawSquare();
     glPopMatrix();
 
     glPushMatrix();
-        glTranslatef(bar.position.x, bar.position.y+yPos, 1);
-        glScalef(100, bar.height/2, 1);
+        glTranslatef(bar->position.x, bar->position.y+yPos, 1);
+        glScalef(100, bar->height/2, 1);
         glColor3f(1.0, 0.0, 0.0);
         drawSquareBorder();
     glPopMatrix();

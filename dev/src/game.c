@@ -381,12 +381,12 @@ void renderGame(Game* game, char timer, bool restart)
 
                 drawAllBalls(game->ballList);
 
-                drawBar(*(game->player[0].ptBar), game->player[0].num);
-                drawBar(*(game->player[1].ptBar), game->player[1].num);
+                drawBar(game->player[0].ptBar, game->player[0].num);
+                drawBar(game->player[1].ptBar, game->player[1].num);
                 if (game->player[0].power != OFF)
-                    drawGauge(*(game->player[0].ptBar), game->player[0].gauge, game->player[0].num);
+                    drawGauge(game->player[0].ptBar, game->player[0].gauge, game->player[0].num);
                 if (game->player[1].power != OFF)
-                    drawGauge(*(game->player[1].ptBar), game->player[1].gauge, game->player[1].num);
+                    drawGauge(game->player[1].ptBar, game->player[1].gauge, game->player[1].num);
 
                 drawAllBricks(game->brickList);
 

@@ -30,8 +30,8 @@ typedef enum Orientation
 Ball* createBall (Point2D position, Vector2D direction, PtPlayer ptPlayer, GLuint* ballTexture);
 void addBall(PtBall* ballList, Ball* ball);
 void moveBall (PtBall ptBall);
-void drawBall (Ball ball);
-void drawGhosts(Ball ball);
+void drawBall (Ball* ball);
+void drawGhosts(Ball* ball);
 void drawAllBalls(PtBall ballList);
 
 float ballBottomPosition (PtBall ptBall);

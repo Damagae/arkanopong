@@ -37,7 +37,7 @@ Bonus* createBonus(PtBrick ptBrick, GLuint* bonusTexture);
 void addBonus(BonusList* bonusList, Bonus* bonus);
 void bonusOrientation(Bonus* bonus, Player player);
 void moveBonus (Bonus* bonus);
-void drawBonus(Bonus bonus);
+void drawBonus(Bonus* bonus);
 void drawBonusText(Bonus* bonus);
 void drawAllBonus(BonusList bonusList);
 

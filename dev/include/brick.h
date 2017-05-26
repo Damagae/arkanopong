@@ -44,7 +44,7 @@ typedef struct brick
 
 Brick* createBrick (Point2D position, BrickType type, BonusList* bonusList, GLuint brickTexture, GLuint* bonusTexture, int color);
 void addBrick(PtBrick* brickList, Brick* brick);
-void drawBrick(Brick brick);
+void drawBrick(Brick* brick);
 void drawAllBricks(PtBrick brickList);
 int brickDamaged(PtBrick ptBrick);
 Point2D brickVerticeTopLeft(PtBrick ptBrick);

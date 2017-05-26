@@ -62,17 +62,17 @@ void addBrick(PtBrick* brickList, Brick* brick)
     }
 }
 
-void drawBrick(Brick brick)
+void drawBrick(Brick* brick)
 {
-    if (brick.life != 0)
+    if (brick->life != 0)
     {
-        if (brick.type != INDES) glColor3f(brick.color.r, brick.color.g, brick.color.b);
+        if (brick->type != INDES) glColor3f(brick->color.r, brick->color.g, brick->color.b);
         glEnable(GL_BLEND);
-        glBindTexture(GL_TEXTURE_2D, brick.texture);
+        glBindTexture(GL_TEXTURE_2D, brick->texture);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
-            glTranslatef(brick.position.x, brick.position.y, 1);
-            glScalef(brick.width, brick.height, 1);
+            glTranslatef(brick->position.x, brick->position.y, 1);
+            glScalef(brick->width, brick->height, 1);
             glRotatef(180, 0.0, 0.0, 1.0);
             //drawSquare();
             drawSquareTexture();
@@ -87,7 +87,7 @@ void drawAllBricks(PtBrick brickList)
 {
     for (; brickList != NULL; brickList = brickList->next)
     {
-        drawBrick(*brickList);
+        drawBrick(brickList);
     }
 }
 

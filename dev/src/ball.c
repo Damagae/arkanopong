@@ -42,16 +42,16 @@ void addBall(PtBall* ballList, Ball* ball)
     }
 }
 
-void drawBall(Ball ball)
+void drawBall(Ball* ball)
 {
     glColor3f(1.0, 1.0, 1.0);
     glEnable(GL_BLEND);
-    glBindTexture(GL_TEXTURE_2D, ball.texture[ball.ptPlayer->num]);
+    glBindTexture(GL_TEXTURE_2D, ball->texture[ball->ptPlayer->num]);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
-        glTranslatef(ball.position.x, ball.position.y, 1);
-        glScalef(ball.radius*2, ball.radius*2, 1);
-        if (ball.ptPlayer->num == 0)
+        glTranslatef(ball->position.x, ball->position.y, 1);
+        glScalef(ball->radius*2, ball->radius*2, 1);
+        if (ball->ptPlayer->num == 0)
             glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
     glPopMatrix();
@@ -59,20 +59,20 @@ void drawBall(Ball ball)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void drawGhosts(Ball ball)
+void drawGhosts(Ball* ball)
 {
     int i;
     for (i = 0; i<5; i++)
     {
-        if (ball.ptPlayer->num == 0) glColor4f(0.0/255, 204.0/255.0, 204.0/255.0, 0.60-0.10*(float)i);
+        if (ball->ptPlayer->num == 0) glColor4f(0.0/255, 204.0/255.0, 204.0/255.0, 0.60-0.10*(float)i);
         else glColor4f(1.0, 51.0/255.0, 51.0/255.0, 0.60-0.10*(float)i);
         glEnable(GL_BLEND);
         //glBindTexture(GL_TEXTURE_2D, ball.texture[ball.ptPlayer->num]);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
-            glTranslatef(ball.ghost[i].x, ball.ghost[i].y, 1);
-            glScalef(ball.radius-2-2*i, ball.radius-2-2*i, 1);
-            if (ball.ptPlayer->num == 0)
+            glTranslatef(ball->ghost[i].x, ball->ghost[i].y, 1);
+            glScalef(ball->radius-2-2*i, ball->radius-2-2*i, 1);
+            if (ball->ptPlayer->num == 0)
                 glRotatef(180, 0.0, 0.0, 1.0);
             //drawSquareTexture();
             drawCircle();
@@ -87,8 +87,8 @@ void drawAllBalls(PtBall ballList)
 {
     for (; ballList != NULL; ballList = ballList->next)
     {
-        drawGhosts(*ballList);
-        drawBall(*ballList);
+        drawGhosts(ballList);
+        drawBall(ballList);
     }
 }
 

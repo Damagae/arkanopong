@@ -260,10 +260,10 @@ int putBrick(int selection)
     else
     {
         srand(time(NULL));   // should only be called once
-        // Return a number between 2 and 8 (if it's 9 or 10, it will be 2)
-        int r = 2 + (rand() % 9);
+        // Random brick type between 2 and 8 with more chance to have a 2 (normal)
+        int r = 2 + (rand() % 12);
         // To make more normal brick than bonus brick
-        if (r == 9 || r == 10)
+        if (r >= 9)
             r = 2;
         return r;
     }

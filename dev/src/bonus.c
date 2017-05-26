@@ -112,22 +112,22 @@ void moveBonus (Bonus* bonus)
 /** DRAWING FUNCTIONS **/
 
 // Draw only if brick is destroyed
-void drawBonus(Bonus bonus)
+void drawBonus(Bonus* bonus)
 {
-    if (bonus.actif)
+    if (bonus->actif)
     {
         glColor3f(1.0, 1.0, 1.0);
         glEnable(GL_BLEND);
-        glBindTexture(GL_TEXTURE_2D, bonus.texture);
+        glBindTexture(GL_TEXTURE_2D, bonus->texture);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
-            glTranslatef(bonus.position.x, bonus.position.y, 1);
-            if (bonus.type ==  BARSPDUP)
-                glScalef(bonus.radius*6, -bonus.radius*2, 1);
-            else if (bonus.type == BARUP || bonus.type == BARDWN)
-                glScalef(bonus.radius*4, -bonus.radius*2, 1);
+            glTranslatef(bonus->position.x, bonus->position.y, 1);
+            if (bonus->type ==  BARSPDUP)
+                glScalef(bonus->radius*6, -bonus->radius*2, 1);
+            else if (bonus->type == BARUP || bonus->type == BARDWN)
+                glScalef(bonus->radius*4, -bonus->radius*2, 1);
             else
-                glScalef(bonus.radius*3, -bonus.radius*3, 1);
+                glScalef(bonus->radius*3, -bonus->radius*3, 1);
             drawSquareTexture();
         glPopMatrix();
         glDisable(GL_BLEND);
@@ -171,7 +171,7 @@ void drawAllBonus(BonusList bonusList)
 
     for (; bonusList != NULL; bonusList = bonusList->next)
     {
-        drawBonus(*bonusList);
+        drawBonus(bonusList);
         drawBonusText(bonusList);
     }
 }
