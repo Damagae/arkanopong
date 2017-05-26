@@ -1,0 +1,81 @@
+How to create a level ?
+
+Use Game Editor
+
+OR
+
+Go to data->level
+Create a file levelX.txt, with X the number of level that already exist +1
+
+If you don't respect the notice, the game will crash when you'll try playing the level you created
+
+Example :
+5 2			-> Columns Lines
+2 9 1 0 1 8 8 0 7 3	-> Type of the brick (Columns * Lines)
+4 0 2 0 3 1 2 0 3 3	-> Color of the brick (Columns * Lines)
+
+Brick Types :
+0 - Empty space
+1 - Normal
+2 - Bar Up
+3 - Bar Down
+4 - Bar Speed Up
+5 - Slow Power
+6 - Accelerate Power
+7 - Add Ball
+8 - Add Life
+9 - Brick Indescrutible
+
+Brick Color :
+0 - No color / White
+1 - Red
+2 - Green
+3 - Blue
+4 - Purple
+Other - White
+
+You can't change Indescrutible Brick color
+
+By default if you don't give any color information, the color will be green
+
+----------------------------------------------------------------------------------------------------
+
+Comment créer un niveau ?
+
+Utiliser l'éditeur de niveau dans le jeu
+
+OU
+
+Aller dans data->level
+Créer un fichier levelX.txt, avec !x le nombre de niveaux déjà existants +1
+
+Si vous ne respectez pas la notice le jeu plantera lorsque vous essayerez de lancer le niveau créé
+
+Exemple :
+5 2			-> Colones Lignes
+2 9 1 0 1 8 8 0 7 3	-> Type de la brique (Colones * Lignes)
+4 0 2 0 3 1 2 0 3 3	-> Couleur de la brique (Colones * Lignes)
+
+Type de brique :
+0 - Vide
+1 - Normal
+2 - Aggrandissement de la barre
+3 - Rétrecissement de la barre
+4 - Augmentation de la vitesse de la barre
+5 - Ralentissement du temps
+6 - Acceleration du temps
+7 - Ajout d'une balle
+8 - Ajout d'une vie
+9 - Brique Indestructible
+
+Couleur des briques :
+0 - Pas de couleur / Blanc
+1 - Rouge
+2 - Vert
+3 - Bleu
+4 - Violet
+Autre - Blanc
+
+Vous ne pouvez pas changer la couleur d'une brique indestructible
+
+Par défaut, si vous ne renseignez pas de couleur la brique sera verte
