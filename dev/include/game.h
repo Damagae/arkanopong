@@ -68,6 +68,7 @@ void drawGameBackground(GLuint backgroundTexture);
 void drawWinner(Player player1, unsigned int AI, GLuint* uiTexture);
 void drawRestart(bool restart, GLuint* texture);
 void drawPause(GLuint uiTexture);
+void drawHit();
 
 void renderGame(Game* game, char timer, bool restart);
 int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick, GLuint* brickTexture);

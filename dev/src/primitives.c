@@ -168,6 +168,20 @@ void drawButton(int x, int y, char* txt, bool select)
     glColor3f(1.0, 1.0, 1.0);
 }
 
+void drawGradientSquare(int timer)
+{
+    float time = (float) timer/100.0;
+    glBegin(GL_QUADS);
+    glColor4f(1.0,0.0,0.0,0.0);
+        glVertex2f(-0.5, 0.5);
+        glVertex2f(0.5, 0.5);
+    glColor4f(1.0,0.0,0.0,time);
+        glVertex2f(0.5, -0.5);
+        glVertex2f(-0.5, -0.5);
+
+    glEnd();
+}
+
 // Create color to change brick texture color */
 Color createColor(int code)
 {

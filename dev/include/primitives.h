@@ -24,6 +24,7 @@ void drawCircleTexture();
 int textLength(char * text);
 void drawText(int x, int y, char* txt, unsigned int size);
 void drawButton(int x, int y, char* txt, bool select);
+void drawGradientSquare(int timer);
 
 Color createColor(int code);
 

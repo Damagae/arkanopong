@@ -22,6 +22,8 @@ int right2;
 float transition = 0;
 static bool mute = false;
 
+static int hit[2] = {0,0};
+
 static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
@@ -359,6 +361,35 @@ void drawRestart(bool restart, GLuint* texture)
     glDisable(GL_TEXTURE_2D);
 }
 
+void drawHit()
+{    
+    glEnable(GL_BLEND);
+    if (hit[0] != 0)
+    {
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glPushMatrix();
+            glTranslatef(WINDOW_WIDTH/2, 2*WINDOW_HEIGHT/3, 1);
+            //glScalef(GAME_WIDTH+50, -WINDOW_HEIGHT/2, 1);
+            glScalef(WINDOW_WIDTH, -2*WINDOW_HEIGHT/2, 1);
+            hit[0] -= 2;
+            drawGradientSquare(hit[0]);
+        glPopMatrix();
+    }
+    if (hit[1] != 0)
+    {
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glPushMatrix();
+            glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/3, 1);
+            //glScalef(GAME_WIDTH+50, WINDOW_HEIGHT/2, 1);
+            glScalef(WINDOW_WIDTH, 2*WINDOW_HEIGHT/2, 1);
+            hit[1] -= 2;
+            drawGradientSquare(hit[1]);
+        glPopMatrix();
+    }
+    glDisable(GL_BLEND);
+    glColor4f(1.0,1.0,1.0,1.0);
+}
+
 void renderGame(Game* game, char timer, bool restart)
 {    
     do
@@ -376,6 +407,7 @@ void renderGame(Game* game, char timer, bool restart)
 
             glEnable(GL_TEXTURE_2D);
             glPushMatrix();
+                drawHit();
                 drawGameBackground(game->backgroundTexture[0]);
                 drawGameBorder();
 
@@ -511,10 +543,12 @@ Position positionDetection(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* bri
         if (ballPosition == OUT_DOWN)
         {
             loseLife(&player[0]);
+            hit[0] = 100;
         }
         else if (ballPosition == OUT_UP)
         {
             loseLife(&player[1]);
+            hit[1] = 100;
         }
 
         // Change the ball owner
