@@ -230,7 +230,7 @@ void renderMenu(TextureList menuTextures, State state, bool* selected, char* mod
         glPushMatrix();
             if(state == SPLASH)
                 drawSplashScreen(menuTextures->texture[0], menuTextures->texture[25]);
-            else if(state == MENU || state == GAME || state == EDITOR)
+            else if(state == MENU || state == GAME || state == EDITOR || state == EDITLVL)
             {
                 drawWindowBackground(menuTextures->texture[1]);
                 drawLogo(menuTextures->texture[2]);
@@ -316,6 +316,8 @@ State menuEvent(State state, Button* selection, int* gameMode, int* lvl, int* nu
                 case SDLK_RETURN:
                     if (state == MENU && *selection == PLAY_GAME)
                         state = GAME;
+                    else if (*selection == LVL)
+                        state = EDITLVL;
                     else if (*selection == EDIT)
                         state = EDITOR;
                     else if (*selection == EXIT)

@@ -11,5 +11,6 @@ int randomColor();
 char ** levelList(int* numFiles);
 void createLevel(int* level, int* color);
 void deleteLevelFile(int level);
+void changeLevel(int* level, int* color, int numLevel);
 
 #endif

@@ -7,7 +7,8 @@ typedef enum State
     SPLASH = 1,
     MENU = 2,
     GAME = 3,
-    EDITOR = 4
+    EDITLVL = 4,
+    EDITOR = 5
 } State;
 
 

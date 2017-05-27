@@ -53,7 +53,7 @@ int randomColor()
 void sort(char ** tab, int * numFiles)
 {
     int i;
-    char * temp[MAX_SIZE];
+    char temp[MAX_SIZE];
     bool order = false;
     int length = *numFiles;
     while(!order)
@@ -361,7 +361,53 @@ void deleteLevelFile(int level)
 
             rename(oldname, newname);
         }
+}
+
+void changeLevel(int* level, int* color, int numLevel)
+{
+    FILE* f;
+    char filepath[MAX_SIZE];
+    char cwd[MAX_SIZE];
+    char bt[MAX_SIZE];
+    char num[2];
+    ++numLevel;
+    sprintf(num, "%d", numLevel);
+
+    int i;
+
+    if (getcwd(cwd, sizeof(cwd)) == NULL) { // Get the program's path
+        fprintf(stderr, "Le chemin est erroné.\n");
+    }
+
+    /* Open the selected level file */
+    strcpy(filepath, cwd);
+    strcat(filepath, "/data/level/level");
+    strcat(filepath, num);
+    strcat(filepath, ".txt");
+
+    /* Write at the beggining of it */
+    f = fopen(filepath ,"w");
+
+    /* Dimensions */
+    fputs("12 10\n", f);
+
+    /* Bricks */
+    for(i = 0; i < (12 * 10) - 1; ++i)
+    {
+        sprintf(bt, "%d ", level[i]);
+        fputs(bt, f);
+    }
+    sprintf(bt, "%d\n", level[12 * 10 - 1]);
+    fputs(bt, f);
+
+    /* Bricks colors */
+    for(i = 0; i < (12 * 10) - 1; ++i)
+    {
+        sprintf(bt, "%d ", color[i]);
+        fputs(bt, f);
+    }
+    sprintf(bt, "%d\n", color[12 * 10 - 1]);    
+    fputs(bt, f);
     
-
-
+    fclose(f);
 }

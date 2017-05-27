@@ -55,7 +55,14 @@ int main(int argc, char** argv)
   /* EDITEUR */
       else if (state == EDITOR)
       {
-        if (editorManager(&state) == false)
+        if (editorManager(&state, -1) == false)
+          if (state != QUIT)
+            state = MENU;
+      }
+  /* MODIFICATION DE NIVEAU */
+      else if (state == EDITLVL)
+      {
+        if (editorManager(&state, level) == false)
           if (state != QUIT)
             state = MENU;
       }

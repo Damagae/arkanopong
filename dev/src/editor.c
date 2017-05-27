@@ -74,14 +74,16 @@ void drawBrickPreview(GLuint texture, int position, int color)
 {
     float x, y;
     Color c = createColor(color);
+
+    x = (96+WIDTH_DEFAULT/2)+WIDTH_DEFAULT*(position%12);
+    y = 355+(HEIGHT_DEFAULT*(position/12));
+
     glColor3f(c.r, c.g, c.b);
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
-        x = (96+WIDTH_DEFAULT/2)+WIDTH_DEFAULT*(position%12);
-        y = 355+(HEIGHT_DEFAULT*(position/12));
         glTranslatef(x, y, 1);
         glScalef(WIDTH_DEFAULT, HEIGHT_DEFAULT, 1);
         glRotatef(180, 0.0, 0.0, 1.0);
@@ -90,6 +92,7 @@ void drawBrickPreview(GLuint texture, int position, int color)
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
+
     glColor3f(1.0, 1.0, 1.0);
 }
 
@@ -273,7 +276,7 @@ int putBrick(int selection)
         
 }
 
-bool editorEvent(State* state, int* position, int *tab, int* selection, int* color, int* tabColor, Mix_Chunk* confirmSound, Mix_Chunk* saveSound)
+bool editorEvent(State* state, int* position, int *tab, int* selection, int* color, int* tabColor, Mix_Chunk* confirmSound, Mix_Chunk* saveSound, int level)
 {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
@@ -314,7 +317,10 @@ bool editorEvent(State* state, int* position, int *tab, int* selection, int* col
                     *color = switchColor(*color);
                     break;
                 case SDLK_s:
-                    createLevel(tab, tabColor);
+                    if (level == -1)    // If it's a new level
+                        createLevel(tab, tabColor);
+                    else                // If the level already exist
+                        changeLevel(tab, tabColor, level);
                     playSound(1, saveSound);
                     SDL_Delay(1500);
                     return false;
@@ -354,7 +360,7 @@ bool editorEvent(State* state, int* position, int *tab, int* selection, int* col
     return true;
 }
 
-bool editorManager(State* state)
+bool editorManager(State* state, int lvl)
 {
     TextureList editorTextures = NULL;
     editorTextures = addTexture(&editorTextures, "data/img/menu/fond_menu.jpg");
@@ -374,10 +380,35 @@ bool editorManager(State* state)
     int i;
     int color = 1;
     
-    for (i=0; i < 120; i++)
+    // If we just want to create a level
+    if (lvl == -1)
     {
-        tab[i] = 0;
-        tabColor[i] = 0;
+        for (i=0; i < 120; ++i)
+        {
+            tab[i] = 0;
+            tabColor[i] = 0;
+        }
+    }
+    // If we selected a level, we have to get its informations
+    else
+    {
+        int numFiles;
+        char ** levelFiles = levelList(&numFiles);
+        int * level;
+        level = loadLevel(levelFiles[lvl]);
+        free(levelFiles);
+
+        if (level == NULL)
+        {
+            fprintf(stderr, "Fermeture du programme\n");
+            return 0;
+        }
+
+        for (i=0; i < 120; ++i)
+        {
+            tab[i] = level[3+i];
+            tabColor[i] = level[123+i];
+        }
     }
 
     int selection = 1;
@@ -389,7 +420,7 @@ bool editorManager(State* state)
 
         renderEditor(editorTextures, position, tab, tabColor, selection, color);
 
-        inEditor = editorEvent(state, &position, tab, &selection, &color, tabColor, confirmSound, saveSound);
+        inEditor = editorEvent(state, &position, tab, &selection, &color, tabColor, confirmSound, saveSound, lvl);
 
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
         if (elapsedTime < FRAMERATE_MILLISECONDS)
