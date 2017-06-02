@@ -1,6 +1,6 @@
 # arkanopong
 
-Game development
+Video game made by Daphné Rose & David Nasr
 
 ## Setup
 
