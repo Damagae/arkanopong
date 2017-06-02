@@ -65,20 +65,6 @@ void drawSplashScreen(GLuint splashScreen, GLuint text)
         drawSquareTexture();
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
-/*
-    glBindTexture(GL_TEXTURE_2D, text);
-    glPushMatrix();
-        glTranslatef(WINDOW_WIDTH/2+25, WINDOW_HEIGHT/2, 1);
-        glScalef(-300,80,1);
-        glRotatef(180, 0.0, 0.0, 1.0);
-        drawSquareTexture();
-    glPopMatrix();
-    glBindTexture(GL_TEXTURE_2D, 0);
-    
-    glDisable(GL_TEXTURE_2D);
-
-    glColor3f(0.0, 0.0, 0.0);
-    drawText(WINDOW_WIDTH/2, WINDOW_HEIGHT/2,"PRESS ANY KEY TO CONTINUE", 6);*/
 }
 
 void drawWindowBackground(GLuint texture)
@@ -138,7 +124,6 @@ void drawMenuButton(GLuint texture, int x, int y, bool selected, char* txt)
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 
-    
     //drawText(x-15-5*animate, y, txt, 6);
     glColor4f(1.0,1.0,1.0,1.0);
 }
@@ -388,6 +373,7 @@ State menuEvent(State state, Button* selection, int* gameMode, int* lvl, int* nu
     return state;
 }
 
+// On n'utilise plus la fonction mais elle était utilisée avant qu'on ait les textures pour afficher le texte des boutons
 void textManager(int gameMode, int lvl, char* mode, char* levelTxt)
 {
     strcpy(mode, "PLAY : ");
