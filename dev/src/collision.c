@@ -61,18 +61,15 @@ bool CollisionSegment (Point2D A,Point2D B, Ball ball)
 
     if (pscal1>=0 && pscal2>=0)
     {
-        //printf("Collision segment\n");
         return true;   // I entre A et B, ok.
     }
     // dernière possibilité, A ou B dans le cercle
     if (CollisionPointCercle(A,ball))
     {
-        //printf("Point A(%.1f,%.1f) dans cercle\n", A.x, A.y);
         return true;
     }
     if (CollisionPointCercle(B,ball))
     {
-        //printf("Point B(%.1f,%.1f) dans cercle\n", B.x, B.y);
         return true;
     }
     return false;
@@ -102,22 +99,18 @@ int BrickCollision (Brick brick, PtBall ptBall)
             if (AB == true ) {
                 // We put ball outside the brick
                 ptBall->position.y = brick.position.y - brick.height/2 - ptBall->radius;
-                //printf("AB\n");
                 return 1;
             }
             else if (CD == true ) {
                 ptBall->position.y = brick.position.y + brick.height/2 + ptBall->radius;
-                //printf("CD\n");
                 return 3;
             }
             else if (BC == true ) {
                 ptBall->position.x = brick.position.x + brick.width/2 + ptBall->radius;
-                //printf("BC\n");
                 return 2;
             }
             else {
                 ptBall->position.x = brick.position.x - brick.width/2 - ptBall->radius;
-                //printf("DA\n");
                 return 4;
             }
         }    
