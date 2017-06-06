@@ -74,7 +74,6 @@ void drawBrick(Brick* brick)
             glTranslatef(brick->position.x, brick->position.y, 1);
             glScalef(brick->width, brick->height, 1);
             glRotatef(180, 0.0, 0.0, 1.0);
-            //drawSquare();
             drawSquareTexture();
         glPopMatrix();
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -134,7 +133,6 @@ void deleteBrick(PtBrick* brickList, PtBrick ptBrick)
     if (*brickList == ptBrick)
     {
         *brickList = NULL;
-        //free(*ptBrick);
         ptBrick = NULL;
         return ;
     }
@@ -145,7 +143,6 @@ void deleteBrick(PtBrick* brickList, PtBrick ptBrick)
     }
 
     (*brickList)->next = ptBrick->next;
-    //free(*ptBrick);
     ptBrick = NULL;
 }
 
