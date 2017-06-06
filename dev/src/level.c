@@ -14,6 +14,10 @@
 
 #define MAX_SIZE 200
 
+/* Return 0 if entry is a digit
+* return 1 if entry is space
+* return -1 if neither of those
+*/
 int digitOrSpace (char c)
 {
     if( c >= '0' && c <= '9' )
@@ -29,6 +33,7 @@ int digitOrSpace (char c)
     return -1;
 }
 
+/* return 1 if the brick type is correct, 0 if it's not */
 int compatibleType(int nb)
 {
     if (nb >= 0 && nb <= 9)
@@ -37,6 +42,7 @@ int compatibleType(int nb)
         return 0;
 }
 
+/* return 1 if the color code is correct, 0 if it's not */
 int compatibleTypeColor(int nb)
 {
     if (nb >= 0 && nb <= 5)
@@ -45,11 +51,13 @@ int compatibleTypeColor(int nb)
         return 0;
 }
 
+/* return a random color */
 int randomColor()
 {
     return rand() % 5 + 1;
 }
 
+/* Sort the filenames array */
 void sort(char ** tab, int * numFiles)
 {
     int i;
@@ -74,6 +82,7 @@ void sort(char ** tab, int * numFiles)
     }
 }
 
+/* Load a level from its name */
 int * loadLevel (const char * filepath)
 {
     FILE *f = NULL;
@@ -264,6 +273,7 @@ char ** levelList(int* numFiles)
     return list;
 }
 
+/* Create a level from an array */
 void createLevel(int* level, int* color)
 {
     int numFiles;
