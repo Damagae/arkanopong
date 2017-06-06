@@ -123,6 +123,7 @@ int textLength(char * text)
 /* Size correspond à la police (de 0 à 6) */
 void drawText(int x, int y, char* txt, unsigned int size)
 {
+    int i;
     if(txt!=NULL)
     {   
         //glMatrixMode( GL_PROJECTION );
@@ -143,7 +144,7 @@ void drawText(int x, int y, char* txt, unsigned int size)
                     GLUT_BITMAP_HELVETICA_18
                 };
 
-        for (int i = 0; i < len; i++)
+        for (i = 0; i < len; i++)
         {
             glutBitmapCharacter(font[size], txt[i]);
         }
