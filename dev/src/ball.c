@@ -67,18 +67,15 @@ void drawGhosts(Ball* ball)
         if (ball->ptPlayer->num == 0) glColor4f(0.0/255, 204.0/255.0, 204.0/255.0, 0.60-0.10*(float)i);
         else glColor4f(1.0, 51.0/255.0, 51.0/255.0, 0.60-0.10*(float)i);
         glEnable(GL_BLEND);
-        //glBindTexture(GL_TEXTURE_2D, ball.texture[ball.ptPlayer->num]);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
             glTranslatef(ball->ghost[i].x, ball->ghost[i].y, 1);
             glScalef(ball->radius-2-2*i, ball->radius-2-2*i, 1);
             if (ball->ptPlayer->num == 0)
                 glRotatef(180, 0.0, 0.0, 1.0);
-            //drawSquareTexture();
             drawCircle();
         glPopMatrix();
         glDisable(GL_BLEND);
-        //glBindTexture(GL_TEXTURE_2D, 0); 
         glColor4f(1.0, 1.0, 1.0, 1.0);
     }
 }
