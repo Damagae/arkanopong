@@ -30,10 +30,10 @@ bool CollisionDroite (Point2D A, Point2D B, Ball ball)
     Vector2D u = Vector(A, B);
     Point2D C = ball.position;
     Vector2D AC = Vector(A, C);
-    float numerateur = u.x*AC.y - u.y*AC.x;   // norme du vecteur v
+    float numerateur = u.x*AC.y - u.y*AC.x;   // AC vector norm
     if (numerateur <0)
-        numerateur = -numerateur ;   // valeur absolue ; si c'est négatif, on prend l'opposé.
-    float denominateur = sqrt(u.x*u.x + u.y*u.y);  // norme de u
+        numerateur = -numerateur ;
+    float denominateur = sqrt(u.x*u.x + u.y*u.y);  // AB vector norm
     float CI = numerateur / denominateur;
     
     if (CI<ball.radius)
@@ -50,20 +50,20 @@ bool CollisionSegment (Point2D A,Point2D B, Ball ball)
 {
     Point2D C = ball.position;
     if (CollisionDroite(A,B,ball) == false)
-        return false;  // si on ne touche pas la droite, on ne touchera jamais le segment
+        return false;  // if there is collision with the straight line, there won't be with the segment
 
     Vector2D AB,AC, BC;
     AB = Vector(A, B);
     AC = Vector(A, C);
     BC = Vector(B, C);
-    float pscal1 = DotProduct(AB, AC);  // produit scalaire
-    float pscal2 = DotProduct(MultVector(AB, -1), BC);  // produit scalaire
+    float pscal1 = DotProduct(AB, AC);
+    float pscal2 = DotProduct(MultVector(AB, -1), BC);
 
     if (pscal1>=0 && pscal2>=0)
     {
-        return true;   // I entre A et B, ok.
+        return true;   // I between A and B
     }
-    // dernière possibilité, A ou B dans le cercle
+    // Last possibility, A or B in the circle
     if (CollisionPointCercle(A,ball))
     {
         return true;
