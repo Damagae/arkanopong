@@ -90,7 +90,6 @@ void drawBar(Bar* bar, int numPlayer)
     glPushMatrix();
         glTranslatef(bar->position.x, bar->position.y, 1);
         glScalef(bar->width, bar->height, 1);
-        // if (numPlayer == 1)
             glRotatef(180, 0.0, 0.0, 1.0);
         drawSquareTexture();
     glPopMatrix();
