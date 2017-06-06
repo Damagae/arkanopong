@@ -88,10 +88,8 @@ void drawMenuSelection(bool* selected, char* mode, char* levelTxt, TextureList m
 {
     /* PLAY */
     drawMenuButton(menuTextures->texture[5+numMode], 300, 300, selected[0], mode);
-    //if (strcmp(mode,"PLAY : PLAYER VS PLAYER"))
     if (numMode != 0)
         drawArrow(menuTextures->texture[4], 60, 300, selected[0], 1);
-    //if (strcmp(mode,"PLAY : COMPUTER HARD"))
     if (numMode != 2)
         drawArrow(menuTextures->texture[4], 540, 300, selected[0], 0);
     /* LEVEL */
@@ -124,7 +122,6 @@ void drawMenuButton(GLuint texture, int x, int y, bool selected, char* txt)
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 
-    //drawText(x-15-5*animate, y, txt, 6);
     glColor4f(1.0,1.0,1.0,1.0);
 }
 
@@ -163,9 +160,6 @@ void drawMenuText(GLuint texture)
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
-/*
-    glColor3f(0.0, 0.0, 0.0);
-    drawText(WINDOW_WIDTH/2,920+5*animate,"PRESS ENTER TO CONTINUE", 6);*/
 }
 
 void drawLogo(GLuint texture)
@@ -401,9 +395,7 @@ State menuManager(State state, unsigned int* AI, int* level)
     Mix_Chunk * sound = createSound("data/audio/select.wav");
 
     int numLvl;
-    //free(levelList(&numLvl));
     char** txt = levelList(&numLvl);
-    //txt[numLvl - 1] = txt[numLvl];
 
     free(txt);
     
