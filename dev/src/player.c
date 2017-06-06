@@ -51,12 +51,7 @@ void drawLife(Player player, GLuint lifeTexture)
             }
             glScalef(40, 40, 1);
             glRotatef(180, 0.0, 0.0, 1.0);
-            //drawCircle();
             drawSquareTexture();
-        }
-        else
-        {
-            //glBindTexture(GL_TEXTURE_2D, life.texture[1]);
         }
         glPopMatrix();
     }
@@ -80,15 +75,3 @@ void drawNames(char* name1, char* name2)
     drawText(GAME_WIDTH - 30,70, name2, 6);
     glColor3f(1.0, 1.0, 1.0);
 }
-
-/*
-void drawWinner(Player player1, Player player2)
-{
-    char winner[80];
-    if (player1.life == 0)
-        strcat(winner, player2.name);
-    else
-        strcat(winner, player1.name);
-    strcat(winner, " won !");
-    drawText(480, 400, winner, 6);
-}*/
