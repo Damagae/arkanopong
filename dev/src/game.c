@@ -47,7 +47,7 @@ void setVideoMode(unsigned int width, unsigned int height)
 
 void initSDL()
 {
-    /** Initialisation de la SDL **/
+    /** SDL Initialisation **/
     if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
         fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
         return;
@@ -75,7 +75,6 @@ float randomNumber(float min, float max)
     srand(time(NULL));
     result = (rand() % (hi_num - low_num)) + low_num;
     fresult = result / 100;
-    //SDL_Delay(50);
     return fresult;
 }
 
@@ -87,14 +86,14 @@ Game* createGame(int lvl, unsigned int AI)
     Game* game = malloc(sizeof(Game));
     if (game == NULL)    return NULL;
 
-    /* Etat du jeu */
+    /* Game State */
     game->start = false;
     game->pause = false;
     game->end = false;
 
     game->AI = AI;
 
-    /* Lecture du level */
+    /* Level reading */
     game->level = levelFiles[lvl];
     int * level;
     level = loadLevel(game->level);
@@ -106,7 +105,7 @@ Game* createGame(int lvl, unsigned int AI)
         return NULL;
     }
 
-    /* Création des textures */
+    /* Textures Creation */
 
     game->brickTextureFile[0] = "data/img/brick/S_indes_brick.png";
     game->brickTextureFile[1] = "data/img/brick/W_brick_0.png";
@@ -183,17 +182,17 @@ Game* createGame(int lvl, unsigned int AI)
     for (i = 0; i < 16; ++i)
         game->uiTexture[i] = generateTexture(&(game->uiTexture[i]), game->uiTextureFile[i]);
 
-    /* Création des barres */
+    /* Bars creation */
     Point2D posDWN = PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, GAME_HEIGHT + (WINDOW_HEIGHT-GAME_HEIGHT)/2 - 50);
     Point2D posUP = PointXY(GAME_WIDTH/2 + (WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2 + 50);
     game->bar[0] = createBar(posDWN, game->barTexture[4]);
     game->bar[1] = createBar(posUP, game->barTexture[5]);
     
-    /* Création des joueurs */
+    /* Players creation */
     game->player[0] = createPlayer(0, "Player 1", &(game->bar[0]));
     game->player[1] = createPlayer(1, "Player 2", &(game->bar[1]));
 
-    /** Creation des balles **/ 
+    /** Balls creation **/ 
     game->ballList = NULL;
     Point2D posBDWN = PointXY(randomNumber(barLeftPosition(&(game->bar[0])), barRightPosition(&(game->bar[0]))), posDWN.y - game->bar[0].height);
     Point2D posBUP = PointXY(randomNumber(barLeftPosition(&(game->bar[1])), barRightPosition(&(game->bar[1]))), posUP.y + game->bar[1].height);
@@ -202,19 +201,20 @@ Game* createGame(int lvl, unsigned int AI)
     changeAngle (game->ballList, &(game->bar[0]));
     changeAngle (game->ballList->next, &(game->bar[1]));
 
-    /* Creation de la liste de bonus */
+    /* Bonus list creation */
     game->bonusList = NULL;
 
-    /** Creation des briques **/
+    /** Bricks creation **/
     game->brickList = NULL;
     createLevelBricks(level, WINDOW_WIDTH, WINDOW_HEIGHT, &(game->brickList), &(game->bonusList), game->brickTexture, game->bonusTexture);
 
-    /* Direction pour controler les barres && le menu && savoir si un pouvoir est actif */
+    /* Direction to control bars and menu *
+    * Knowing if a power is on */
     game->direction[0] = game->direction[1] = NONE;
     game->power[0] = game->power[1] = false;
     game->selection = NONE;
 
-    /* Création des sons */
+    /* Sounds creation */
 
     game->sound[0] = createSound("data/audio/hitBrick.wav");
     game->sound[1] = createSound("data/audio/hitBar.wav");
@@ -273,7 +273,6 @@ void drawPause(GLuint uiTexture)
 {
     Point2D GAME_TOP_LEFT = PointXY((WINDOW_WIDTH-GAME_WIDTH)/2, (WINDOW_HEIGHT-GAME_HEIGHT)/2);
 
-    //glColor4f(1.0,1.0,1.0,1.0);
     glEnable(GL_BLEND);
 
     glBindTexture(GL_TEXTURE_2D, uiTexture);
@@ -286,7 +285,6 @@ void drawPause(GLuint uiTexture)
     glBindTexture(GL_TEXTURE_2D, 0);
     
     glDisable(GL_BLEND);
-    //glColor4f(1.0,1.0,1.0,1.0);
 }
 
 void drawWinner(Player player1, unsigned int AI, GLuint* uiTexture)
@@ -370,7 +368,6 @@ void drawHit()
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
             glTranslatef(WINDOW_WIDTH/2, 2*WINDOW_HEIGHT/3, 1);
-            //glScalef(GAME_WIDTH+50, -WINDOW_HEIGHT/2, 1);
             glScalef(WINDOW_WIDTH, -2*WINDOW_HEIGHT/2, 1);
             hit[0] -= 2;
             drawGradientSquare(hit[0]);
@@ -381,7 +378,6 @@ void drawHit()
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
             glTranslatef(WINDOW_WIDTH/2, WINDOW_HEIGHT/3, 1);
-            //glScalef(GAME_WIDTH+50, WINDOW_HEIGHT/2, 1);
             glScalef(WINDOW_WIDTH, 2*WINDOW_HEIGHT/2, 1);
             hit[1] -= 2;
             drawGradientSquare(hit[1]);
@@ -445,8 +441,6 @@ void renderGame(Game* game, char timer, bool restart)
             if (timer != '0')
             {
                 drawTimer(&timer, game->uiTexture);
-                /* glColor3f(1.0, 0.0, 0.0);
-                drawText(490,485, &timer, 6); */
             }
         }
 
@@ -502,7 +496,6 @@ void bonusManager(BonusList* bonusList, PtBar bar1, PtBar bar2, PtBall* ballList
                     else if (ptBonus->type == ADDLIFE)
                         playSound(channel, sound[13]);
                 }
-                //deleteBonus(bonusList, &ptBonus);
             }
         }
     }
@@ -520,7 +513,6 @@ int brickManager(PtBall ptBall, PtBrick* brickList, PtBrick ptBrick, GLuint* bri
             ptBrick->bonus->actif = true;
             bonusOrientation(ptBrick->bonus, *(ptBall->ptPlayer));
         }
-        //deleteBrick(brickList, ptBrick);
         return 0;
     }
     else
@@ -620,7 +612,7 @@ Position ballManager(PtBall ballList, PtBar bar1, PtBar bar2, PtBrick* brickList
     return ballPosition;
 }
 
-// Parcours la liste chainee de balles
+// Browse the balls list
 Position runGame(Game* game)
 {
     Position ballPosition;
@@ -685,7 +677,6 @@ bool gameEvent(Game* game, char timer, State* state)
               }
               break;
             case SDLK_UP:
-                //game->selection = UP;
                 game->power[0] = true;
                 if (game->player[0].power == SLOW)
                 {
@@ -708,7 +699,6 @@ bool gameEvent(Game* game, char timer, State* state)
                 }
               break;
             case SDLK_DOWN:
-              //game->selection = DOWN;
               break;
             case SDLK_RETURN:
                 if(game->end)
@@ -870,13 +860,9 @@ bool playGame(Game* game, State* state)
     }
 
     playSound(0, game->sound[6]);
-    
-    /* FOR COLLISION TEST 
-        Ball* ball = createBall(PointXY(500,890), VectorXY(0,1), &game->player[0], game->ballTexture);
-        addBall(&game->ballList, ball);
-    */
+ 
 
-    /** Boucle d'affichage et de gestion du jeu **/
+    /** Display loop and game management **/
     while(inGame)
     {
         Uint32 startTime = SDL_GetTicks() - ticks_reset;
@@ -937,8 +923,6 @@ bool playGame(Game* game, State* state)
         {
             SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
         }
-
-        //printf("%d\n",startTime);
     }
     return restart;
 }
@@ -947,7 +931,6 @@ char gameLaunch(Uint32 startTime)
 {
     char timer = '5';
     timer = timer-(startTime/1000);
-    //printf("%d\n",startTime);
 
     return timer;
 }
